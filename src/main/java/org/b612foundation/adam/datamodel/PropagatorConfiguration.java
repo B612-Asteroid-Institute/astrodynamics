@@ -201,8 +201,8 @@ public class PropagatorConfiguration {
 
   @Override
   public int hashCode() {
-    return Objects.hash(uuid, description, sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto,
-        moon, asteroids);
+    return Objects.hash(uuid, sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto, moon,
+        asteroids);
   }
 
   @Override
@@ -214,8 +214,7 @@ public class PropagatorConfiguration {
     if (getClass() != obj.getClass())
       return false;
     PropagatorConfiguration other = (PropagatorConfiguration) obj;
-    return Objects.equals(uuid, other.uuid) && Objects.equals(description, other.description)
-        && Objects.equals(sun, other.sun) && Objects.equals(mercury, other.mercury)
+    return Objects.equals(uuid, other.uuid) && Objects.equals(sun, other.sun) && Objects.equals(mercury, other.mercury)
         && Objects.equals(venus, other.venus) && Objects.equals(earth, other.earth) && Objects.equals(mars, other.mars)
         && Objects.equals(jupiter, other.jupiter) && Objects.equals(saturn, other.saturn)
         && Objects.equals(uranus, other.uranus) && Objects.equals(neptune, other.neptune)
