@@ -37,6 +37,8 @@ public class OdmCommonMetadata implements Serializable {
     // manuevers, or covariances.
     /** Earth Mean Equator and Equinox of J2000 */
     EME2000,
+    /** Earth Mean Ecliptic and Equinox of J2000. Any center may be specified. */
+    EMEME2000,
     /** Geocentric Celestial Reference Frame */
     GCRF,
     /** Greenwich Rotating Coordinates */
