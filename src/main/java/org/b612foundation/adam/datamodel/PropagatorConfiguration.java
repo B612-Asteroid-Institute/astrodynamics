@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Configuration for the interplanetary orbit propagator. Lists various forces to be included.
  */
-public class PropagatorConfiguration {
+public class PropagatorConfiguration extends AdamObject {
 
   /**
    * How to include gravity of individual bodies: ignore it all together, use it as point mass, or use a detailed model.
@@ -23,8 +23,6 @@ public class PropagatorConfiguration {
     SPHERICAL_HARMONICS
   }
 
-  /** Globally unique id of this config. */
-  private String uuid;
   /** Human-readable description. Not used in hash code or equal. */
   private String description;
 
@@ -52,15 +50,6 @@ public class PropagatorConfiguration {
   private PlanetGravityMode moon = PlanetGravityMode.POINT_MASS;
   /** Names of asteroids we want to include. */
   private List<String> asteroids = new ArrayList<>();
-
-  public String getUuid() {
-    return uuid;
-  }
-
-  public PropagatorConfiguration setUuid(String uuid) {
-    this.uuid = uuid;
-    return this;
-  }
 
   public String getDescription() {
     return description;
@@ -201,8 +190,8 @@ public class PropagatorConfiguration {
 
   @Override
   public int hashCode() {
-    return Objects.hash(uuid, sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto, moon,
-        asteroids);
+    return Objects.hash(super.hashCode(), sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto,
+        moon, asteroids);
   }
 
   @Override
@@ -214,23 +203,11 @@ public class PropagatorConfiguration {
     if (getClass() != obj.getClass())
       return false;
     PropagatorConfiguration other = (PropagatorConfiguration) obj;
-    return Objects.equals(uuid, other.uuid) && Objects.equals(sun, other.sun) && Objects.equals(mercury, other.mercury)
+    return super.equals(other) && Objects.equals(sun, other.sun) && Objects.equals(mercury, other.mercury)
         && Objects.equals(venus, other.venus) && Objects.equals(earth, other.earth) && Objects.equals(mars, other.mars)
         && Objects.equals(jupiter, other.jupiter) && Objects.equals(saturn, other.saturn)
         && Objects.equals(uranus, other.uranus) && Objects.equals(neptune, other.neptune)
         && Objects.equals(pluto, other.pluto) && Objects.equals(moon, other.moon)
         && Objects.equals(asteroids, other.asteroids);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("PropagatorConfiguration [uuid=").append(uuid).append(", description=").append(description)
-        .append(", sun=").append(sun).append(", mercury=").append(mercury).append(", venus=").append(venus)
-        .append(", earth=").append(earth).append(", mars=").append(mars).append(", jupiter=").append(jupiter)
-        .append(", saturn=").append(saturn).append(", uranus=").append(uranus).append(", neptune=").append(neptune)
-        .append(", pluto=").append(pluto).append(", moon=").append(moon).append(", asteroids=").append(asteroids)
-        .append("]");
-    return builder.toString();
   }
 }
