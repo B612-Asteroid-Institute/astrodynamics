@@ -10,8 +10,14 @@ public class SinglePropagation extends AdamObject {
   /** Human-readable description of this propagation. */
   private String description;
 
-  /** Actual ephemeris produced as part of the propagation. May be null if not requested that ephemeris be kept. */
+  /**
+   * Ephemeris produced as part of the propagation. Formatted as contents of STK .e file. May be null if not requested
+   * that ephemeris be kept.
+   */
   private String ephemeris;
+
+  /** Calculated state vector at end time as specified in propagation parameters. Format: time, x, y, z, dx, dy, dz. */
+  private String finalStateVector;
 
   public PropagationParameters getPropagationParameters() {
     return propagationParameters;
@@ -40,9 +46,18 @@ public class SinglePropagation extends AdamObject {
     return this;
   }
 
+  public String getFinalStateVector() {
+    return finalStateVector;
+  }
+
+  public SinglePropagation setFinalStateVector(String finalStateVector) {
+    this.finalStateVector = finalStateVector;
+    return this;
+  }
+
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), propagationParameters, ephemeris);
+    return Objects.hash(super.hashCode(), propagationParameters, ephemeris, finalStateVector);
   }
 
   @Override
@@ -55,7 +70,7 @@ public class SinglePropagation extends AdamObject {
       return false;
     SinglePropagation other = (SinglePropagation) obj;
     return super.equals(other) && Objects.equals(propagationParameters, other.propagationParameters)
-        && Objects.equals(ephemeris, other.ephemeris);
+        && Objects.equals(ephemeris, other.ephemeris) && Objects.equals(finalStateVector, other.finalStateVector);
   }
 
 }

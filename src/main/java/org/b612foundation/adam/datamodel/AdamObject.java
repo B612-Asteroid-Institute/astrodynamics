@@ -2,7 +2,6 @@ package org.b612foundation.adam.datamodel;
 
 import java.util.Objects;
 
-// Belongs open source.
 public class AdamObject {
 
   /** Unique id for an object, generated on creation. */
