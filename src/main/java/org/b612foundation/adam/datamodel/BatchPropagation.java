@@ -3,7 +3,6 @@ package org.b612foundation.adam.datamodel;
 import java.util.List;
 import java.util.Objects;
 
-// Belongs open source.
 public class BatchPropagation extends AdamObject {
 
   /** Parameters used to generate the ephemerides of propagations in this batch. */
