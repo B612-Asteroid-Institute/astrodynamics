@@ -45,11 +45,4 @@ public class AdamObject {
     return Objects.equals(uuid, other.uuid) && Objects.equals(project, other.project);
   }
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("AdamObject [uuid=").append(uuid).append(", project=").append(project).append("]");
-    return builder.toString();
-  }
-
 }
