@@ -8,6 +8,9 @@ public class BatchPropagation extends AdamObject {
   /** Parameters used to generate the ephemerides of propagations in this batch. */
   private PropagationParameters templatePropagationParameters;
 
+  /** Human-readable description of this object. */
+  private String description;
+
   /** Type of this batch propagation. Options: HYPERCUBE, SINGLE. Type may indicate presence of custom fields in OPM. */
   private String type;
 
@@ -23,6 +26,15 @@ public class BatchPropagation extends AdamObject {
 
   public BatchPropagation setTemplatePropagationParameters(PropagationParameters templatePropagationParameters) {
     this.templatePropagationParameters = templatePropagationParameters;
+    return this;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public BatchPropagation setDescription(String description) {
+    this.description = description;
     return this;
   }
 
@@ -55,7 +67,8 @@ public class BatchPropagation extends AdamObject {
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), templatePropagationParameters, type, summary, propagationUuids.hashCode());
+    return Objects.hash(super.hashCode(), templatePropagationParameters, description, type, summary,
+        propagationUuids.hashCode());
   }
 
   @Override
@@ -68,7 +81,8 @@ public class BatchPropagation extends AdamObject {
       return false;
     BatchPropagation other = (BatchPropagation) obj;
     return super.equals(other) && Objects.equals(templatePropagationParameters, other.templatePropagationParameters)
-        && Objects.equals(summary, other.summary) && Objects.equals(propagationUuids, other.propagationUuids);
+        && Objects.equals(description, other.description) && Objects.equals(summary, other.summary)
+        && Objects.equals(propagationUuids, other.propagationUuids);
   }
 
 }
