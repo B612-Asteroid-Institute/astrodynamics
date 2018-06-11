@@ -11,9 +11,6 @@ public class BatchPropagation extends AdamObject {
   /** Human-readable description of this object. */
   private String description;
 
-  /** Type of this batch propagation. Options: HYPERCUBE, SINGLE. Type may indicate presence of custom fields in OPM. */
-  private String type;
-
   /** Summary of the results. */
   private String summary;
 
@@ -38,15 +35,6 @@ public class BatchPropagation extends AdamObject {
     return this;
   }
 
-  public String getType() {
-    return type;
-  }
-
-  public BatchPropagation setType(String type) {
-    this.type = type;
-    return this;
-  }
-
   public String getSummary() {
     return summary;
   }
@@ -67,7 +55,7 @@ public class BatchPropagation extends AdamObject {
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), templatePropagationParameters, description, type, summary,
+    return Objects.hash(super.hashCode(), templatePropagationParameters, description, summary,
         propagationUuids.hashCode());
   }
 
