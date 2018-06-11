@@ -4,11 +4,8 @@ import java.util.Objects;
 
 public class AdamObject {
 
-  /** Unique id for an object, generated on creation. */
+  /** Id for an object, unique among all AdamObjects. */
   private String uuid;
-
-  /** Project to which this object belongs. */
-  private String project;
 
   public String getUuid() {
     return uuid;
@@ -19,18 +16,9 @@ public class AdamObject {
     return this;
   }
 
-  public String getProject() {
-    return project;
-  }
-
-  public AdamObject setProject(String project) {
-    this.project = project;
-    return this;
-  }
-
   @Override
   public int hashCode() {
-    return Objects.hash(uuid, project);
+    return Objects.hash(uuid);
   }
 
   @Override
@@ -42,7 +30,7 @@ public class AdamObject {
     if (getClass() != obj.getClass())
       return false;
     AdamObject other = (AdamObject) obj;
-    return Objects.equals(uuid, other.uuid) && Objects.equals(project, other.project);
+    return Objects.equals(uuid, other.uuid);
   }
 
 }
