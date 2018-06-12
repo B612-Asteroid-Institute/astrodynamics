@@ -11,5 +11,9 @@ public enum CalculationState {
   /** Propagation failed, error field contains details. */
   FAILED,
   /** The request is pending in the queue, not yet running. */
-  PENDING
+  PENDING;
+
+  public boolean isFinal() {
+    return COMPLETED.equals(this) || FAILED.equals(this);
+  }
 }
