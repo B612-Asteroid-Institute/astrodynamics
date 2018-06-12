@@ -1,6 +1,5 @@
 package org.b612foundation.adam.datamodel;
 
-import java.util.List;
 import java.util.Objects;
 
 public class BatchPropagation extends AdamObject {
@@ -13,9 +12,6 @@ public class BatchPropagation extends AdamObject {
 
   /** Summary of the results. */
   private String summary;
-
-  /** Uuids of single propagations carried out as part of this batch. */
-  private List<String> propagationUuids;
 
   public PropagationParameters getTemplatePropagationParameters() {
     return templatePropagationParameters;
@@ -44,19 +40,9 @@ public class BatchPropagation extends AdamObject {
     return this;
   }
 
-  public List<String> getPropagationUuids() {
-    return propagationUuids;
-  }
-
-  public BatchPropagation setPropagationUuids(List<String> propagationUuids) {
-    this.propagationUuids = propagationUuids;
-    return this;
-  }
-
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), templatePropagationParameters, description, summary,
-        propagationUuids.hashCode());
+    return Objects.hash(super.hashCode(), templatePropagationParameters, description, summary);
   }
 
   @Override
@@ -69,8 +55,7 @@ public class BatchPropagation extends AdamObject {
       return false;
     BatchPropagation other = (BatchPropagation) obj;
     return super.equals(other) && Objects.equals(templatePropagationParameters, other.templatePropagationParameters)
-        && Objects.equals(description, other.description) && Objects.equals(summary, other.summary)
-        && Objects.equals(propagationUuids, other.propagationUuids);
+        && Objects.equals(description, other.description) && Objects.equals(summary, other.summary);
   }
 
 }
