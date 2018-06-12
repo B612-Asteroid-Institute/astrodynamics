@@ -25,7 +25,14 @@ public class SinglePropagation extends AdamObject {
    */
   private String ephemeris;
 
-  /** Calculated state vector at end time as specified in propagation parameters. Format: time, x, y, z, dx, dy, dz. */
+  /**
+   * Calculated state vector at end time as specified in propagation parameters. Equal to the last line of the
+   * ephemeris.
+   * 
+   * Format: time, x, y, z, x velocity, y velocity, z velocity.
+   * 
+   * Units: seconds-since-file-epoch, meters, meters, meters, meters/second, meters/second, meters/second
+   */
   private String finalStateVector;
 
   public PropagationParameters getPropagationParameters() {
