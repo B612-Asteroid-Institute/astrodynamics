@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * State Vector Components. The coordinate system is given in the metadata. https://public.ccsds.org/Pubs/502x0b2c1.pdf
@@ -20,9 +21,8 @@ public class StateVector implements Serializable {
   public StateVector deepCopy() {
     StateVector res = new StateVector();
     for (String c : comments)
-      res.addComment(new String(c));
-    if (epoch != null)
-      res.setEpoch(new String(epoch));
+      res.addComment(c);
+    res.setEpoch(epoch);
     res.setX(x);
     res.setY(y);
     res.setZ(z);
@@ -111,24 +111,7 @@ public class StateVector implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-    result = prime * result + ((epoch == null) ? 0 : epoch.hashCode());
-    long temp;
-    temp = Double.doubleToLongBits(x);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(xDot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(y);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(yDot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(z);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(zDot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    return result;
+    return Objects.hash(comments, epoch, x, y, z, xDot, yDot, zDot);
   }
 
   @Override
@@ -140,29 +123,16 @@ public class StateVector implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     StateVector other = (StateVector) obj;
-    if (comments == null) {
-      if (other.comments != null)
-        return false;
-    } else if (!comments.equals(other.comments))
-      return false;
-    if (epoch == null) {
-      if (other.epoch != null)
-        return false;
-    } else if (!epoch.equals(other.epoch))
-      return false;
-    if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
-      return false;
-    if (Double.doubleToLongBits(xDot) != Double.doubleToLongBits(other.xDot))
-      return false;
-    if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
-      return false;
-    if (Double.doubleToLongBits(yDot) != Double.doubleToLongBits(other.yDot))
-      return false;
-    if (Double.doubleToLongBits(z) != Double.doubleToLongBits(other.z))
-      return false;
-    if (Double.doubleToLongBits(zDot) != Double.doubleToLongBits(other.zDot))
-      return false;
-    return true;
+    // @formatter:off
+    return Objects.equals(comments, other.comments) 
+        && Objects.equals(epoch, other.epoch) 
+        && Objects.equals(x, other.x) 
+        && Objects.equals(y, other.y) 
+        && Objects.equals(z, other.z) 
+        && Objects.equals(xDot, other.xDot) 
+        && Objects.equals(yDot, other.yDot) 
+        && Objects.equals(zDot, other.zDot);
+    // @formatter:on
   }
 
   @Override

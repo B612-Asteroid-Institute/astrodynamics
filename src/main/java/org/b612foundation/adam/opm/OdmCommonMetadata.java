@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Metadata fields common to all three ODM messages. https://public.ccsds.org/Pubs/502x0b2c1.pdf
@@ -112,15 +113,12 @@ public class OdmCommonMetadata implements Serializable {
   public OdmCommonMetadata deepCopy() {
     OdmCommonMetadata res = new OdmCommonMetadata();
     for (String c : comments)
-      res.addComment(new String(c));
-    if (objectName != null)
-      res.setObject_name(new String(objectName));
-    if (objectId != null)
-      res.setObject_id(new String(objectId));
+      res.addComment(c);
+    res.setObject_name(objectName);
+    res.setObject_id(objectId);
     res.setCenter_name(centerName);
     res.setRef_frame(refFrame);
-    if (refFrameEpoch != null)
-      res.setRef_frame_epoch(new String(refFrameEpoch));
+    res.setRef_frame_epoch(refFrameEpoch);
     res.setTime_system(timeSystem);
     return res;
   }
@@ -195,16 +193,7 @@ public class OdmCommonMetadata implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((centerName == null) ? 0 : centerName.hashCode());
-    result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-    result = prime * result + ((objectId == null) ? 0 : objectId.hashCode());
-    result = prime * result + ((objectName == null) ? 0 : objectName.hashCode());
-    result = prime * result + ((refFrame == null) ? 0 : refFrame.hashCode());
-    result = prime * result + ((refFrameEpoch == null) ? 0 : refFrameEpoch.hashCode());
-    result = prime * result + ((timeSystem == null) ? 0 : timeSystem.hashCode());
-    return result;
+    return Objects.hash(centerName, comments, objectId, objectName, refFrame, refFrameEpoch, timeSystem);
   }
 
   @Override
@@ -216,33 +205,15 @@ public class OdmCommonMetadata implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     OdmCommonMetadata other = (OdmCommonMetadata) obj;
-    if (centerName != other.centerName)
-      return false;
-    if (comments == null) {
-      if (other.comments != null)
-        return false;
-    } else if (!comments.equals(other.comments))
-      return false;
-    if (objectId == null) {
-      if (other.objectId != null)
-        return false;
-    } else if (!objectId.equals(other.objectId))
-      return false;
-    if (objectName == null) {
-      if (other.objectName != null)
-        return false;
-    } else if (!objectName.equals(other.objectName))
-      return false;
-    if (refFrame != other.refFrame)
-      return false;
-    if (refFrameEpoch == null) {
-      if (other.refFrameEpoch != null)
-        return false;
-    } else if (!refFrameEpoch.equals(other.refFrameEpoch))
-      return false;
-    if (timeSystem != other.timeSystem)
-      return false;
-    return true;
+    // @formatter:off
+    return Objects.equals(centerName, other.centerName)
+        && Objects.equals(comments, other.comments)
+        && Objects.equals(objectId, other.objectId)
+        && Objects.equals(objectName, other.objectName)
+        && Objects.equals(refFrame, other.refFrame)
+        && Objects.equals(refFrameEpoch, other.refFrameEpoch)
+        && Objects.equals(timeSystem, other.timeSystem);
+    // @formatter:on
   }
 
   @Override

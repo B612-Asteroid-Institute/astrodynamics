@@ -2,6 +2,10 @@ package org.b612foundation.adam.datamodel;
 
 import java.util.Objects;
 
+import org.b612foundation.adam.opm.OdmFormatter;
+import org.b612foundation.adam.opm.OdmParseException;
+import org.b612foundation.adam.opm.OrbitParameterMessage;
+
 public class PropagationParameters {
 
   /** Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time. */
@@ -12,8 +16,18 @@ public class PropagationParameters {
   private long step_duration_sec;
   /** Settings for the numeric propagator - the ID. */
   private String propagator_uuid;
-  /** OPM as a single string in CCSDS format */
-  private String opm_string;
+  /** OPM as parsed from a single string in CCSDS format */
+  private OrbitParameterMessage opm;
+  
+  public PropagationParameters deepCopy() {
+    PropagationParameters copy = new PropagationParameters();
+    copy.setEnd_time(end_time);
+    copy.setOpm(opm.deepCopy());
+    copy.setPropagator_uuid(propagator_uuid);
+    copy.setStart_time(start_time);
+    copy.setStep_duration_sec(step_duration_sec);
+    return copy;
+  }
 
   public String getStart_time() {
     return start_time;
@@ -50,19 +64,23 @@ public class PropagationParameters {
     this.propagator_uuid = propagator_uuid;
     return this;
   }
-
-  public String getOpm_string() {
-    return opm_string;
+  
+  public OrbitParameterMessage getOpm() {
+    return opm;
   }
-
-  public PropagationParameters setOpm_string(String opm_string) {
-    this.opm_string = opm_string;
+  
+  public PropagationParameters setOpm(OrbitParameterMessage opm) {
+    this.opm = opm;
     return this;
+  }
+  
+  public void setOpmFromString(String opmString) throws OdmParseException {
+    this.opm = OdmFormatter.parseOpmString(opmString);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(end_time, opm_string, propagator_uuid, start_time, step_duration_sec);
+    return Objects.hash(end_time, opm, propagator_uuid, start_time, step_duration_sec);
   }
 
   @Override
@@ -74,7 +92,7 @@ public class PropagationParameters {
     if (getClass() != obj.getClass())
       return false;
     PropagationParameters other = (PropagationParameters) obj;
-    return Objects.equals(end_time, other.end_time) && Objects.equals(opm_string, other.opm_string)
+    return Objects.equals(end_time, other.end_time) && Objects.equals(opm, other.opm)
         && Objects.equals(propagator_uuid, other.propagator_uuid) && Objects.equals(start_time, other.start_time)
         && Objects.equals(step_duration_sec, other.step_duration_sec);
   }

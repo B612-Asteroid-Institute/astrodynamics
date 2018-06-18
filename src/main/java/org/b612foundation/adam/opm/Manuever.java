@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Description of an individual manuever (burn). Used in OPM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
@@ -24,9 +25,8 @@ public class Manuever implements Serializable {
   public Manuever deepCopy() {
     Manuever res = new Manuever();
     for (String c : comments)
-      res.addComment(new String(c));
-    if (manEpochIgnition != null)
-      res.setMan_epoch_ignition(new String(manEpochIgnition));
+      res.addComment(c);
+    res.setMan_epoch_ignition(manEpochIgnition);
     res.setDuration(duration);
     res.setDelta_mass(deltaMass);
     res.setMan_ref_frame(manRefFrame);
@@ -115,23 +115,7 @@ public class Manuever implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-    long temp;
-    temp = Double.doubleToLongBits(deltaMass);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(duration);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(manDv1);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(manDv2);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(manDv3);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((manEpochIgnition == null) ? 0 : manEpochIgnition.hashCode());
-    result = prime * result + ((manRefFrame == null) ? 0 : manRefFrame.hashCode());
-    return result;
+    return Objects.hash(comments, deltaMass, duration, manDv1, manDv2, manDv3, manEpochIgnition, manRefFrame);
   }
 
   @Override
@@ -143,29 +127,16 @@ public class Manuever implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Manuever other = (Manuever) obj;
-    if (comments == null) {
-      if (other.comments != null)
-        return false;
-    } else if (!comments.equals(other.comments))
-      return false;
-    if (Double.doubleToLongBits(deltaMass) != Double.doubleToLongBits(other.deltaMass))
-      return false;
-    if (Double.doubleToLongBits(duration) != Double.doubleToLongBits(other.duration))
-      return false;
-    if (Double.doubleToLongBits(manDv1) != Double.doubleToLongBits(other.manDv1))
-      return false;
-    if (Double.doubleToLongBits(manDv2) != Double.doubleToLongBits(other.manDv2))
-      return false;
-    if (Double.doubleToLongBits(manDv3) != Double.doubleToLongBits(other.manDv3))
-      return false;
-    if (manEpochIgnition == null) {
-      if (other.manEpochIgnition != null)
-        return false;
-    } else if (!manEpochIgnition.equals(other.manEpochIgnition))
-      return false;
-    if (manRefFrame != other.manRefFrame)
-      return false;
-    return true;
+    // @formatter:off
+    return Objects.equals(comments, other.comments)
+        && Objects.equals(deltaMass, other.deltaMass)
+        && Objects.equals(duration, other.duration)
+        && Objects.equals(manDv1, other.manDv1)
+        && Objects.equals(manDv2, other.manDv2)
+        && Objects.equals(manDv3, other.manDv3)
+        && Objects.equals(manEpochIgnition, other.manEpochIgnition)
+        && Objects.equals(manRefFrame, other.manRefFrame);
+    // @formatter:on
   }
 
   @Override

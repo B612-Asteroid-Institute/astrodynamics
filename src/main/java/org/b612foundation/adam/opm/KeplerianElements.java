@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Osculating Keplerian Elements in the specified reference frame (none or all parameters of this block must be given.)
@@ -39,7 +40,7 @@ public class KeplerianElements implements Serializable {
   public KeplerianElements deepCopy() {
     KeplerianElements res = new KeplerianElements();
     for (String c : comments)
-      res.addComment(new String(c));
+      res.addComment(c);
     res.setSemi_major_axis(semiMajorAxis);
     res.setMean_motion(meanMotion);
     res.setEccentricity(eccentricity);
@@ -149,29 +150,8 @@ public class KeplerianElements implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    long temp;
-    temp = Double.doubleToLongBits(argOfPericenter);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-    temp = Double.doubleToLongBits(eccentricity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(gm);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(inclination);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(meanAnomaly);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(meanMotion);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(raOfAscNode);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(semiMajorAxis);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(trueAnomaly);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    return result;
+    return Objects.hash(argOfPericenter, comments, eccentricity, gm, inclination, meanAnomaly, meanMotion, raOfAscNode,
+        semiMajorAxis, trueAnomaly);
   }
 
   @Override
@@ -183,30 +163,18 @@ public class KeplerianElements implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     KeplerianElements other = (KeplerianElements) obj;
-    if (Double.doubleToLongBits(argOfPericenter) != Double.doubleToLongBits(other.argOfPericenter))
-      return false;
-    if (comments == null) {
-      if (other.comments != null)
-        return false;
-    } else if (!comments.equals(other.comments))
-      return false;
-    if (Double.doubleToLongBits(eccentricity) != Double.doubleToLongBits(other.eccentricity))
-      return false;
-    if (Double.doubleToLongBits(gm) != Double.doubleToLongBits(other.gm))
-      return false;
-    if (Double.doubleToLongBits(inclination) != Double.doubleToLongBits(other.inclination))
-      return false;
-    if (Double.doubleToLongBits(meanAnomaly) != Double.doubleToLongBits(other.meanAnomaly))
-      return false;
-    if (Double.doubleToLongBits(meanMotion) != Double.doubleToLongBits(other.meanMotion))
-      return false;
-    if (Double.doubleToLongBits(raOfAscNode) != Double.doubleToLongBits(other.raOfAscNode))
-      return false;
-    if (Double.doubleToLongBits(semiMajorAxis) != Double.doubleToLongBits(other.semiMajorAxis))
-      return false;
-    if (Double.doubleToLongBits(trueAnomaly) != Double.doubleToLongBits(other.trueAnomaly))
-      return false;
-    return true;
+    // @formatter:off
+    return Objects.equals(argOfPericenter, other.argOfPericenter)
+        && Objects.equals(comments, other.comments)
+        && Objects.equals(eccentricity, other.eccentricity)
+        && Objects.equals(gm, other.gm)
+        && Objects.equals(inclination, other.inclination)
+        && Objects.equals(meanAnomaly, other.meanAnomaly)
+        && Objects.equals(meanMotion, other.meanMotion)
+        && Objects.equals(raOfAscNode, other.raOfAscNode)
+        && Objects.equals(semiMajorAxis, other.semiMajorAxis)
+        && Objects.equals(trueAnomaly, other.trueAnomaly);
+    // @formatter:on
   }
 
   @Override

@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Header fields are common for all three ODM messages. https://public.ccsds.org/Pubs/502x0b2c1.pdf
@@ -20,11 +21,9 @@ public class OdmCommonHeader implements Serializable {
   public OdmCommonHeader deepCopy() {
     OdmCommonHeader res = new OdmCommonHeader();
     for (String c : comments)
-      res.addComment(new String(c));
-    if (creationDate != null)
-      res.setCreation_date(new String(creationDate));
-    if (originator != null)
-      res.setOriginator(new String(originator));
+      res.addComment(c);
+    res.setCreation_date(creationDate);
+    res.setOriginator(originator);
     return res;
   }
 
@@ -57,12 +56,7 @@ public class OdmCommonHeader implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-    result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
-    result = prime * result + ((originator == null) ? 0 : originator.hashCode());
-    return result;
+    return Objects.hash(comments, creationDate, originator);
   }
 
   @Override
@@ -74,22 +68,8 @@ public class OdmCommonHeader implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     OdmCommonHeader other = (OdmCommonHeader) obj;
-    if (comments == null) {
-      if (other.comments != null)
-        return false;
-    } else if (!comments.equals(other.comments))
-      return false;
-    if (creationDate == null) {
-      if (other.creationDate != null)
-        return false;
-    } else if (!creationDate.equals(other.creationDate))
-      return false;
-    if (originator == null) {
-      if (other.originator != null)
-        return false;
-    } else if (!originator.equals(other.originator))
-      return false;
-    return true;
+    return Objects.equals(comments, other.comments) && Objects.equals(creationDate, other.creationDate)
+        && Objects.equals(originator, other.originator);
   }
 
   @Override

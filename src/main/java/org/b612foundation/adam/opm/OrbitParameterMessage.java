@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Orbit Parameter Message, or OPM, one of the three high-level message types defined in CCSDS ODM standard.
@@ -45,6 +46,10 @@ public class OrbitParameterMessage implements Serializable {
       res.setState_vector(stateVector.deepCopy());
     if (keplerian != null)
       res.setKeplerian(keplerian.deepCopy());
+    if (spacecraft != null)
+      res.setSpacecraft(spacecraft.deepCopy());
+    if (covariance != null)
+      res.setCovariance(covariance.deepCopy());
     for (Manuever man : manuevers)
       res.addManuever(man.deepCopy());
     for (AdamField af : adamFields)
@@ -145,18 +150,8 @@ public class OrbitParameterMessage implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((adamFields == null) ? 0 : adamFields.hashCode());
-    result = prime * result + ((ccsdsOpmVers == null) ? 0 : ccsdsOpmVers.hashCode());
-    result = prime * result + ((covariance == null) ? 0 : covariance.hashCode());
-    result = prime * result + ((header == null) ? 0 : header.hashCode());
-    result = prime * result + ((keplerian == null) ? 0 : keplerian.hashCode());
-    result = prime * result + ((manuevers == null) ? 0 : manuevers.hashCode());
-    result = prime * result + ((metadata == null) ? 0 : metadata.hashCode());
-    result = prime * result + ((spacecraft == null) ? 0 : spacecraft.hashCode());
-    result = prime * result + ((stateVector == null) ? 0 : stateVector.hashCode());
-    return result;
+    return Objects.hash(adamFields, ccsdsOpmVers, covariance, header, keplerian, manuevers, metadata, spacecraft,
+        stateVector);
   }
 
   @Override
@@ -168,52 +163,17 @@ public class OrbitParameterMessage implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     OrbitParameterMessage other = (OrbitParameterMessage) obj;
-    if (adamFields == null) {
-      if (other.adamFields != null)
-        return false;
-    } else if (!adamFields.equals(other.adamFields))
-      return false;
-    if (ccsdsOpmVers == null) {
-      if (other.ccsdsOpmVers != null)
-        return false;
-    } else if (!ccsdsOpmVers.equals(other.ccsdsOpmVers))
-      return false;
-    if (covariance == null) {
-      if (other.covariance != null)
-        return false;
-    } else if (!covariance.equals(other.covariance))
-      return false;
-    if (header == null) {
-      if (other.header != null)
-        return false;
-    } else if (!header.equals(other.header))
-      return false;
-    if (keplerian == null) {
-      if (other.keplerian != null)
-        return false;
-    } else if (!keplerian.equals(other.keplerian))
-      return false;
-    if (manuevers == null) {
-      if (other.manuevers != null)
-        return false;
-    } else if (!manuevers.equals(other.manuevers))
-      return false;
-    if (metadata == null) {
-      if (other.metadata != null)
-        return false;
-    } else if (!metadata.equals(other.metadata))
-      return false;
-    if (spacecraft == null) {
-      if (other.spacecraft != null)
-        return false;
-    } else if (!spacecraft.equals(other.spacecraft))
-      return false;
-    if (stateVector == null) {
-      if (other.stateVector != null)
-        return false;
-    } else if (!stateVector.equals(other.stateVector))
-      return false;
-    return true;
+    // @formatter:off
+    return Objects.equals(adamFields, other.adamFields) &&
+        Objects.equals(ccsdsOpmVers, other.ccsdsOpmVers) &&
+        Objects.equals(covariance, other.covariance) &&
+        Objects.equals(header, other.header) &&
+        Objects.equals(keplerian, other.keplerian) &&
+        Objects.equals(manuevers, other.manuevers) &&
+        Objects.equals(metadata, other.metadata) &&
+        Objects.equals(spacecraft, other.spacecraft) &&
+        Objects.equals(stateVector, other.stateVector);
+    // @formatter:on
   }
 
   @Override
