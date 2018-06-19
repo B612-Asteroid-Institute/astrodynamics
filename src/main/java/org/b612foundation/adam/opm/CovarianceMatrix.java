@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Position/Velocity Covariance Matrix (6x6 Lower Triangular Form. None or all parameters of the matrix must be given.
@@ -18,12 +19,51 @@ public class CovarianceMatrix implements Serializable {
   /**
    * Covariance matrix. The variables are in order x,y,z,x',y',z'. Units are km and km/s, with corresponding products.
    */
-  private double cXX;
+  private double CXX;
   private double CYX, CYY;
   private double CZX, CZY, CZZ;
   private double CXdotX, CXdotY, CXdotZ, CXdotXdot;
   private double CYdotX, CYdotY, CYdotZ, CYdotXdot, CYdotYdot;
   private double CZdotX, CZdotY, CZdotZ, CZdotXdot, CZdotYdot, CZdotZdot;
+  
+  public CovarianceMatrix deepCopy() {
+    CovarianceMatrix copy = new CovarianceMatrix();
+    for (String comment : comments) {
+      copy.addComment(comment);
+    }
+    
+    copy.setEpoch(epoch);
+    copy.setCov_ref_frame(covRefFrame);
+    
+    copy.setCx_x(CXX);
+    
+    copy.setCy_x(CYX);
+    copy.setCy_y(CYY);
+
+    copy.setCz_x(CZX);
+    copy.setCz_y(CZY);
+    copy.setCz_z(CZZ);
+
+    copy.setCx_dot_x(CXdotX);
+    copy.setCx_dot_y(CXdotY);
+    copy.setCx_dot_z(CXdotZ);
+    copy.setCx_dot_x_dot(CXdotXdot);
+
+    copy.setCy_dot_x(CYdotX);
+    copy.setCy_dot_y(CYdotY);
+    copy.setCy_dot_z(CYdotZ);
+    copy.setCy_dot_x_dot(CYdotXdot);
+    copy.setCy_dot_y_dot(CYdotYdot);
+
+    copy.setCz_dot_x(CZdotX);
+    copy.setCz_dot_y(CZdotY);
+    copy.setCz_dot_z(CZdotZ);
+    copy.setCz_dot_x_dot(CZdotXdot);
+    copy.setCz_dot_y_dot(CZdotYdot);
+    copy.setCz_dot_z_dot(CZdotZdot);
+    
+    return copy;
+  }
 
   public List<String> getComments() {
     return comments;
@@ -58,11 +98,11 @@ public class CovarianceMatrix implements Serializable {
   }
 
   public double getCx_x() {
-    return cXX;
+    return CXX;
   }
 
   public CovarianceMatrix setCx_x(double cXX) {
-    this.cXX = cXX;
+    this.CXX = cXX;
     return this;
   }
 
@@ -248,55 +288,16 @@ public class CovarianceMatrix implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    long temp;
-    temp = Double.doubleToLongBits(CXdotX);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CXdotXdot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CXdotY);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CXdotZ);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CYX);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CYY);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CYdotX);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CYdotXdot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CYdotY);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CYdotYdot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CYdotZ);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZX);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZY);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZZ);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZdotX);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZdotXdot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZdotY);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZdotYdot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZdotZ);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(CZdotZdot);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(cXX);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-    result = prime * result + ((covRefFrame == null) ? 0 : covRefFrame.hashCode());
-    result = prime * result + ((epoch == null) ? 0 : epoch.hashCode());
-    return result;
+    // @formatter:off
+    return Objects.hash(
+        comments, covRefFrame, epoch,
+        CXX,
+        CYX, CYY,
+        CZX, CZY, CZZ,
+        CXdotX, CXdotY, CXdotZ, CXdotXdot,
+        CYdotX, CYdotY, CYdotZ, CYdotXdot, CYdotYdot,
+        CZdotX, CZdotY, CZdotZ, CZdotXdot, CZdotYdot, CZdotZdot);
+    // @formatter:on
   }
 
   @Override
@@ -308,68 +309,29 @@ public class CovarianceMatrix implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     CovarianceMatrix other = (CovarianceMatrix) obj;
-    if (Double.doubleToLongBits(CXdotX) != Double.doubleToLongBits(other.CXdotX))
-      return false;
-    if (Double.doubleToLongBits(CXdotXdot) != Double.doubleToLongBits(other.CXdotXdot))
-      return false;
-    if (Double.doubleToLongBits(CXdotY) != Double.doubleToLongBits(other.CXdotY))
-      return false;
-    if (Double.doubleToLongBits(CXdotZ) != Double.doubleToLongBits(other.CXdotZ))
-      return false;
-    if (Double.doubleToLongBits(CYX) != Double.doubleToLongBits(other.CYX))
-      return false;
-    if (Double.doubleToLongBits(CYY) != Double.doubleToLongBits(other.CYY))
-      return false;
-    if (Double.doubleToLongBits(CYdotX) != Double.doubleToLongBits(other.CYdotX))
-      return false;
-    if (Double.doubleToLongBits(CYdotXdot) != Double.doubleToLongBits(other.CYdotXdot))
-      return false;
-    if (Double.doubleToLongBits(CYdotY) != Double.doubleToLongBits(other.CYdotY))
-      return false;
-    if (Double.doubleToLongBits(CYdotYdot) != Double.doubleToLongBits(other.CYdotYdot))
-      return false;
-    if (Double.doubleToLongBits(CYdotZ) != Double.doubleToLongBits(other.CYdotZ))
-      return false;
-    if (Double.doubleToLongBits(CZX) != Double.doubleToLongBits(other.CZX))
-      return false;
-    if (Double.doubleToLongBits(CZY) != Double.doubleToLongBits(other.CZY))
-      return false;
-    if (Double.doubleToLongBits(CZZ) != Double.doubleToLongBits(other.CZZ))
-      return false;
-    if (Double.doubleToLongBits(CZdotX) != Double.doubleToLongBits(other.CZdotX))
-      return false;
-    if (Double.doubleToLongBits(CZdotXdot) != Double.doubleToLongBits(other.CZdotXdot))
-      return false;
-    if (Double.doubleToLongBits(CZdotY) != Double.doubleToLongBits(other.CZdotY))
-      return false;
-    if (Double.doubleToLongBits(CZdotYdot) != Double.doubleToLongBits(other.CZdotYdot))
-      return false;
-    if (Double.doubleToLongBits(CZdotZ) != Double.doubleToLongBits(other.CZdotZ))
-      return false;
-    if (Double.doubleToLongBits(CZdotZdot) != Double.doubleToLongBits(other.CZdotZdot))
-      return false;
-    if (Double.doubleToLongBits(cXX) != Double.doubleToLongBits(other.cXX))
-      return false;
-    if (comments == null) {
-      if (other.comments != null)
-        return false;
-    } else if (!comments.equals(other.comments))
-      return false;
-    if (covRefFrame != other.covRefFrame)
-      return false;
-    if (epoch == null) {
-      if (other.epoch != null)
-        return false;
-    } else if (!epoch.equals(other.epoch))
-      return false;
-    return true;
+    // @formatter:off
+    return Objects.equals(comments, other.comments)
+        && Objects.equals(covRefFrame, other.covRefFrame)
+        && Objects.equals(epoch, other.epoch)
+        && Objects.equals(CXX, other.CXX)
+        && Objects.equals(CYX, other.CYX) && Objects.equals(CYY, other.CYY)
+        && Objects.equals(CZX, other.CZX) && Objects.equals(CZY, other.CZY) && Objects.equals(CZZ, other.CZZ)
+        && Objects.equals(CXdotX, other.CXdotX) && Objects.equals(CXdotY, other.CXdotY)
+          && Objects.equals(CXdotZ, other.CXdotZ) && Objects.equals(CXdotXdot, other.CXdotXdot)
+        && Objects.equals(CYdotX, other.CYdotX) && Objects.equals(CYdotY, other.CYdotY)
+          && Objects.equals(CYdotZ, other.CYdotZ) && Objects.equals(CYdotXdot, other.CYdotXdot)
+          && Objects.equals(CYdotYdot, other.CYdotYdot)
+        && Objects.equals(CZdotX, other.CZdotX) && Objects.equals(CZdotY, other.CZdotY)
+          && Objects.equals(CZdotZ, other.CZdotZ) && Objects.equals(CZdotXdot, other.CZdotXdot)
+          && Objects.equals(CZdotYdot, other.CZdotYdot) && Objects.equals(CZdotZdot, other.CZdotZdot);
+    // @formatter:on
   }
 
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append("CovarianceMatrix [comments=").append(comments).append(", epoch=").append(epoch)
-        .append(", covRefFrame=").append(covRefFrame).append(", cXX=").append(cXX).append(", CYX=").append(CYX)
+        .append(", covRefFrame=").append(covRefFrame).append(", cXX=").append(CXX).append(", CYX=").append(CYX)
         .append(", CYY=").append(CYY).append(", CZX=").append(CZX).append(", CZY=").append(CZY).append(", CZZ=")
         .append(CZZ).append(", CXdotX=").append(CXdotX).append(", CXdotY=").append(CXdotY).append(", CXdotZ=")
         .append(CXdotZ).append(", CXdotXdot=").append(CXdotXdot).append(", CYdotX=").append(CYdotX).append(", CYdotY=")

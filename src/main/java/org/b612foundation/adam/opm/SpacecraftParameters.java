@@ -3,6 +3,7 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Description of a spacecraft. May be included in OPM or OMM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
@@ -20,6 +21,19 @@ public class SpacecraftParameters implements Serializable {
   private double dragArea;
   /** Drag coefficient. */
   private double dragCoeff;
+
+  public SpacecraftParameters deepCopy() {
+    SpacecraftParameters copy = new SpacecraftParameters();
+    for (String comment : comments) {
+      copy.addComment(comment);
+    }
+    copy.setMass(mass);
+    copy.setSolar_rad_area(solarRadArea);
+    copy.setSolar_rad_coeff(solarRadCoeff);
+    copy.setDrag_area(dragArea);
+    copy.setDrag_coeff(dragCoeff);
+    return copy;
+  }
 
   public List<String> getComments() {
     return comments;
@@ -82,21 +96,7 @@ public class SpacecraftParameters implements Serializable {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((comments == null) ? 0 : comments.hashCode());
-    long temp;
-    temp = Double.doubleToLongBits(dragArea);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(dragCoeff);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(mass);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(solarRadArea);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(solarRadCoeff);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    return result;
+    return Objects.hash(comments, dragArea, dragCoeff, mass, solarRadArea, solarRadCoeff);
   }
 
   @Override
@@ -108,22 +108,14 @@ public class SpacecraftParameters implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     SpacecraftParameters other = (SpacecraftParameters) obj;
-    if (comments == null) {
-      if (other.comments != null)
-        return false;
-    } else if (!comments.equals(other.comments))
-      return false;
-    if (Double.doubleToLongBits(dragArea) != Double.doubleToLongBits(other.dragArea))
-      return false;
-    if (Double.doubleToLongBits(dragCoeff) != Double.doubleToLongBits(other.dragCoeff))
-      return false;
-    if (Double.doubleToLongBits(mass) != Double.doubleToLongBits(other.mass))
-      return false;
-    if (Double.doubleToLongBits(solarRadArea) != Double.doubleToLongBits(other.solarRadArea))
-      return false;
-    if (Double.doubleToLongBits(solarRadCoeff) != Double.doubleToLongBits(other.solarRadCoeff))
-      return false;
-    return true;
+    // @formatter:off
+    return Objects.equals(comments, other.comments)
+        && Objects.equals(dragArea, other.dragArea)
+        && Objects.equals(dragCoeff, other.dragCoeff)
+        && Objects.equals(mass, other.mass)
+        && Objects.equals(solarRadArea, other.solarRadArea)
+        && Objects.equals(solarRadCoeff, other.solarRadCoeff);
+    // @formatter:on
   }
 
   @Override
