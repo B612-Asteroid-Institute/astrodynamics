@@ -10,6 +10,13 @@ public class OdmFormatterTest {
     OrbitParameterMessage parsed = OdmFormatter.parseOpmString(OdmScenarioBuilder.getSimpleOpm());
     Assert.assertEquals(parsed, expected);
   }
+  
+  @Test
+  public void testParseSimpleOpmTTHappy() throws Exception {
+    OrbitParameterMessage expected = OdmScenarioBuilder.buildSimpleOpmTT();
+    OrbitParameterMessage parsed = OdmFormatter.parseOpmString(OdmScenarioBuilder.getSimpleOpmTT());
+    Assert.assertEquals(parsed, expected);
+  }
 
   @Test
   public void testParseKeplerianAndManueversOpmHappy() throws Exception {
