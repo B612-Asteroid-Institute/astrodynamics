@@ -68,42 +68,7 @@ public class OdmScenarioBuilder {
             .setDrag_coeff(2.500000));
     return result;
   }
-  
-  /** Returns simple Orbit Parameter Message from figure 3-1 of the standard, but USING 'TT' as the TIME_SYSTEM instead of 'UTC' */
-  public static OrbitParameterMessage buildSimpleOpmTT() {
-    OrbitParameterMessage result = new OrbitParameterMessage();
-    result.setCcsds_opm_vers("2.0");
-    result.setHeader(
-        new OdmCommonHeader()
-            .setCreation_date("1998-11-06T09:23:57")
-            .setOriginator("JAXA"));
-    result.setMetadata(
-        new OdmCommonMetadata()
-            .addComment("GEOCENTRIC, CARTESIAN, EARTH FIXED")
-            .setObject_name("GODZILLA 5")
-            .setObject_id("1998-057A")
-            .setCenter_name(OdmCommonMetadata.CenterName.EARTH)
-            .setRef_frame(OdmCommonMetadata.ReferenceFrame.ITRF97)
-            .setTime_system(OdmCommonMetadata.TimeSystem.TT));
-    result.setState_vector(
-        new StateVector()
-            .setEpoch("1998-12-18T14:28:15.1172")
-            .setX(6503.514000)
-            .setY(1239.647000)
-            .setZ(-717.490000)
-            .setX_dot(-0.873160)
-            .setY_dot(8.740420)
-            .setZ_dot(-4.191076));
-    result.setSpacecraft(
-        new SpacecraftParameters()
-            .setMass(3000.000000)
-            .setSolar_rad_area(18.770000)
-            .setSolar_rad_coeff(1.000000)
-            .setDrag_area(18.770000)
-            .setDrag_coeff(2.500000));
-    return result;
-  } 
-  
+
   /** Returns OPM from figure 3-2 in the ODM standard */
   public static String getOpmWithKepelerianAndManuevers() {
     return "CCSDS_OPM_VERS = 2.0\n"
