@@ -70,14 +70,14 @@ public class OdmCommonMetadata implements Serializable {
     UTC,
     /** International Atomic Time. */
     TAI,
-	/** Terrestrial Time. */
-	TT,
-	/** Global Positioning System time. */
-	GPS,
-	/** Barycentric Dynamical Time. */
-	TDB,
-	/** Barycentric Coordinate Time. */
-	TCB
+    /** Terrestrial Time. */
+    TT,
+    /** Global Positioning System time. */
+    GPS,
+    /** Barycentric Dynamical Time. */
+    TDB,
+    /** Barycentric Coordinate Time. */
+    TCB
   }
 
   /** Optional comments */
