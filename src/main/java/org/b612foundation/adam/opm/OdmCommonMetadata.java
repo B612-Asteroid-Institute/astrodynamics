@@ -67,8 +67,18 @@ public class OdmCommonMetadata implements Serializable {
    * set as needed.
    */
   public enum TimeSystem {
-    /** Universal coordinated time. */
-    UTC
+    /** Coordinated Universal Time. */
+    UTC,
+    /** International Atomic Time. */
+    TAI,
+    /** Terrestrial Time. */
+    TT,
+    /** Global Positioning System time. */
+    GPS,
+    /** Barycentric Dynamical Time. */
+    TDB,
+    /** Barycentric Coordinate Time. */
+    TCB
   }
 
   /** Optional comments */
