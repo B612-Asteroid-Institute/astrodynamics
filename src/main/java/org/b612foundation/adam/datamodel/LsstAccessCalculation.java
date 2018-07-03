@@ -40,8 +40,9 @@ public class LsstAccessCalculation extends AdamObject {
   private String description;
 
   /**
-   * A list of lines describing detected accesses. The format of the line will be "<start_date>, <end_date>", where
-   * start_date and end_date are ISO-format strings.
+   * A list of lines describing detected accesses. The format of the line will be
+   * "<start_julian_date>,<end_julian_date>;<start_date>,<end_date>", where start_julian_date and end_julian_date are
+   * Julian dates and start_date and end_date are ISO-format strings.
    */
   private List<String> accesses;
 
