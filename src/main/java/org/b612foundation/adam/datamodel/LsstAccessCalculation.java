@@ -105,6 +105,10 @@ public class LsstAccessCalculation extends AdamObject {
 
   @Override
   public int hashCode() {
+    // Note about list hashing. In Object.hash, "if the array contains other arrays as elements, the hash code is based
+    // on their identities rather than their contents." Since that's not what we want for lists - we want contents-based
+    // hashing - we have to use the hashcode computed by the list itself (which uses the elements) instead of the
+    // hashcode computed by Objects.
     return Objects.hash(super.hashCode(), asteroidPropagationParameters, asteroidPropagationUuid, accessStartTime,
         accessEndTime, pointingsTableName, description, accesses == null ? null : accesses.hashCode());
   }
@@ -118,6 +122,8 @@ public class LsstAccessCalculation extends AdamObject {
     if (getClass() != obj.getClass())
       return false;
     LsstAccessCalculation other = (LsstAccessCalculation) obj;
+    // Note about list equality: Objects will not consider list contents, so we need to use List.equals directly. See
+    // note on hashCode.
     return super.equals(other) && Objects.equals(asteroidPropagationParameters, other.asteroidPropagationParameters)
         && Objects.equals(asteroidPropagationUuid, other.asteroidPropagationUuid)
         && Objects.equals(accessStartTime, other.accessStartTime) && Objects.equals(accessEndTime, other.accessEndTime)
