@@ -8,7 +8,7 @@ public class TargetingParameters {
   private double targetDistanceFromEarth;
   
   /** The distance from earth that should be targeted, in km, during the first stage of targeting */
-  private double initialTargetDistanceFromEarth;
+  private double initialTargetDistanceFromEarth = -1.0;
 
   /** The tolerance on the targeting of the target distance from earth, in km. */
   private double tolerance;
