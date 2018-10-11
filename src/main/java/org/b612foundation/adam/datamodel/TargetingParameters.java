@@ -6,6 +6,9 @@ public class TargetingParameters {
 
   /** The distance from earth that should be targeted, in km. */
   private double targetDistanceFromEarth;
+  
+  /** The distance from earth that should be targeted, in km, during the first stage of targeting */
+  private double initialTargetDistanceFromEarth = -1.0;
 
   /** The tolerance on the targeting of the target distance from earth, in km. */
   private double tolerance;
@@ -22,6 +25,15 @@ public class TargetingParameters {
     return this;
   }
 
+  public double getInitialTargetDistanceFromEarth() {
+    return initialTargetDistanceFromEarth;
+  }
+
+  public TargetingParameters setInitialTargetDistanceFromEarth(double initialTargetDistanceFromEarth) {
+    this.initialTargetDistanceFromEarth = initialTargetDistanceFromEarth;
+    return this;
+  }
+  
   public double getTolerance() {
     return tolerance;
   }
@@ -42,7 +54,7 @@ public class TargetingParameters {
 
   @Override
   public int hashCode() {
-    return Objects.hash(targetDistanceFromEarth, tolerance, runNominalOnly);
+    return Objects.hash(targetDistanceFromEarth, initialTargetDistanceFromEarth, tolerance, runNominalOnly);
   }
 
   @Override
@@ -55,6 +67,7 @@ public class TargetingParameters {
       return false;
     TargetingParameters other = (TargetingParameters) obj;
     return Objects.equals(targetDistanceFromEarth, other.targetDistanceFromEarth)
+        && Objects.equals(initialTargetDistanceFromEarth, other.initialTargetDistanceFromEarth)
         && Objects.equals(tolerance, other.tolerance) && Objects.equals(runNominalOnly, other.runNominalOnly);
   }
 
