@@ -16,6 +16,8 @@ public class PropagationParameters {
   private long step_duration_sec;
   /** Settings for the numeric propagator - the ID. */
   private String propagator_uuid;
+  /** Specific executor to be used, e.g. STK, OpenOrb. The behavior is up to the server implementation. */
+  private String executor;
   /** OPM as parsed from a single string in CCSDS format */
   private OrbitParameterMessage opm;
   
@@ -64,7 +66,16 @@ public class PropagationParameters {
     this.propagator_uuid = propagator_uuid;
     return this;
   }
-  
+
+  public String getExecutor() {
+    return executor;
+  }
+
+  public PropagationParameters setExecutor(String executor) {
+    this.executor = executor;
+    return this;
+  }
+
   public OrbitParameterMessage getOpm() {
     return opm;
   }
@@ -80,7 +91,7 @@ public class PropagationParameters {
 
   @Override
   public int hashCode() {
-    return Objects.hash(end_time, opm, propagator_uuid, start_time, step_duration_sec);
+    return Objects.hash(end_time, opm, propagator_uuid, executor, start_time, step_duration_sec);
   }
 
   @Override
@@ -93,8 +104,8 @@ public class PropagationParameters {
       return false;
     PropagationParameters other = (PropagationParameters) obj;
     return Objects.equals(end_time, other.end_time) && Objects.equals(opm, other.opm)
-        && Objects.equals(propagator_uuid, other.propagator_uuid) && Objects.equals(start_time, other.start_time)
-        && Objects.equals(step_duration_sec, other.step_duration_sec);
+        && Objects.equals(propagator_uuid, other.propagator_uuid) && Objects.equals(executor, other.executor)
+        && Objects.equals(start_time, other.start_time) && Objects.equals(step_duration_sec, other.step_duration_sec);
   }
 
 }
