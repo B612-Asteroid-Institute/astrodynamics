@@ -28,6 +28,7 @@ public class PropagationParameters {
     copy.setPropagator_uuid(propagator_uuid);
     copy.setStart_time(start_time);
     copy.setStep_duration_sec(step_duration_sec);
+    copy.setExecutor(executor);
     return copy;
   }
 
