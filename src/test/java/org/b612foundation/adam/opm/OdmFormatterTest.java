@@ -58,4 +58,18 @@ public class OdmFormatterTest {
     OrbitParameterMessage parsed = OdmFormatter.parseOpmString(OdmScenarioBuilder.getOpmWithCovariance(type));
     Assert.assertEquals(parsed, expected);
   }
+
+  @Test
+  public void testBasicOemHappy() throws Exception {
+    OrbitEphemerisMessage expected = OdmScenarioBuilder.buildOemWithAccelerations();
+    OrbitEphemerisMessage parsed = OdmFormatter.parseOemString(OdmScenarioBuilder.getOemWithAccelerations());
+    Assert.assertEquals(parsed, expected);
+  }
+
+  @Test
+  public void testOemWithCovariance() throws Exception {
+    OrbitEphemerisMessage expected = OdmScenarioBuilder.buildOemWithCovariance();
+    OrbitEphemerisMessage parsed = OdmFormatter.parseOemString(OdmScenarioBuilder.getOemWithCovariance());
+    Assert.assertEquals(parsed, expected);
+  }
 }

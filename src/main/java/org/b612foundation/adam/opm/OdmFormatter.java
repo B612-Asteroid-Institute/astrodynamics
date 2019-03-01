@@ -9,6 +9,7 @@ import java.util.List;
  */
 public final class OdmFormatter {
   private static final String CCSDS_OPM_VERS = "CCSDS_OPM_VERS";
+  private static final String CCSDS_OEM_VERS = "CCSDS_OEM_VERS";
   private static final String COMMENT = "COMMENT";
   private static final String CREATION_DATE = "CREATION_DATE";
   private static final String ORIGINATOR = "ORIGINATOR";
@@ -67,6 +68,18 @@ public final class OdmFormatter {
   private static final String MAN_DV_1 = "MAN_DV_1";
   private static final String MAN_DV_2 = "MAN_DV_2";
   private static final String MAN_DV_3 = "MAN_DV_3";
+  // OEM fields
+  private static final String META_START = "META_START";
+  private static final String META_STOP = "META_STOP";
+  private static final String START_TIME = "START_TIME";
+  private static final String USEABLE_START_TIME = "USEABLE_START_TIME";
+  private static final String USEABLE_STOP_TIME = "USEABLE_STOP_TIME";
+  private static final String STOP_TIME = "STOP_TIME";
+  private static final String INTERPOLATION = "INTERPOLATION";
+  private static final String INTERPOLATION_DEGREE = "INTERPOLATION_DEGREE";
+  private static final String COVARIANCE_START = "COVARIANCE_START";
+  private static final String COVARIANCE_STOP = "COVARIANCE_STOP";
+
   private static final String ADAM_PREFIX = "USER_DEFINED_ADAM_";
 
   /* Do not instantiate. */
@@ -89,7 +102,9 @@ public final class OdmFormatter {
     OrbitParameterMessage result = new OrbitParameterMessage();
     result.setCcsds_opm_vers(extractField(lines, CCSDS_OPM_VERS));
     result.setHeader(parseCommonHeader(lines));
-    result.setMetadata(parseCommonMetadata(lines));
+    OdmCommonMetadata metadata = new OdmCommonMetadata();
+    parseCommonMetadata(lines, metadata);
+    result.setMetadata(metadata);
     result.setState_vector(parseStateVector(lines));
     // Several sections are optional, but each may contains COMMENT, so look
     // ahead.
@@ -140,6 +155,21 @@ public final class OdmFormatter {
     return result;
   }
 
+  public static OrbitEphemerisMessage parseOemString(String buffer) throws OdmParseException {
+    ArrayList<String> lines = getNonEmptyLines(buffer);
+    OrbitEphemerisMessage result = new OrbitEphemerisMessage();
+    result.setCcsds_oem_vers(extractField(lines, CCSDS_OEM_VERS));
+    result.setHeader(parseCommonHeader(lines));
+    // There may be multiple blocks of data, each with its own metadata and optional covarience.
+    while (containsLater(lines, META_START)) {
+      result.addBlock(parseOemBlock(lines));
+    }
+    if (!lines.isEmpty()) {
+      throw new OdmParseException("Unparsed lines in OEM: " + lines);
+    }
+    return result;
+  }
+
   /**
    * Parses common header lines. Assumes the input lines all have data. On success removes the parsed lines from the
    * list.
@@ -155,11 +185,59 @@ public final class OdmFormatter {
     return result;
   }
 
+  private static OemDataBlock parseOemBlock(List<String> lines) throws OdmParseException {
+    OemDataBlock block = new OemDataBlock();
+
+    OemMetadata metadata = new OemMetadata();
+    parseOemMetadata(lines, metadata);
+    block.setMetadata(metadata);
+
+    // Comments are optional, expect them to come as a group.
+    while (containsNext(lines, COMMENT)) {
+      block.addComment(extractField(lines, COMMENT));
+    }
+
+    // The data comes until the end of file, another META_START, or COVARIANCE_START
+    while (!lines.isEmpty() && !containsNext(lines, META_START) && !containsNext(lines, COVARIANCE_START)) {
+      String line = lines.remove(0);
+      // Date x y z vx vy vz [ax ay az]. We ignore accelerations for now.
+      String[] parts = line.split("\\s+");
+      // for (int i = 0; i < parts.length; i++) System.out.println("LINE " + i + "[" + parts[i] + "]");
+      if (parts.length < 7) {
+        throw new OdmParseException("Ephemeris data should contain at least date, position, and velocity. Got " + line);
+      }
+      try {
+        block.addLine(parts[0], Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]),
+            Double.parseDouble(parts[4]), Double.parseDouble(parts[5]), Double.parseDouble(parts[6]));
+      } catch (NumberFormatException e) {
+        throw new OdmParseException("Couldn't parse ephemeris line " + line + ": " + e);
+      }
+    }
+
+    // If there was no covariance, we are done.
+    if (!containsNext(lines, COVARIANCE_START)) {
+      return block;
+    }
+
+    // Eat the covariance tag.
+    lines.remove(0);
+
+    // There may be multiple entries until the end tag.
+    while (!lines.isEmpty() && !containsNext(lines, COVARIANCE_STOP)) {
+      block.addCovariance(parseShortFormCovariance(lines));
+    }
+
+    // Eat closing tag.
+    if (containsNext(lines, COVARIANCE_STOP)) {
+      lines.remove(0);
+    }
+    return block;
+  }
+
   /**
    * Parses common metadata fields among three ODM types. On success removes the parsed lines from the list.
    */
-  private static OdmCommonMetadata parseCommonMetadata(List<String> lines) throws OdmParseException {
-    OdmCommonMetadata result = new OdmCommonMetadata();
+  private static void parseCommonMetadata(List<String> lines, OdmCommonMetadata result) throws OdmParseException {
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
     }
@@ -175,7 +253,41 @@ public final class OdmFormatter {
     }
     String time = extractField(lines, TIME_SYSTEM);
     result.setTime_system(parseTimeSystem(time));
-    return result;
+  }
+
+  /**
+   * Parses OEM metadata block, which has a few fields in addition to the common metadata block. On success removes the
+   * parsed lines from the list.
+   */
+  private static void parseOemMetadata(List<String> lines, OemMetadata result) throws OdmParseException {
+    if (!containsNext(lines, META_START)) {
+      throw new OdmParseException("OEM metadata block missing " + META_START);
+    }
+    lines.remove(0); // consume START
+    parseCommonMetadata(lines, result);
+    result.setStart_time(extractField(lines, START_TIME));
+    if (containsNext(lines, USEABLE_START_TIME)) {
+      result.setUsable_start_time(extractField(lines, USEABLE_START_TIME));
+    }
+    if (containsNext(lines, USEABLE_STOP_TIME)) {
+      result.setUsable_stop_time(extractField(lines, USEABLE_STOP_TIME));
+    }
+    result.setStop_time(extractField(lines, STOP_TIME));
+    if (containsNext(lines, INTERPOLATION)) {
+      result.setInterpolation(extractField(lines, INTERPOLATION));
+    }
+    if (containsNext(lines, INTERPOLATION_DEGREE)) {
+      String value = extractField(lines, INTERPOLATION_DEGREE);
+      try {
+        result.setInterpolation_degree(Integer.parseInt(value));
+      } catch (NumberFormatException e) {
+        throw new OdmParseException(INTERPOLATION_DEGREE + " should be an integer, got " + value);
+      }
+    }
+    if (!containsNext(lines, META_STOP)) {
+      throw new OdmParseException("OEM metadata block missing " + META_STOP);
+    }
+    lines.remove(0); // consume STOP
   }
 
   /** Parses the state vector section. Removes parsed lines from the list. */
@@ -236,7 +348,7 @@ public final class OdmFormatter {
    * parsed lines from the list. The long form is used in OPM and OMM. OEM uses a different (short) format for the same
    * data.
    */
-  private static CovarianceMatrix parseLongFormCovariance(ArrayList<String> lines) throws OdmParseException {
+  private static CovarianceMatrix parseLongFormCovariance(List<String> lines) throws OdmParseException {
     CovarianceMatrix result = new CovarianceMatrix();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
@@ -269,6 +381,90 @@ public final class OdmFormatter {
     result.setCz_dot_x_dot(extractDoubleNoUnits(lines, CZ_DOT_X_DOT));
     result.setCz_dot_y_dot(extractDoubleNoUnits(lines, CZ_DOT_Y_DOT));
     result.setCz_dot_z_dot(extractDoubleNoUnits(lines, CZ_DOT_Z_DOT));
+    return result;
+  }
+
+  /**
+   * Parses short form of covariance matrix used in OEM. The matrix is listed as lower triangular, with 1 to 6 numbers
+   * per line.
+   */
+  private static CovarianceMatrix parseShortFormCovariance(List<String> lines) throws OdmParseException {
+    CovarianceMatrix result = new CovarianceMatrix();
+    while (containsNext(lines, COMMENT)) {
+      result.addComment(extractField(lines, COMMENT));
+    }
+    // Epoch is required in short-form
+    result.setEpoch(extractField(lines, EPOCH));
+    // Covariance reference frame may be omitted, in which case the reference
+    // frame from the metadata section is assumed.
+    if (containsNext(lines, COV_REF_FRAME)) {
+      String frame = extractField(lines, COV_REF_FRAME);
+      result.setCov_ref_frame(parseReferenceFrame(frame));
+    }
+    // There should be 6 lines with numbers. There should also be the end tag somewhere.
+    if (lines.size() < 7) {
+      throw new OdmParseException("Unexpected end of data while parsing short-form covariance");
+    }
+    try {
+      String line = lines.remove(0);
+      String[] parts = line.split("\\s+");
+      if (parts.length < 1) {
+        throw new OdmParseException("Not enough numbers in covariance line for X: " + line);
+      }
+      result.setCx_x(Double.parseDouble(parts[0]));
+
+      line = lines.remove(0);
+      parts = line.split("\\s+");
+      if (parts.length < 2) {
+        throw new OdmParseException("Not enough numbers in covariance line for Y: " + line);
+      }
+      result.setCy_x(Double.parseDouble(parts[0]));
+      result.setCy_y(Double.parseDouble(parts[1]));
+
+      line = lines.remove(0);
+      parts = line.split("\\s+");
+      if (parts.length < 3) {
+        throw new OdmParseException("Not enough numbers in covariance line for Z: " + line);
+      }
+      result.setCz_x(Double.parseDouble(parts[0]));
+      result.setCz_y(Double.parseDouble(parts[1]));
+      result.setCz_z(Double.parseDouble(parts[2]));
+
+      line = lines.remove(0);
+      parts = line.split("\\s+");
+      if (parts.length < 4) {
+        throw new OdmParseException("Not enough numbers in covariance line for X_DOT: " + line);
+      }
+      result.setCx_dot_x(Double.parseDouble(parts[0]));
+      result.setCx_dot_y(Double.parseDouble(parts[1]));
+      result.setCx_dot_z(Double.parseDouble(parts[2]));
+      result.setCx_dot_x_dot(Double.parseDouble(parts[3]));
+
+      line = lines.remove(0);
+      parts = line.split("\\s+");
+      if (parts.length < 5) {
+        throw new OdmParseException("Not enough numbers in covariance line for Y_DOT: " + line);
+      }
+      result.setCy_dot_x(Double.parseDouble(parts[0]));
+      result.setCy_dot_y(Double.parseDouble(parts[1]));
+      result.setCy_dot_z(Double.parseDouble(parts[2]));
+      result.setCy_dot_x_dot(Double.parseDouble(parts[3]));
+      result.setCy_dot_y_dot(Double.parseDouble(parts[4]));
+
+      line = lines.remove(0);
+      parts = line.split("\\s+");
+      if (parts.length < 6) {
+        throw new OdmParseException("Not enough numbers in covariance line for Z_DOT: " + line);
+      }
+      result.setCz_dot_x(Double.parseDouble(parts[0]));
+      result.setCz_dot_y(Double.parseDouble(parts[1]));
+      result.setCz_dot_z(Double.parseDouble(parts[2]));
+      result.setCz_dot_x_dot(Double.parseDouble(parts[3]));
+      result.setCz_dot_y_dot(Double.parseDouble(parts[4]));
+      result.setCz_dot_z_dot(Double.parseDouble(parts[5]));
+    } catch (NumberFormatException e) {
+      throw new OdmParseException("Cannot parse short form covariance matrix: " + e);
+    }
     return result;
   }
 

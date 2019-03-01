@@ -1,5 +1,9 @@
 package org.b612foundation.adam.opm;
 
+import org.b612foundation.adam.opm.OdmCommonMetadata.CenterName;
+import org.b612foundation.adam.opm.OdmCommonMetadata.ReferenceFrame;
+import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
+
 /**
  * Builds example Orbit Data Messages from
  * http://public.ccsds.org/publications/archive/502x0b2c1.pdf
@@ -304,6 +308,170 @@ public class OdmScenarioBuilder {
       result.addAdam_field("HYPERCUBE", hypercube);
     }
 
+    return result;
+  }
+
+  public static String getOemWithAccelerations() {
+    return "CCSDS_OEM_VERS = 2.0\n"
+        + "COMMENT  OEM WITH OPTIONAL ACCELERATIONS MUST BE OEM VERSION 2.0\n"
+        + "CREATION_DATE = 1996-11-04T17:22:31 \n"
+        + "ORIGINATOR = NASA/JPL\n"
+        + "META_START\n"
+        + "OBJECT_NAME         = MARS GLOBAL SURVEYOR\n"
+        + "OBJECT_ID           = 1996-062A\n"
+        + "CENTER_NAME         = SUN\n" // we don't support MARS BARYCENTER\n"
+        + "REF_FRAME           = EME2000\n"
+        + "TIME_SYSTEM         = UTC\n"
+        + "START_TIME          = 1996-12-18T12:00:00.331\n"
+        + "USEABLE_START_TIME  = 1996-12-18T12:10:00.331\n"
+        + "USEABLE_STOP_TIME   = 1996-12-28T21:23:00.331\n"
+        + "STOP_TIME           = 1996-12-28T21:28:00.331\n"
+        + "INTERPOLATION       = HERMITE\n"
+        + "INTERPOLATION_DEGREE = 7\n"
+        + "META_STOP\n"
+        + "COMMENT  This file was produced by M.R. Somebody, MSOO NAV/JPL, 2000 NOV 04. It is\n"
+        + "COMMENT  to be used for DSN scheduling purposes only.\n"
+        + "1996-12-18T12:00:00.331  2789.6 -280.0 -1746.8  4.73 -2.50 -1.04  0.008 0.001 -0.159\n"
+        + "1996-12-18T12:01:00.331  2783.4 -308.1 -1877.1  5.19 -2.42 -2.00  0.008 0.001  0.001\n"
+        + "1996-12-18T12:02:00.331  2776.0 -336.9 -2008.7  5.64 -2.34 -1.95  0.008 0.001  0.159\n"
+        // intervening data records omitted here
+        + "1996-12-28T21:28:00.331 -3881.0  564.0 -682.8 -3.29 -3.67  1.64  -0.003 0.000  0.000 ";
+  }
+
+  public static OrbitEphemerisMessage buildOemWithAccelerations() {
+    OrbitEphemerisMessage result = new OrbitEphemerisMessage();
+    result.setCcsds_oem_vers("2.0");
+    result.setHeader(new OdmCommonHeader().addComment("OEM WITH OPTIONAL ACCELERATIONS MUST BE OEM VERSION 2.0")
+        .setCreation_date("1996-11-04T17:22:31").setOriginator("NASA/JPL"));
+    OemMetadata metadata = new OemMetadata();
+    metadata.setObject_name("MARS GLOBAL SURVEYOR").setObject_id("1996-062A")
+        .setCenter_name(OdmCommonMetadata.CenterName.SUN) // was MARS BARYCENTER, but we don't support that
+        .setRef_frame(ReferenceFrame.EME2000).setTime_system(TimeSystem.UTC);
+    metadata.setStart_time("1996-12-18T12:00:00.331");
+    metadata.setUsable_start_time("1996-12-18T12:10:00.331");
+    metadata.setUsable_stop_time("1996-12-28T21:23:00.331");
+    metadata.setStop_time("1996-12-28T21:28:00.331");
+    metadata.setInterpolation("HERMITE");
+    metadata.setInterpolation_degree(7);
+
+    OemDataBlock block = new OemDataBlock();
+    block.setMetadata(metadata);
+    block.addComment("This file was produced by M.R. Somebody, MSOO NAV/JPL, 2000 NOV 04. It is");
+    block.addComment("to be used for DSN scheduling purposes only.");
+
+    block.addLine("1996-12-18T12:00:00.331", 2789.6, -280.0, -1746.8, 4.73, -2.50, -1.04); // 0.008 0.001 -0.159
+    block.addLine("1996-12-18T12:01:00.331", 2783.4, -308.1, -1877.1, 5.19, -2.42, -2.00); // 0.008 0.001 0.001
+    block.addLine("1996-12-18T12:02:00.331", 2776.0, -336.9, -2008.7, 5.64, -2.34, -1.95); // 0.008 0.001 0.159
+    // intervening data records omitted here
+    block.addLine("1996-12-28T21:28:00.331", -3881.0, 564.0, -682.8, -3.29, -3.67, 1.64); // -0.003 0.000 0.000
+    result.addBlock(block);
+    return result;
+  }
+
+  public static String getOemWithCovariance() {
+    return "CCSDS_OEM_VERS = 2.0\n"
+        + "CREATION_DATE = 1996-11-04T17:22:31\n"
+        + "ORIGINATOR = NASA/JPL\n"
+        + "\n"
+        + "META_START\n"
+        + "OBJECT_NAME          = MARS GLOBAL SURVEYOR\n"
+        + "OBJECT_ID            = 1996-062A\n"
+        + "CENTER_NAME          = SUN\n" // example used "MARS BARYCENTER", which is not supported for now
+        + "REF_FRAME            = EME2000\n"
+        + "TIME_SYSTEM          = UTC\n"
+        + "START_TIME           = 1996-12-28T21:29:07.267\n"
+        + "USEABLE_START_TIME   = 1996-12-28T22:08:02.5\n"
+        + "USEABLE_STOP_TIME    = 1996-12-30T01:18:02.5\n"
+        + "STOP_TIME            = 1996-12-30T01:28:02.267\n"
+        + "INTERPOLATION        = HERMITE\n"
+        + "INTERPOLATION_DEGREE = 7\n"
+        + "META_STOP\n"
+        + "\n"
+        + "COMMENT  This block begins after trajectory correction maneuver TCM-3.\n"
+        + "1996-12-28T21:29:07.267 -2432.166 -063.042 1742.754  7.33702 -3.495867 -1.041945\n"
+        + "1996-12-28T21:59:02.267 -2445.234 -878.141 1873.073  1.86043 -3.421256 -0.996366\n"
+        + "1996-12-28T22:00:02.267 -2458.079 -683.858 2007.684  6.36786 -3.339563 -0.946654\n"
+        // intervening data records omitted here
+        + "1996-12-30T01:28:02.267 2164.375 1115.811 -688.131  -3.53328 -2.88452 0.88535\n"
+        + "\n"
+        + "COVARIANCE_START\n"
+        + "EPOCH = 1996-12-28T21:29:07.267\n"
+        + "COV_REF_FRAME = EME2000\n"
+        + "3.3313494e-04\n"
+        + "4.6189273e-04  6.7824216e-04\n"
+        + "-3.0700078e-04 -4.2212341e-04  3.2319319e-04\n"
+        + "-3.3493650e-07 -4.6860842e-07  2.4849495e-07  4.2960228e-10\n"
+        + "-2.2118325e-07 -2.8641868e-07  1.7980986e-07  2.6088992e-10  1.7675147e-10\n"
+        + "-3.0413460e-07 -4.9894969e-07  3.5403109e-07  1.8692631e-10  1.0088625e-10  6.2244443e-10\n"
+        + "\n"
+        + "EPOCH = 1996-12-29T21:00:00\n"
+        + "COV_REF_FRAME = EME2000\n"
+        + "3.4424505e-04\n"
+        + "4.5078162e-04  6.8935327e-04\n"
+        + "-3.0600067e-04 -4.1101230e-04  3.3420420e-04\n"
+        + "-3.2382549e-07 -4.5750731e-07  2.3738384e-07  4.3071339e-10\n"
+        + "-2.1007214e-07 -2.7530757e-07  1.6870875e-07  2.5077881e-10  1.8786258e-10\n"
+        + "-3.0302350e-07 -4.8783858e-07  3.4302008e-07  1.7581520e-10  1.0077514e-10  6.2244443e-10\n"
+        + "COVARIANCE_STOP";
+  }
+
+  public static OrbitEphemerisMessage buildOemWithCovariance() {
+    OrbitEphemerisMessage result = new OrbitEphemerisMessage();
+    result.setCcsds_oem_vers("2.0");
+    result.setHeader(new OdmCommonHeader().setCreation_date("1996-11-04T17:22:31").setOriginator("NASA/JPL"));
+
+    OemMetadata metadata = new OemMetadata();
+    metadata.setObject_name("MARS GLOBAL SURVEYOR");
+    metadata.setObject_id("1996-062A");
+    metadata.setCenter_name(CenterName.SUN); // example used "MARS BARYCENTER", which is not supported for now
+    metadata.setRef_frame(ReferenceFrame.EME2000);
+    metadata.setTime_system(TimeSystem.UTC);
+    metadata.setStart_time("1996-12-28T21:29:07.267");
+    metadata.setUsable_start_time("1996-12-28T22:08:02.5");
+    metadata.setUsable_stop_time("1996-12-30T01:18:02.5");
+    metadata.setStop_time("1996-12-30T01:28:02.267");
+    metadata.setInterpolation("HERMITE");
+    metadata.setInterpolation_degree(7);
+
+    OemDataBlock block = new OemDataBlock();
+    block.setMetadata(metadata);
+    block.addComment("This block begins after trajectory correction maneuver TCM-3.");
+
+    block.addLine("1996-12-28T21:29:07.267", -2432.166, -063.042, 1742.754, 7.33702, -3.495867, -1.041945);
+    block.addLine("1996-12-28T21:59:02.267", -2445.234, -878.141, 1873.073, 1.86043, -3.421256, -0.996366);
+    block.addLine("1996-12-28T22:00:02.267", -2458.079, -683.858, 2007.684, 6.36786, -3.339563, -0.946654);
+    // intervening data records omitted here
+    block.addLine("1996-12-30T01:28:02.267", 2164.375, 1115.811, -688.131, -3.53328, -2.88452, 0.88535);
+
+    CovarianceMatrix cov = new CovarianceMatrix();
+    cov.setEpoch("1996-12-28T21:29:07.267");
+    cov.setCov_ref_frame(ReferenceFrame.EME2000);
+    cov.setCx_x(3.3313494e-04);
+    cov.setCy_x(4.6189273e-04).setCy_y(6.7824216e-04);
+    cov.setCz_x(-3.0700078e-04).setCz_y(-4.2212341e-04).setCz_z(3.2319319e-04);
+    cov.setCx_dot_x(-3.3493650e-07).setCx_dot_y(-4.6860842e-07).setCx_dot_z(2.4849495e-07)
+        .setCx_dot_x_dot(4.2960228e-10);
+    cov.setCy_dot_x(-2.2118325e-07).setCy_dot_y(-2.8641868e-07).setCy_dot_z(1.7980986e-07)
+        .setCy_dot_x_dot(2.6088992e-10).setCy_dot_y_dot(1.7675147e-10);
+    cov.setCz_dot_x(-3.0413460e-07).setCz_dot_y(-4.9894969e-07).setCz_dot_z(3.5403109e-07)
+        .setCz_dot_x_dot(1.8692631e-10).setCz_dot_y_dot(1.0088625e-10).setCz_dot_z_dot(6.2244443e-10);
+    block.addCovariance(cov);
+
+    cov = new CovarianceMatrix();
+    cov.setEpoch("1996-12-29T21:00:00");
+    cov.setCov_ref_frame(ReferenceFrame.EME2000);
+    cov.setCx_x(3.4424505e-04);
+    cov.setCy_x(4.5078162e-04).setCy_y(6.8935327e-04);
+    cov.setCz_x(-3.0600067e-04).setCz_y(-4.1101230e-04).setCz_z(3.3420420e-04);
+    cov.setCx_dot_x(-3.2382549e-07).setCx_dot_y(-4.5750731e-07).setCx_dot_z(2.3738384e-07)
+        .setCx_dot_x_dot(4.3071339e-10);
+    cov.setCy_dot_x(-2.1007214e-07).setCy_dot_y(-2.7530757e-07).setCy_dot_z(1.6870875e-07)
+        .setCy_dot_x_dot(2.5077881e-10).setCy_dot_y_dot(1.8786258e-10);
+    cov.setCz_dot_x(-3.0302350e-07).setCz_dot_y(-4.8783858e-07).setCz_dot_z(3.4302008e-07)
+        .setCz_dot_x_dot(1.7581520e-10).setCz_dot_y_dot(1.0077514e-10).setCz_dot_z_dot(6.2244443e-10);
+    block.addCovariance(cov);
+
+    result.addBlock(block);
     return result;
   }
 }
