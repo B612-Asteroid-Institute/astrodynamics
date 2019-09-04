@@ -1,6 +1,7 @@
 package org.b612foundation.adam.datamodel;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class AdamObject {
 
@@ -14,6 +15,11 @@ public abstract class AdamObject {
   public AdamObject setUuid(String uuid) {
     this.uuid = uuid;
     return this;
+  }
+
+  public AdamObject()
+  {
+    this.uuid = UUID.randomUUID().toString();
   }
 
   @Override
