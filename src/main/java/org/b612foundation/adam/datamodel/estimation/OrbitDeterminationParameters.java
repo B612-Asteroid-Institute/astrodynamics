@@ -2,22 +2,40 @@ package org.b612foundation.adam.datamodel.estimation;
 
 import lombok.*;
 import org.b612foundation.adam.datamodel.AdamObject;
+import org.b612foundation.adam.opm.OrbitParameterMessage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The parameters to use for a specific run of the OD software which includes things like the space object ID,
  * measurements to process, etc.
  */
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class BaseOrbitDeterminationParameters extends AdamObject {
-    /** Specific executor to be used, e.g. OpenOrb, Orekit, etc. The behavior is up to the server implementation. */
-    private String executor;
+public class OrbitDeterminationParameters extends AdamObject {
 
     /** Logging level for output of forensic data during OD run **/
     private int loggingLevel;
+
+    /** Settings which may be specific to an OD calculation at initialization time, like initial guesses which
+     * are state specific **/
+    @Singular
+    private Map<String, String> initializationSettings;
+
+    /** An initial state which can be used for initializing the OD system **/
+    private OrbitParameterMessage initialStateEstimate;
+
+    /** The SRP coefficient for the space object **/
+    private double initialStateEstimateCr;
+
+    /** The SRP coefficient for the space object **/
+    private double initialStateEstimateSrpArea;
+
+    /** The initial state estimate of the mass of the space object **/
+    private double initialStateEstimateMass;
 
     /** Format of the passed in measurements string **/
     private String measurementsFormatType;
@@ -30,7 +48,7 @@ public class BaseOrbitDeterminationParameters extends AdamObject {
     private String measurements;
 
     /** Settings for the numeric propagator - the ID. */
-    private String orbit_determination_uuid;
+    private String orbit_determination_config_uuid;
 
 
     /** The ID in the observations file that we are doing the OD against **/
