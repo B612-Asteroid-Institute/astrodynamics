@@ -69,6 +69,7 @@ public class OdDataExamplesTest {
                 .outputFrame("ICRF")
                 .measurementsFormatType("DES")
                 .measurements(base64ObsFile)
+                .type(OrbitDeterminationParameters.OdType.Initial)
                 .build();
 
         // A call to the REST service ran the IOD and generated IOD values, let's say so now have OPM...
@@ -122,6 +123,7 @@ public class OdDataExamplesTest {
                 .initialStateEstimateCr(1.3)
                 .initialStateEstimateMass(9.3e20)
                 .initialStateEstimateSrpArea(2.95e6)
+                .type(OrbitDeterminationParameters.OdType.Full)
                 .build();
 
 

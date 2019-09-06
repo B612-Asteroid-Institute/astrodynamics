@@ -61,6 +61,10 @@ public class OrbitDeterminationParameters extends AdamObject {
     /** The Coordinate frame that the resulting orbit should be calculated in **/
     private String outputFrame;
 
+    private OdType type;
 
-
+    public enum OdType {
+        Initial,
+        Full
+    }
 }
