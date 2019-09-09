@@ -39,6 +39,10 @@ public class OrbitEphemerisMessage implements Serializable {
     this.data.add(block);
   }
 
+  public List<OemDataBlock> getBlocks() {
+    return this.data;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(ccsdsOemVers, header, data);
