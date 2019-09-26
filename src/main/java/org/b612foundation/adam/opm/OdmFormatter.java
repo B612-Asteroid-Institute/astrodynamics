@@ -1,7 +1,14 @@
 package org.b612foundation.adam.opm;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static org.b612foundation.adam.opm.AstroConstants.AU_PER_DAY_TO_METER_PER_SEC;
+import static org.b612foundation.adam.opm.AstroConstants.AU_TO_METERS;
 
 /**
  * Class for translating between text-based ODM formats and classes in this package. The CCSDS ODM standard is here:
@@ -168,6 +175,44 @@ public final class OdmFormatter {
       throw new OdmParseException("Unparsed lines in OEM: " + lines);
     }
     return result;
+  }
+
+  public static OrbitEphemerisMessage parseOorbEphemerisString(String buffer) throws OdmParseException {
+    //TODO fill in metadata and optional covariance
+    final int xIndex = 2;
+    final int yIndex = 3;
+    final int zIndex = 4;
+    final int vxIndex = 5;
+    final int vyIndex = 6;
+    final int vzIndex = 7;
+    final int epochIndex = 9;
+    OemDataBlock ephemBlock = new OemDataBlock();
+
+    String[] lines = buffer.split("\n");
+    for(String line : lines) {
+      String trimmedLine = line.trim();
+      if(trimmedLine.isEmpty() || trimmedLine.startsWith("!!") || trimmedLine.startsWith("#")) {
+        continue;
+      }
+
+      String[] elements = line.split("\\s+");
+      double x = Double.parseDouble(elements[xIndex]) * AU_TO_METERS;
+      double y = Double.parseDouble(elements[yIndex]) * AU_TO_METERS;
+      double z = Double.parseDouble(elements[zIndex]) * AU_TO_METERS;
+      double vx = Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_METER_PER_SEC;
+      double vy = Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_METER_PER_SEC;
+      double vz = Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_METER_PER_SEC;
+      double mjd = Double.parseDouble(elements[epochIndex]);
+      String epoch = AstroUtils.localDateTimefromMJD(mjd).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+      ephemBlock.addLine(epoch, x, y, z, vx, vy, vz);
+    }
+
+    OdmCommonHeader header = new OdmCommonHeader();
+    header.setCreation_date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    OrbitEphemerisMessage message = new OrbitEphemerisMessage().setHeader(header);
+    message.addBlock(ephemBlock);
+
+    return message;
   }
 
   /**

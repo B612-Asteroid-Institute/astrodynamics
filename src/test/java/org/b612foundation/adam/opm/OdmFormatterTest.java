@@ -3,6 +3,8 @@ package org.b612foundation.adam.opm;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class OdmFormatterTest {
   @Test
   public void testParseSimpleOpmHappy() throws Exception {
@@ -71,5 +73,16 @@ public class OdmFormatterTest {
     OrbitEphemerisMessage expected = OdmScenarioBuilder.buildOemWithCovariance();
     OrbitEphemerisMessage parsed = OdmFormatter.parseOemString(OdmScenarioBuilder.getOemWithCovariance());
     Assert.assertEquals(parsed, expected);
+  }
+
+  @Test
+  public void testBasicOorbOemHappy() throws OdmParseException {
+    String oorbEphemerisString = String.join("\n",
+            "!!OID FORMAT x y z dx/dt dy/dt dz/dt H t_0 INDEX N_PAR MOID COMPCODE",
+            "smoke CAR  0.149995559432062E+01  0.140451497813544E-01 -0.893450119807154E-15 -0.131510871962501E-03  0.140447393095277E-01 -0.176296525267191E-14  0.200000000000000E+02   0.58485000800741E+05 1 6 -0.100000000000000E+01 OPENORB",
+            "smoke CAR  0.149975833233652E+01  0.280890681682720E-01 -0.345024787678361E-14 -0.263010213738389E-03  0.140428922497122E-01 -0.329957019328539E-14  0.200000000000000E+02   0.58486000800741E+05 1 6 -0.100000000000000E+01 OPENORB");
+    OrbitEphemerisMessage oemFromOorb = OdmFormatter.parseOorbEphemerisString(oorbEphemerisString);
+    assertEquals(2, oemFromOorb.getBlocks().get(0).getLines().size());
+    //TODO Add real tests if this is permament
   }
 }
