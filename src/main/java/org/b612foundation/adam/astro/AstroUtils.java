@@ -1,11 +1,11 @@
-package org.b612foundation.adam.opm;
+package org.b612foundation.adam.astro;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.JulianFields;
 
-import static org.b612foundation.adam.opm.AstroConstants.DAY_TO_SEC;
+import static org.b612foundation.adam.astro.AstroConstants.DAY_TO_SEC;
 
 public class AstroUtils {
 

@@ -1,11 +1,13 @@
 package org.b612foundation.adam.opm;
 
+import org.b612foundation.adam.astro.AstroUtils;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.b612foundation.adam.opm.AstroConstants.*;
+import static org.b612foundation.adam.astro.AstroConstants.*;
 
 /**
  * Class for translating between text-based ODM formats and classes in this package. The CCSDS ODM standard is here:

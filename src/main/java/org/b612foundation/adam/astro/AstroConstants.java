@@ -1,4 +1,4 @@
-package org.b612foundation.adam.opm;
+package org.b612foundation.adam.astro;
 
 public class AstroConstants {
     public static final double GM = 132712440041.93938;   //From JPL Horizons
