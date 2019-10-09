@@ -54,7 +54,7 @@ public class OemToStkEphemerisWriter {
             for(OemDataLine line : block.getLines()) {
                 double dateEpochSec = dateStringToEpochSec(line.getDate(), startEpoch);
                 double[] pv = line.getPoint();
-                String stkLine = String.format("%f %f %f %f %f %f %f\n",
+                String stkLine = String.format("%e %e %e %e %e %e %e\n",
                         dateEpochSec, pv[0], pv[1], pv[2], pv[3], pv[4], pv[5]);
                 sb.append(stkLine);
             }
@@ -65,14 +65,19 @@ public class OemToStkEphemerisWriter {
             for(OemDataBlock block : oem.getBlocks()) {
                 for(CovarianceMatrix cov : block.getCovariances()) {
                     double dateEpochSec = dateStringToEpochSec(cov.getEpoch(), startEpoch);
-                    sb.append(dateEpochSec + " ");
-                    sb.append(cov.getCx_x() + " ");
-                    sb.append(cov.getCy_x() + " " + cov.getCy_y() + " ");
-                    sb.append(cov.getCz_x() + " " + cov.getCz_y() + " " + cov.getCy_x());
-                    sb.append(cov.getCx_dot_x() + " " + cov.getCx_dot_y() + " " + cov.getCx_dot_z() + " " + cov.getCx_dot_x_dot() + " ");
-                    sb.append(cov.getCy_dot_x() + " " + cov.getCy_dot_y() + " " + cov.getCy_dot_z() + " " + cov.getCy_dot_x_dot() + " " + cov.getCy_dot_y_dot() + " ");
-                    sb.append(cov.getCz_dot_x() + " " + cov.getCz_dot_y() + " " + cov.getCz_dot_z() + " " + cov.getCz_dot_x_dot() + " " + cov.getCz_dot_y_dot() + " " + cov.getCz_dot_z_dot());
-                    sb.append("\n");
+                    sb.append(String.format("%e ", dateEpochSec));
+                    sb.append(String.format("%e ",
+                            cov.getCx_x()));
+                    sb.append(String.format("%e %e ",
+                            cov.getCy_x(),cov.getCy_y()));
+                    sb.append(String.format("%e %e %e ",
+                            cov.getCz_x(), cov.getCz_y(), cov.getCz_z()));
+                    sb.append(String.format("%e %e %e %e ",
+                            cov.getCx_dot_x(), cov.getCx_dot_y(), cov.getCx_dot_z(), cov.getCx_dot_x_dot()));
+                    sb.append(String.format("%e %e %e %e %e ",
+                            cov.getCy_dot_x(), cov.getCy_dot_y(), cov.getCy_dot_z(),  cov.getCy_dot_x_dot(), cov.getCy_dot_y_dot()));
+                    sb.append(String.format("%e %e %e %e %e %e\n",
+                            cov.getCz_dot_x(), cov.getCz_dot_y(), cov.getCz_dot_z(), cov.getCz_dot_x_dot(), cov.getCz_dot_y_dot(), cov.getCz_dot_z_dot()));
                 }
             }
         }

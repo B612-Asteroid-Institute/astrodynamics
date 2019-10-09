@@ -12,7 +12,7 @@ public class OemToStkEphemerisWriterTest {
 
     @Test
     public void testHappyPath() throws NoSuchAlgorithmException {
-        String sha256Expected = "4e3d923c5698ecf6ad8ac8fdec7fc58b96d5b2a6678d64e1d3a069e953b2c451";
+        String sha256Expected = "30050374c2b9e884d652f1a71a3ba48fd936224e299e96a8fb91dc6896c80476";
         OrbitEphemerisMessage oem = OdmScenarioBuilder.buildOemWithCovariance();
         String actualStkString = OemToStkEphemerisWriter.toStkEphemerisString(oem);
         String sha256Actual = getSha256HashString(actualStkString);
