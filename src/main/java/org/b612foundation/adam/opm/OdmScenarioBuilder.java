@@ -347,6 +347,8 @@ public class OdmScenarioBuilder {
     metadata.setObject_name("MARS GLOBAL SURVEYOR").setObject_id("1996-062A")
         .setCenter_name(OdmCommonMetadata.CenterName.SUN) // was MARS BARYCENTER, but we don't support that
         .setRef_frame(ReferenceFrame.EME2000).setTime_system(TimeSystem.UTC);
+    metadata.setCenter_name(CenterName.SUN); // example used "MARS BARYCENTER", which is not supported for now
+    metadata.setRef_frame(ReferenceFrame.EME2000);
     metadata.setStart_time("1996-12-18T12:00:00.331");
     metadata.setUsable_start_time("1996-12-18T12:10:00.331");
     metadata.setUsable_stop_time("1996-12-28T21:23:00.331");

@@ -1,14 +1,11 @@
 package org.b612foundation.adam.opm;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.b612foundation.adam.opm.AstroConstants.AU_PER_DAY_TO_METER_PER_SEC;
-import static org.b612foundation.adam.opm.AstroConstants.AU_TO_METERS;
+import static org.b612foundation.adam.opm.AstroConstants.*;
 
 /**
  * Class for translating between text-based ODM formats and classes in this package. The CCSDS ODM standard is here:
@@ -177,8 +174,10 @@ public final class OdmFormatter {
     return result;
   }
 
-  public static OrbitEphemerisMessage parseOorbEphemerisString(String buffer) throws OdmParseException {
-    //TODO fill in metadata and optional covariance
+  public static OrbitEphemerisMessage parseOorbEphemerisString(String buffer,
+                                                               String objectName,
+                                                               String objectId) throws OdmParseException {
+    //TODO fill in optional covariance
     final int xIndex = 2;
     final int yIndex = 3;
     final int zIndex = 4;
@@ -196,16 +195,30 @@ public final class OdmFormatter {
       }
 
       String[] elements = line.split("\\s+");
-      double x = Double.parseDouble(elements[xIndex]) * AU_TO_METERS;
-      double y = Double.parseDouble(elements[yIndex]) * AU_TO_METERS;
-      double z = Double.parseDouble(elements[zIndex]) * AU_TO_METERS;
-      double vx = Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_METER_PER_SEC;
-      double vy = Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_METER_PER_SEC;
-      double vz = Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_METER_PER_SEC;
+      double x = Double.parseDouble(elements[xIndex]) * AU_TO_KM;
+      double y = Double.parseDouble(elements[yIndex]) * AU_TO_KM;
+      double z = Double.parseDouble(elements[zIndex]) * AU_TO_KM;
+      double vx = Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_KM_PER_SEC;
+      double vy = Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_KM_PER_SEC;
+      double vz = Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_KM_PER_SEC;
       double mjd = Double.parseDouble(elements[epochIndex]);
       String epoch = AstroUtils.localDateTimefromMJD(mjd).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
       ephemBlock.addLine(epoch, x, y, z, vx, vy, vz);
     }
+
+    OemMetadata metadata = new OemMetadata();
+    metadata.setCenter_name(OdmCommonMetadata.CenterName.SUN);
+    metadata.setRef_frame(OdmCommonMetadata.ReferenceFrame.EME2000); //TODO Determine actual frame
+    metadata.setInterpolation("HERMITE");
+    metadata.setInterpolation_degree(5);
+    metadata.setStart_time(ephemBlock.getLines().get(0).getDate());
+    metadata.setUsable_start_time(metadata.getStart_time());
+    metadata.setStop_time(ephemBlock.getLines().get(ephemBlock.getLines().size()-1).getDate());
+    metadata.setUsable_stop_time(metadata.getStop_time());
+    metadata.setObject_id(objectId);
+    metadata.setObject_name(objectName);
+    metadata.setTime_system(OdmCommonMetadata.TimeSystem.TT);
+    ephemBlock.setMetadata(metadata);
 
     OdmCommonHeader header = new OdmCommonHeader();
     header.setCreation_date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -311,6 +324,15 @@ public final class OdmFormatter {
     lines.remove(0); // consume START
     parseCommonMetadata(lines, result);
     result.setStart_time(extractField(lines, START_TIME));
+
+    if(containsNext(lines, REF_FRAME)) {
+      String frame = extractField(lines, COV_REF_FRAME);
+      result.setRef_frame(parseReferenceFrame(frame));
+    }
+    if(containsNext(lines, CENTER_NAME)) {
+      String centerName = extractField(lines, CENTER_NAME);
+      result.setCenter_name(parseCenterName(centerName));
+    }
     if (containsNext(lines, USEABLE_START_TIME)) {
       result.setUsable_start_time(extractField(lines, USEABLE_START_TIME));
     }
