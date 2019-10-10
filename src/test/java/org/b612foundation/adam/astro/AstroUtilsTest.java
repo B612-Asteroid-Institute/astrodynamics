@@ -1,5 +1,6 @@
-package org.b612foundation.adam.opm;
+package org.b612foundation.adam.astro;
 
+import org.b612foundation.adam.astro.AstroUtils;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
