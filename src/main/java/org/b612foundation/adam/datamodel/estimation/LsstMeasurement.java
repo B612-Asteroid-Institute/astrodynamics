@@ -7,6 +7,8 @@ public class LsstMeasurement {
     //objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v mag detected D_km
     private String objectId;
 
+    private String stationId;
+
     private int visitId;
 
     private double mjd;

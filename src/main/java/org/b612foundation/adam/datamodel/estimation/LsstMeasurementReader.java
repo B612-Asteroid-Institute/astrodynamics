@@ -38,8 +38,7 @@ public class LsstMeasurementReader {
     private static final int D_kmIdx=27;
     private static final int expectedItemCount = 28;
 
-
-    public static List<LsstMeasurement> readSingleObjectCsvFile(Path csvFile) throws IOException {
+    public static List<LsstMeasurement> readSingleObjectCsvFile(Path csvFile, String stationId) throws IOException {
         var lines = Files.readAllLines(csvFile);
         var measurements = new ArrayList<LsstMeasurement>();
 
@@ -58,6 +57,7 @@ public class LsstMeasurementReader {
 
             var m = new LsstMeasurement();
             m.setObjectId(elements[objIdIdx]);
+            m.setStationId(stationId);
             m.setVisitId(Integer.parseInt(elements[visitIdIdx]));
             m.setMjd(Double.parseDouble(elements[mjdIdx]));
             m.setRaDeg(Double.parseDouble(elements[raIdx]));

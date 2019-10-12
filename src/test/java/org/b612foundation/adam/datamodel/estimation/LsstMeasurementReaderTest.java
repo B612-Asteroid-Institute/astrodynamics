@@ -13,11 +13,13 @@ public class LsstMeasurementReaderTest {
     public void testReadSingleObjectCsv() throws IOException {
         var expectedSize = 2666;
         var tol = 1e-15;
+        var stationId = "aoeu";
         var csvFile = Paths.get("src/test/resources/single_object_lsst.csv");
-        var measurements = LsstMeasurementReader.readSingleObjectCsvFile(csvFile);
+        var measurements = LsstMeasurementReader.readSingleObjectCsvFile(csvFile, stationId);
         assertEquals(expectedSize, measurements.size());
 
         var m = measurements.get(0);
+        assertEquals(stationId, m.getStationId());
         assertEquals("5021", m.getObjectId());
         assertEquals(83215, m.getVisitId());
         assertEquals(29824.568521193,m.getMjd(),tol);
