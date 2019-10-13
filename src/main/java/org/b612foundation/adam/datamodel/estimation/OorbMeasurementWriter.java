@@ -6,9 +6,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class OorbMeasurementWriter {
-    public static final double DEFAULT_RA_ERROR_ESTIMATE_ASEC = 0.001;
-    public static final double DEFAULT_DEC_ERROR_ESTIMATE_ASEC = 0.001;
-    public static final double DEFAULT_VMAG_ERROR_ESTIMATE = -1.0; //means ignore
+    public static final double DEFAULT_RA_ERROR_ESTIMATE_ASEC = 1.000;
+    public static final double DEFAULT_DEC_ERROR_ESTIMATE_ASEC = 1.000;
+    public static final double DEFAULT_VMAG_ERROR_ESTIMATE = 1.000; //means ignore
 
     private double raErrorEstimate;
 
@@ -43,7 +43,7 @@ public class OorbMeasurementWriter {
             stationId += " ";
         }
 
-        String rval = String.format("%s %16.10f O %14.10f %14.10f %14.10f X %s%13.10f %14.10f %14.10f -0.1000000E+01 X",
+        String rval = String.format("%s %16.10f O %14.10f %14.10f %14.10f X %s%13.10f %14.10f %14.10f  0.1000000E+01 X",
                 m.getObjectId(), m.getMjd(), m.getRaDeg(), m.getDecDeg(), m.getVmag(), stationId,
                 raErrorEstimate, decErrorEstimate, vMagErrorEstimate);
         return rval;
