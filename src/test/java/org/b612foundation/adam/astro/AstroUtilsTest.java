@@ -4,6 +4,7 @@ import org.b612foundation.adam.astro.AstroUtils;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -26,5 +27,13 @@ public class AstroUtilsTest {
         actual = AstroUtils.localDateTimefromMJD(mjd);
         assertEquals(expected.toString(), actual.toString());
 
+    }
+
+    @Test
+    public void testMjdToLocalDateTime() {
+        double mjdExpected = 58485.000800741;
+        LocalDateTime dateTime = LocalDateTime.of(2019, 1, 2, 0, 1, 9);
+        double mjdActual = AstroUtils.mjdFromLocalDateTime(dateTime);
+        assertEquals(mjdExpected, mjdActual, 5e-6);
     }
 }
