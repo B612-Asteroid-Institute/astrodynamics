@@ -4,8 +4,12 @@ import org.b612foundation.adam.astro.AstroUtils;
 
 import javax.swing.plaf.nimbus.State;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 import static org.b612foundation.adam.astro.AstroConstants.AU_PER_DAY_TO_KM_PER_SEC;
 import static org.b612foundation.adam.astro.AstroConstants.AU_TO_KM;
@@ -144,5 +148,19 @@ public class OorbToOdmConverter {
                 G
         );
         return rval;
+    }
+
+    public static void opmToOorbFile(OrbitParameterMessage opm, double H, double G, Path orbFilePath) throws FileNotFoundException {
+        String[] header = {
+                "#    Number           Ecliptic x            Ecliptic y            Ecliptic z          Ecliptic dx/dt        Ecliptic dy/dt        Ecliptic dz/dt        Epoch (TT)       sigma e1        sigma e2        sigma e3        sigma e4        sigma e5        sigma e6       cor(e1,e2)      cor(e1,e3)      cor(e1,e4)      cor(e1,e5)      cor(e1,e6)      cor(e2,e3)      cor(e2,e4)      cor(e2,e5)      cor(e2,e6)      cor(e3,e4)      cor(e3,e5)      cor(e3,e6)      cor(e4,e5)      cor(e4,e6)      cor(e5,e6)    Absolute   Slope",
+                "#      or                                                                                                                                                  MJD                                                                                                                                                                                                                                                                                                                                                        magnitude parameter",
+                "#  designation           [au]                  [au]                  [au]                 [au/d]                [au/d]                [au/d]                                                                                                                                                                                                                                                                                                                                                                              H         G",
+                "#-----0001-----<>--------0039--------<>--------0040--------<>--------0041--------<>--------0042--------<>--------0043--------<>--------0044--------<>------0074-----<>-----0009-----<>-----0011-----<>-----0010-----<>-----0012-----<>-----0013-----<>-----0014-----<>-----0015-----<>-----0016-----<>-----0017-----<>-----0018-----<>-----0019-----<>-----0020-----<>-----0021-----<>-----0022-----<>-----0023-----<>-----0024-----<>-----0025-----<>-----0026-----<>-----0027-----<>-----0028-----<>-----0029-----<>---0036-<>---0037-<"
+        };
+        String stateLine = opmToOorbFullOrbit(opm, H, G);
+        try(PrintWriter writer = new PrintWriter(orbFilePath.toFile())) {
+            Arrays.stream(header).forEach(writer::println);
+            writer.println(stateLine);
+        }
     }
 }

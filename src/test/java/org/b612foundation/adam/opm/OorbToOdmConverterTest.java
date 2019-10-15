@@ -1,6 +1,13 @@
 package org.b612foundation.adam.opm;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 import static org.b612foundation.adam.astro.AstroConstants.AU_PER_DAY_TO_KM_PER_SEC;
 import static org.b612foundation.adam.astro.AstroConstants.AU_TO_KM;
@@ -30,10 +37,22 @@ public class OorbToOdmConverterTest {
     }
 
     @Test
-    public void testOpmToOorbFullOrbFormat() {
+    public void testOpmToOorbFullOrbFormat() throws JsonProcessingException {
         String originalOorbLine = "5021              5.96545143576990E-02 -2.73619451266390E+00 -2.77749365026260E-01  7.07605124655270E-03  2.24554111471030E-03  1.97834281921930E-03   73452.00000000   9.7336320E-06   8.1317530E-06   5.2204160E-06   6.1608440E-08   3.5743450E-08   1.8437930E-08   2.8579060E-01   4.6240860E-01   1.4966980E-01  -5.4593640E-01  -2.7575710E-01   9.1260700E-01  -8.8048160E-01  -9.4268190E-01  -9.0663170E-01  -7.1339950E-01  -9.0735080E-01  -9.2151300E-01   6.9563800E-01   8.1035460E-01   8.5206010E-01  20.00004  0.150000";
         OrbitParameterMessage opm = OorbToOdmConverter.oorbFullOrbitToOpm(originalOorbLine);
         String convertedLine = OorbToOdmConverter.opmToOorbFullOrbit(opm, 20.00004,  0.150000);
         assertEquals(originalOorbLine, convertedLine);
+    }
+
+    @Test
+    public void testOpmToFile() throws IOException {
+        String originalOorbLine = "5021              5.96545143576990E-02 -2.73619451266390E+00 -2.77749365026260E-01  7.07605124655270E-03  2.24554111471030E-03  1.97834281921930E-03   73452.00000000   9.7336320E-06   8.1317530E-06   5.2204160E-06   6.1608440E-08   3.5743450E-08   1.8437930E-08   2.8579060E-01   4.6240860E-01   1.4966980E-01  -5.4593640E-01  -2.7575710E-01   9.1260700E-01  -8.8048160E-01  -9.4268190E-01  -9.0663170E-01  -7.1339950E-01  -9.0735080E-01  -9.2151300E-01   6.9563800E-01   8.1035460E-01   8.5206010E-01  20.00004  0.150000";
+        OrbitParameterMessage opm = OorbToOdmConverter.oorbFullOrbitToOpm(originalOorbLine);
+        Path orbFile = Files.createTempFile("oorbStateExample",".orb");
+        OorbToOdmConverter.opmToOorbFile(opm, 20.00004,  0.150000, orbFile);
+        List<String> orbFileLines = Files.readAllLines(orbFile);
+        assertEquals(5, orbFileLines.size());
+        assertEquals(originalOorbLine, orbFileLines.get(orbFileLines.size() - 1));
+
     }
 }
