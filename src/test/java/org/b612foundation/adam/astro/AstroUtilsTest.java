@@ -17,12 +17,12 @@ public class AstroUtilsTest {
         LocalDateTime actual = AstroUtils.localDateTimefromMJD(mjd);
         assertEquals(expected, actual);
 
-        mjd = 54617.46681714;
+        mjd = 54617.46681712962963;
         expected = LocalDateTime.of(2008, 5, 31, 11, 12, 13);
         actual = AstroUtils.localDateTimefromMJD(mjd);
         assertEquals(expected, actual);
 
-        mjd = 58485.000800741;
+        mjd = 58485.00079861111;
         expected = LocalDateTime.of(2019, 1, 2, 0, 1, 9);
         actual = AstroUtils.localDateTimefromMJD(mjd);
         assertEquals(expected.toString(), actual.toString());
@@ -31,9 +31,19 @@ public class AstroUtilsTest {
 
     @Test
     public void testMjdToLocalDateTime() {
-        double mjdExpected = 58485.000800741;
-        LocalDateTime dateTime = LocalDateTime.of(2019, 1, 2, 0, 1, 9);
+         double mjdExpected = 49987.0;
+        LocalDateTime dateTime = LocalDateTime.of(1995, 9, 27, 0, 0, 0);
         double mjdActual = AstroUtils.mjdFromLocalDateTime(dateTime);
-        assertEquals(mjdExpected, mjdActual, 5e-6);
+        assertEquals(mjdExpected, mjdActual, 1e-12);
+
+        mjdExpected = 58485.00079861111;
+        dateTime = LocalDateTime.of(2019, 1, 2, 0, 1, 9);
+        mjdActual = AstroUtils.mjdFromLocalDateTime(dateTime);
+        assertEquals(mjdExpected, mjdActual, 1e-12);
+
+        mjdExpected = 54617.46681712962963;
+        dateTime = LocalDateTime.of(2008, 5, 31, 11, 12, 13);
+        mjdActual = AstroUtils.mjdFromLocalDateTime(dateTime);
+        assertEquals(mjdExpected, mjdActual, 1e-12);
     }
 }
