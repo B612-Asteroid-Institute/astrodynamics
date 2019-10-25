@@ -89,8 +89,8 @@ public class OdmFormatterTest {
     assertEquals(1, oemFromOorb.getBlocks().size());
     OemDataBlock block = oemFromOorb.getBlocks().get(0);
     OemMetadata metadata = block.getMetadata();
-    String expectedStart = "2019-01-02T00:01:09";
-    String expectedStop = "2019-01-03T00:01:09";
+    String expectedStart = "2019-01-02T00:01:09.184022373";
+    String expectedStop = "2019-01-03T00:01:09.184022373";
     assertEquals(expectedStart, metadata.getStart_time());
     assertEquals(metadata.getStart_time(), metadata.getUsable_start_time());
     assertEquals(expectedStop, metadata.getStop_time());
