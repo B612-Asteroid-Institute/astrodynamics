@@ -59,7 +59,9 @@ public class OdmCommonMetadata implements Serializable {
     /** True Equator Mean Equinox */
     TEME,
     /** True of Date */
-    TOD
+    TOD,
+    /** ODM non-standard referenece frame representing the IAU76 Mean Ecliptic Plane at J2000 epoch **/
+    J2000_IAU76ECLIP
   }
 
   /**
