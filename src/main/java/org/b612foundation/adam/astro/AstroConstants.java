@@ -10,4 +10,8 @@ public class AstroConstants {
     public static final double AU_PER_DAY_TO_METER_PER_SEC= 1731456.84; // AU/Day conversion to m/sec
     public static final double AU_PER_DAY_TO_KM_PER_SEC= AU_PER_DAY_TO_METER_PER_SEC * M_TO_KM; // AU/Day conversion to km/sec
     public static final double DAY_TO_SEC = 86400.0;
+    public static final double DAY_TO_HR = 24.0;
+    public static final double HR_TO_MIN = 60.0;
+    public static final double MIN_TO_SEC = 60.0;
+    public static final double SEC_TO_NANO = 1e9;
 }
