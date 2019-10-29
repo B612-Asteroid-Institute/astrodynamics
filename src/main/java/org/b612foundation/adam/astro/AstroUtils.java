@@ -1,9 +1,6 @@
 package org.b612foundation.adam.astro;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Period;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.JulianFields;
 
@@ -47,6 +44,18 @@ public class AstroUtils {
     public static double mjdFromLocalDateTime(LocalDateTime dateTime) {
         //1858-11-17
         final LocalDateTime julianEpoch = LocalDateTime.of(1858, 11, 17, 0, 0, 0);
+        long seconds = ChronoUnit.SECONDS.between(julianEpoch, dateTime);
+        return seconds / DAY_TO_SEC;
+    }
+
+    /**
+     * Given a date/time represented by a ZonedDateTime object compute the equivalent Modified Julian Date
+     * @param dateTime date/time to be converted
+     * @return Modified Julian Date of input date/time
+     */
+    public static double mjdFromZonedDateTime(ZonedDateTime dateTime) {
+        //1858-11-17
+        final ZonedDateTime julianEpoch = ZonedDateTime.of(1858, 11, 17, 0, 0, 0, 0, ZoneId.of("Z"));
         long seconds = ChronoUnit.SECONDS.between(julianEpoch, dateTime);
         return seconds / DAY_TO_SEC;
     }
