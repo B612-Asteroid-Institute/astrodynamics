@@ -10,7 +10,7 @@ import static org.b612foundation.adam.astro.AstroConstants.KM_TO_M;
 /**
  * Given an OEM file write output to an STK Ephemeris File string format
  */
-public class OemToStkEphemerisWriter {
+public class OemWriter {
     private static final DateTimeFormatter STK_GREG_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss.SSSSSS");
 
     public static String toStkEphemerisString(OrbitEphemerisMessage oem) {
@@ -99,7 +99,7 @@ public class OemToStkEphemerisWriter {
         }
     }
 
-    public OemToStkEphemerisWriter() {
+    public OemWriter() {
     }
 
     private static void validateBlocks(List<OemDataBlock> blocks) {

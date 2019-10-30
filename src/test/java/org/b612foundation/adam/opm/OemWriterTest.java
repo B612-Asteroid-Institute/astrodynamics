@@ -8,13 +8,13 @@ import java.security.NoSuchAlgorithmException;
 
 import static org.junit.Assert.assertEquals;
 
-public class OemToStkEphemerisWriterTest {
+public class OemWriterTest {
 
     @Test
     public void testHappyPath() throws NoSuchAlgorithmException {
         String sha256Expected = "de1612faa48c08b58e2a8f4119cf90c79f87866f234c9f20bdfdd64b6a19fda3";
         OrbitEphemerisMessage oem = OdmScenarioBuilder.buildOemWithCovariance();
-        String actualStkString = OemToStkEphemerisWriter.toStkEphemerisString(oem);
+        String actualStkString = OemWriter.toStkEphemerisString(oem);
         String sha256Actual = getSha256HashString(actualStkString);
         assertEquals(sha256Expected, sha256Actual);
     }
