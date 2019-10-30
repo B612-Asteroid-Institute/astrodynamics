@@ -1,7 +1,9 @@
 package org.b612foundation.adam.opm;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class OemWriter {
         validateBlocks(oem.getBlocks());
         OemMetadata firstBlockMetadata = oem.getBlocks().get(0).getMetadata();
         String startString = firstBlockMetadata.getStart_time();
-        LocalDateTime startEpoch = LocalDateTime.parse(startString);
+        LocalDateTime startEpoch = dateStringToLocalDateTime(startString);
         sb.append("ScenarioEpoch " + startEpoch.format(STK_GREG_FORMATTER) + "\n");
         sb.append("CentralBody " + firstBlockMetadata.getCenter_name() + "\n");
         sb.append("CoordinateSystem " + oemToStkCoordinateSystem(firstBlockMetadata.getRef_frame()) + "\n");
@@ -88,6 +90,71 @@ public class OemWriter {
         return sb.toString();
     }
 
+    public static String toCcsdsOemString(OrbitEphemerisMessage oem) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("CCSDS_OEM_VERS = " + oem.getCcsds_oem_vers() + "\n");
+        builder.append("CREATION_DATE = " + oem.getHeader().getCreation_date() + "\n");
+        builder.append("ORIGINATOR = " + oem.getHeader().getOriginator() + "\n");
+        for(String comment : oem.getHeader().getComments()) {
+            builder.append("COMMENT " + comment + "\n");
+        }
+        builder.append("\n");
+
+        for(OemDataBlock block : oem.getBlocks()) {
+            OemMetadata metadata = block.getMetadata();
+            builder.append("META_START\n");
+            builder.append("OBJECT_NAME          = " + metadata.getObject_name() + "\n");
+            builder.append("OBJECT_ID            = " + metadata.getObject_id() + "\n");
+            builder.append("CENTER_NAME          = " + metadata.getCenter_name() + "\n");
+            builder.append("REF_FRAME            = " + metadata.getRef_frame() + "\n");
+            if(metadata.getRef_frame_epoch() != null && !metadata.getRef_frame_epoch().isEmpty()) {
+                builder.append("REF_FRAME_EPOCH      = " + metadata.getRef_frame_epoch() + "\n");
+            }
+            builder.append("TIME_SYSTEM          = " + metadata.getTime_system() + "\n");
+            builder.append("START_TIME           = " + metadata.getStart_time() + "\n");
+            if(metadata.getUsable_start_time() != null && !metadata.getUsable_start_time().isEmpty()) {
+                builder.append("USEABLE_START_TIME   = " + metadata.getUsable_start_time() + "\n");
+            }
+            if(metadata.getUsable_stop_time() != null && !metadata.getUsable_stop_time().isEmpty()) {
+                builder.append("USEABLE_STOP_TIME    = " + metadata.getUsable_stop_time() + "\n");
+            }
+            builder.append("STOP_TIME            = " + metadata.getStop_time() + "\n");
+            if(metadata.getInterpolation() != null && !metadata.getInterpolation().isEmpty()) {
+                builder.append("INTERPOLATION        = " + metadata.getInterpolation() + "\n");
+            }
+            if(metadata.getInterpolation_degree() != 0) {
+                builder.append("INTERPOLATION_DEGREE = " + metadata.getInterpolation_degree() + "\n");
+            }
+            builder.append("META_STOP\n");
+            builder.append("\n");
+
+            for(String comment : block.getComments()) {
+                builder.append("COMMENT  " + comment + "\n");
+            }
+
+            for(OemDataLine line : block.getLines()) {
+                builder.append(line);
+            }
+            builder.append("\n");
+
+            builder.append("COVARIANCE_START\n");
+            for(CovarianceMatrix cov : block.getCovariances()) {
+                builder.append("EPOCH = " + cov.getEpoch() + "\n");
+                builder.append("COV_REF_FRAME = " + cov.getCov_ref_frame() + "\n");
+                builder.append(String.format("%9.7e\n", cov.getCx_x()));
+                builder.append(String.format("%9.7e %9.7e\n", cov.getCy_x(), cov.getCy_y()));
+                builder.append(String.format("%9.7e %9.7e %9.7e\n", cov.getCz_x(), cov.getCz_y(), cov.getCz_z()));
+                builder.append(String.format("%9.7e %9.7e %9.7e %9.7e\n", cov.getCx_dot_x(), cov.getCx_dot_y(), cov.getCx_dot_z(), cov.getCx_dot_x_dot()));
+                builder.append(String.format("%9.7e %9.7e %9.7e %9.7e %9.7e\n", cov.getCy_dot_x(), cov.getCy_dot_y(), cov.getCy_dot_z(), cov.getCy_dot_x_dot(), cov.getCy_dot_y_dot()));
+                builder.append(String.format("%9.7e %9.7e %9.7e %9.7e %9.7e %9.7e\n", cov.getCz_dot_x(), cov.getCz_dot_y(), cov.getCz_dot_z(), cov.getCz_dot_x_dot(), cov.getCz_dot_y_dot(), cov.getCz_dot_z_dot()));
+                builder.append("\n");
+            }
+            builder.append("COVARIANCE_STOP");
+        }
+
+        return builder.toString();
+    }
+
     private static String oemToStkCoordinateSystem(OdmCommonMetadata.ReferenceFrame ref_frame) {
         switch(ref_frame) {
             case EME2000:
@@ -97,9 +164,6 @@ public class OemWriter {
             default:
                 throw new IllegalArgumentException("Unknown conversion for OEM Coordinate Systm: " + ref_frame);
         }
-    }
-
-    public OemWriter() {
     }
 
     private static void validateBlocks(List<OemDataBlock> blocks) {
@@ -133,7 +197,20 @@ public class OemWriter {
     }
 
     private static double dateStringToEpochSec(String dateString, LocalDateTime epoch) {
-        LocalDateTime date = LocalDateTime.parse(dateString);
+        LocalDateTime date = dateStringToLocalDateTime(dateString);
         return ChronoUnit.MILLIS.between(epoch, date) / 1000.0;
+    }
+
+    private static LocalDateTime dateStringToLocalDateTime(String dateString) {
+        try {
+            //try to avoid exception if common Z date string used
+            if(dateString.trim().endsWith("Z")) {
+                return ZonedDateTime.parse(dateString).toLocalDateTime();
+            }
+
+            return LocalDateTime.parse(dateString);
+        } catch (DateTimeParseException e) {
+            return ZonedDateTime.parse(dateString).toLocalDateTime();
+        }
     }
 }
