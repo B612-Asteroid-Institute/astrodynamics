@@ -13,5 +13,7 @@ public class AstroConstants {
     public static final double DAY_TO_HR = 24.0;
     public static final double HR_TO_MIN = 60.0;
     public static final double MIN_TO_SEC = 60.0;
+    public static final double SEC_TO_MILLIS = 1000.0;
     public static final double SEC_TO_NANO = 1e9;
+    public static final double DAY_TO_MILLIS = 86400.0 * SEC_TO_MILLIS;
 }

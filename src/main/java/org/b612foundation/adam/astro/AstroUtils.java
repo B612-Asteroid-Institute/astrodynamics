@@ -44,8 +44,8 @@ public class AstroUtils {
     public static double mjdFromLocalDateTime(LocalDateTime dateTime) {
         //1858-11-17
         final LocalDateTime julianEpoch = LocalDateTime.of(1858, 11, 17, 0, 0, 0);
-        long seconds = ChronoUnit.SECONDS.between(julianEpoch, dateTime);
-        return seconds / DAY_TO_SEC;
+        long seconds = ChronoUnit.MILLIS.between(julianEpoch, dateTime);
+        return seconds / DAY_TO_MILLIS;
     }
 
     /**
@@ -56,7 +56,7 @@ public class AstroUtils {
     public static double mjdFromZonedDateTime(ZonedDateTime dateTime) {
         //1858-11-17
         final ZonedDateTime julianEpoch = ZonedDateTime.of(1858, 11, 17, 0, 0, 0, 0, ZoneId.of("Z"));
-        long seconds = ChronoUnit.SECONDS.between(julianEpoch, dateTime);
-        return seconds / DAY_TO_SEC;
+        long seconds = ChronoUnit.MILLIS.between(julianEpoch, dateTime);
+        return seconds / DAY_TO_MILLIS;
     }
 }
