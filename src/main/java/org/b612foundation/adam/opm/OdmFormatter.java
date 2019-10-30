@@ -1,6 +1,7 @@
 package org.b612foundation.adam.opm;
 
 import org.b612foundation.adam.astro.AstroUtils;
+import org.b612foundation.adam.astro.ReferenceFrameConverter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -178,7 +179,8 @@ public final class OdmFormatter {
 
   public static OrbitEphemerisMessage parseOorbEphemerisString(String buffer,
                                                                String objectName,
-                                                               String objectId) throws OdmParseException {
+                                                               String objectId,
+                                                               boolean convertToIcrf) throws OdmParseException {
     //TODO fill in optional covariance
     final int xIndex = 2;
     final int yIndex = 3;
@@ -197,20 +199,33 @@ public final class OdmFormatter {
       }
 
       String[] elements = line.split("\\s+");
-      double x = Double.parseDouble(elements[xIndex]) * AU_TO_KM;
-      double y = Double.parseDouble(elements[yIndex]) * AU_TO_KM;
-      double z = Double.parseDouble(elements[zIndex]) * AU_TO_KM;
-      double vx = Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_KM_PER_SEC;
-      double vy = Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_KM_PER_SEC;
-      double vz = Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_KM_PER_SEC;
+      double posVel[] = {
+          Double.parseDouble(elements[xIndex]) * AU_TO_KM,
+          Double.parseDouble(elements[yIndex]) * AU_TO_KM,
+          Double.parseDouble(elements[zIndex]) * AU_TO_KM,
+          Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
+          Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
+          Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_KM_PER_SEC
+      };
+
+      if(convertToIcrf) {
+        posVel = ReferenceFrameConverter.convertJplEclipticToICRF(posVel);
+      }
+
       double mjd = Double.parseDouble(elements[epochIndex]);
+
       String epoch = AstroUtils.localDateTimefromMJD(mjd).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-      ephemBlock.addLine(epoch, x, y, z, vx, vy, vz);
+      ephemBlock.addLine(epoch, posVel[0], posVel[1], posVel[2], posVel[3], posVel[4], posVel[5]);
     }
 
     OemMetadata metadata = new OemMetadata();
     metadata.setCenter_name(OdmCommonMetadata.CenterName.SUN);
-    metadata.setRef_frame(OdmCommonMetadata.ReferenceFrame.EME2000); //TODO Determine actual frame
+    if(convertToIcrf) {
+      metadata.setRef_frame(OdmCommonMetadata.ReferenceFrame.ICRF);
+    } else {
+      metadata.setRef_frame(OdmCommonMetadata.ReferenceFrame.J2000_IAU76ECLIP);
+    }
+
     metadata.setInterpolation("HERMITE");
     metadata.setInterpolation_degree(5);
     metadata.setStart_time(ephemBlock.getLines().get(0).getDate());

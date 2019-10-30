@@ -5,11 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static org.b612foundation.adam.astro.AstroConstants.KM_TO_M;
+
 /**
  * Given an OEM file write output to an STK Ephemeris File string format
  */
 public class OemToStkEphemerisWriter {
-    private static final DateTimeFormatter STK_GREG_FORMATTER = DateTimeFormatter.ofPattern("yyyy MMM dd HH:mm:ss.SSSSSS");
+    private static final DateTimeFormatter STK_GREG_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss.SSSSSS");
 
     public static String toStkEphemerisString(OrbitEphemerisMessage oem) {
         StringBuilder sb = new StringBuilder();
@@ -20,7 +22,6 @@ public class OemToStkEphemerisWriter {
         String startString = firstBlockMetadata.getStart_time();
         LocalDateTime startEpoch = LocalDateTime.parse(startString);
         sb.append("ScenarioEpoch " + startEpoch.format(STK_GREG_FORMATTER) + "\n");
-        sb.append("DistanceUnit KM\n");
         sb.append("CentralBody " + firstBlockMetadata.getCenter_name() + "\n");
         sb.append("CoordinateSystem " + oemToStkCoordinateSystem(firstBlockMetadata.getRef_frame()) + "\n");
         sb.append("InterpolationMethod " + firstBlockMetadata.getInterpolation() + "\n");
@@ -54,8 +55,8 @@ public class OemToStkEphemerisWriter {
             for(OemDataLine line : block.getLines()) {
                 double dateEpochSec = dateStringToEpochSec(line.getDate(), startEpoch);
                 double[] pv = line.getPoint();
-                String stkLine = String.format("%e %e %e %e %e %e %e\n",
-                        dateEpochSec, pv[0], pv[1], pv[2], pv[3], pv[4], pv[5]);
+                String stkLine = String.format("%14.12e %14.12e %14.12e %14.12e %14.12e %14.12e %14.12e\n",
+                        dateEpochSec, pv[0] * KM_TO_M, pv[1]  * KM_TO_M, pv[2]  * KM_TO_M, pv[3] * KM_TO_M, pv[4] * KM_TO_M, pv[5] * KM_TO_M);
                 sb.append(stkLine);
             }
         }
@@ -65,18 +66,18 @@ public class OemToStkEphemerisWriter {
             for(OemDataBlock block : oem.getBlocks()) {
                 for(CovarianceMatrix cov : block.getCovariances()) {
                     double dateEpochSec = dateStringToEpochSec(cov.getEpoch(), startEpoch);
-                    sb.append(String.format("%e ", dateEpochSec));
-                    sb.append(String.format("%e ",
+                    sb.append(String.format("%14.12e ", dateEpochSec));
+                    sb.append(String.format("%14.12e ",
                             cov.getCx_x()));
-                    sb.append(String.format("%e %e ",
+                    sb.append(String.format("%14.12e %14.12e ",
                             cov.getCy_x(),cov.getCy_y()));
-                    sb.append(String.format("%e %e %e ",
+                    sb.append(String.format("%14.12e %14.12e %14.12e ",
                             cov.getCz_x(), cov.getCz_y(), cov.getCz_z()));
-                    sb.append(String.format("%e %e %e %e ",
+                    sb.append(String.format("%14.12e %14.12e %14.12e %14.12e ",
                             cov.getCx_dot_x(), cov.getCx_dot_y(), cov.getCx_dot_z(), cov.getCx_dot_x_dot()));
-                    sb.append(String.format("%e %e %e %e %e ",
+                    sb.append(String.format("%14.12e %14.12e %14.12e %14.12e %14.12e ",
                             cov.getCy_dot_x(), cov.getCy_dot_y(), cov.getCy_dot_z(),  cov.getCy_dot_x_dot(), cov.getCy_dot_y_dot()));
-                    sb.append(String.format("%e %e %e %e %e %e\n",
+                    sb.append(String.format("%14.12e %14.12e %14.12e %14.12e %14.12e %14.12e\n",
                             cov.getCz_dot_x(), cov.getCz_dot_y(), cov.getCz_dot_z(), cov.getCz_dot_x_dot(), cov.getCz_dot_y_dot(), cov.getCz_dot_z_dot()));
                 }
             }
@@ -93,8 +94,6 @@ public class OemToStkEphemerisWriter {
                 return "J2000";
             case ICRF:
                 return "ICRF";
-            case GCRF:
-                return "GCRF";
             default:
                 throw new IllegalArgumentException("Unknown conversion for OEM Coordinate Systm: " + ref_frame);
         }
