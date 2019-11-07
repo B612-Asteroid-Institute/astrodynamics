@@ -1,6 +1,7 @@
 package org.b612foundation.adam.opm;
 
 import javax.swing.plaf.nimbus.State;
+import java.util.List;
 
 /**
  * Writer class that turns OrbitParameterMessage objects into string representations
@@ -15,36 +16,41 @@ public class OpmWriter {
     builder.append("CREATION_DATE = " + header.getCreation_date() + "\n");
     builder.append("ORIGINATOR = " + header.getOriginator() + "\n");
 
-    OdmCommonMetadata metadata = opm.getMetadata();
-    for(String comment : metadata.getComments()) {
-      builder.append("COMMENT " + comment + "\n");
+    if (opm.getMetadata() == null) {
+      throw new IllegalArgumentException("OPM metadata must be filled in to correctly serialize");
     }
+
+    OdmCommonMetadata metadata = opm.getMetadata();
+    outputComments(builder, metadata.getComments());
     builder.append("OBJECT_NAME = " + metadata.getObject_name() + "\n");
     builder.append("OBJECT_ID = " + metadata.getObject_id() + "\n");
     builder.append("CENTER_NAME = " + metadata.getCenter_name() + "\n");
     builder.append("REF_FRAME = " + metadata.getRef_frame() + "\n");
-    if(metadata.getRef_frame_epoch() != null && !metadata.getRef_frame_epoch().isEmpty()) {
+    if (metadata.getRef_frame_epoch() != null && !metadata.getRef_frame_epoch().isEmpty()) {
       builder.append("REF_FRAME_EPOCH = " + metadata.getRef_frame_epoch() + "\n");
     }
     builder.append("TIME_SYSTEM = " + metadata.getTime_system() + "\n");
 
-    StateVector stateVector = opm.getState_vector();
-    for(String comment : stateVector.getComments()) {
-      builder.append("COMMENT " + comment + "\n");
+    if (opm.getState_vector() == null && opm.getKeplerian() == null) {
+      throw new IllegalArgumentException("OPM must have state vector data (cartesian or keplerian) to correctly serialize");
     }
-    builder.append("EPOCH = " + stateVector.getEpoch() + "\n");
-    builder.append("X = " + stateVector.getX() + "\n");
-    builder.append("Y = " + stateVector.getY() + "\n");
-    builder.append("Z = " + stateVector.getZ() + "\n");
-    builder.append("X_DOT = " + stateVector.getX_dot() + "\n");
-    builder.append("Y_DOT = " + stateVector.getY_dot() + "\n");
-    builder.append("Z_DOT = " + stateVector.getZ_dot() + "\n");
 
-    if(opm.getKeplerian() != null) {
+    if(opm.getState_vector() != null)
+    {
+      StateVector stateVector = opm.getState_vector();
+      outputComments(builder, stateVector.getComments());
+      builder.append("EPOCH = " + stateVector.getEpoch() + "\n");
+      builder.append("X = " + stateVector.getX() + "\n");
+      builder.append("Y = " + stateVector.getY() + "\n");
+      builder.append("Z = " + stateVector.getZ() + "\n");
+      builder.append("X_DOT = " + stateVector.getX_dot() + "\n");
+      builder.append("Y_DOT = " + stateVector.getY_dot() + "\n");
+      builder.append("Z_DOT = " + stateVector.getZ_dot() + "\n");
+    }
+
+    if (opm.getKeplerian() != null) {
       KeplerianElements keplerian = opm.getKeplerian();
-      for(String comment : keplerian.getComments()) {
-        builder.append("COMMENT " + comment + "\n");
-      }
+      outputComments(builder, keplerian.getComments());
       builder.append("SEMI_MAJOR_AXIS = " + keplerian.getSemi_major_axis() + "\n");
       builder.append("ECCENTRICITY = " + keplerian.getEccentricity() + "\n");
       builder.append("INCLINATION = " + keplerian.getInclination() + "\n");
@@ -54,11 +60,9 @@ public class OpmWriter {
       builder.append("GM = " + keplerian.getGm() + "\n");
     }
 
-    if(opm.getSpacecraft() != null) {
+    if (opm.getSpacecraft() != null) {
       SpacecraftParameters spacecraft = opm.getSpacecraft();
-      for(String comment : spacecraft.getComments()) {
-        builder.append("COMMENT " + comment + "\n");
-      }
+      outputComments(builder, spacecraft.getComments());
       builder.append("MASS = " + spacecraft.getMass() + "\n");
       builder.append("SOLAR_RAD_AREA = " + spacecraft.getSolar_rad_area() + "\n");
       builder.append("SOLAR_RAD_COEFF = " + spacecraft.getSolar_rad_coeff() + "\n");
@@ -66,20 +70,21 @@ public class OpmWriter {
       builder.append("DRAG_COEFF = " + spacecraft.getDrag_coeff() + "\n");
     }
 
-    for(Manuever m : opm.getManuevers()) {
-      for(String comment : m.getComments()) {
-        builder.append("COMMENT " + comment + "\n");
+    if (opm.getManuevers() != null)
+    {
+      for (Manuever m : opm.getManuevers()) {
+        outputComments(builder, m.getComments());
+        builder.append("MAN_EPOCH_IGNITION = " + m.getMan_epoch_ignition() + "\n");
+        builder.append("MAN_DURATION = " + m.getDuration() + "\n");
+        builder.append("MAN_DELTA_MASS = " + m.getDelta_mass() + "\n");
+        builder.append("MAN_REF_FRAME = " + m.getMan_ref_frame() + "\n");
+        builder.append("MAN_DV_1 = " + m.getMan_dv_1() + "\n");
+        builder.append("MAN_DV_2 = " + m.getMan_dv_2() + "\n");
+        builder.append("MAN_DV_3 = " + m.getMan_dv_3() + "\n");
       }
-      builder.append("MAN_EPOCH_IGNITION = " + m.getMan_epoch_ignition() + "\n");
-      builder.append("MAN_DURATION = " + m.getDuration() + "\n");
-      builder.append("MAN_DELTA_MASS = " + m.getDelta_mass() + "\n");
-      builder.append("MAN_REF_FRAME = " + m.getMan_ref_frame() + "\n");
-      builder.append("MAN_DV_1 = " + m.getMan_dv_1() + "\n");
-      builder.append("MAN_DV_2 = " + m.getMan_dv_2() + "\n");
-      builder.append("MAN_DV_3 = " + m.getMan_dv_3() + "\n");
     }
 
-    if(opm.getCovariance() != null) {
+    if (opm.getCovariance() != null) {
       CovarianceMatrix cov = opm.getCovariance();
       builder.append("CX_X = " + cov.getCx_x() + "\n");
       builder.append("CY_X = " + cov.getCy_x() + "\n");
@@ -105,5 +110,18 @@ public class OpmWriter {
     }
 
     return builder.toString();
+  }
+
+  private static void outputComments(StringBuilder builder, List<String> comments)
+  {
+    if(comments == null)
+    {
+      return;
+    }
+
+    for(String comment : comments)
+    {
+      builder.append("COMMENT " + comment + "\n");
+    }
   }
 }
