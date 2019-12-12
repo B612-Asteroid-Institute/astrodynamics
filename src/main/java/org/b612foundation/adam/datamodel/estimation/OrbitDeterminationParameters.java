@@ -69,6 +69,7 @@ public class OrbitDeterminationParameters extends AdamObject {
     }
 
     public enum MeasurumentType {
-        LsstCsvFilePath
+        LsstCsvFilePath,
+        DesFilePath
     }
 }
