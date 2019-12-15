@@ -106,7 +106,7 @@ public class OorbToOdmConverter {
         OdmCommonMetadata metadata = new OdmCommonMetadata();
         metadata.getComments().add(comment);
         metadata.setRef_frame(referenceFrame);
-        metadata.setTime_system(OdmCommonMetadata.TimeSystem.UTC);
+        metadata.setTime_system(OdmCommonMetadata.TimeSystem.TT);
         metadata.setCenter_name(OdmCommonMetadata.CenterName.SUN);
         metadata.setObject_id(elems[objectIdIndex]);
         metadata.setObject_name(metadata.getObject_id());
