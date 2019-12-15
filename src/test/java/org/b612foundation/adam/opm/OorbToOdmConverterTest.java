@@ -20,7 +20,7 @@ public class OorbToOdmConverterTest {
         final double velTolerance = 1e-15;
         final double covTolerance = 1e-15;
         final OdmCommonMetadata.ReferenceFrame expectedRefFrame = OdmCommonMetadata.ReferenceFrame.J2000_IAU76ECLIP;
-        final OdmCommonMetadata.TimeSystem expectedTimeSys = OdmCommonMetadata.TimeSystem.UTC;
+        final OdmCommonMetadata.TimeSystem expectedTimeSys = OdmCommonMetadata.TimeSystem.TT;
         final String expectedObjectId = "5021";
         final String expectedEpoch = "2059-12-25T00:00:00";
         final double expectedX = 0.59654514357699E-01 * AU_TO_KM;

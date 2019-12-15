@@ -12,16 +12,16 @@ public class OorbConfigWriter {
                                           OrbitDeterminationConfiguration odConfig,
                                           PropagatorConfiguration propConfig) throws FileNotFoundException {
         try (var writer = new PrintWriter(configFilePath.toFile())) {
-            odConfig.getExecutionSettings().entrySet().forEach(
-                    entry -> writer.println(entry.getKey() + ": " + entry.getValue())
-            );
-            odConfig.getMeasurementSettings().entrySet().forEach(
-                    entry -> writer.println(entry.getKey() + ": " + entry.getValue())
-            );
-            odConfig.getConvergenceSettings().entrySet().forEach(
-                    entry -> writer.println(entry.getKey() + ": " + entry.getValue())
-            );
-            writer.println("dynamical_model:      n-body");
+            odConfig.getExecutionSettings().forEach((key, value) -> writer.println(key + ": " + value));
+            odConfig.getMeasurementSettings().forEach((key, value) -> writer.println(key + ": " + value));
+            odConfig.getConvergenceSettings().forEach((key, value) -> writer.println(key + ": " + value));
+
+            if(isTwoBody(propConfig))
+            {
+                writer.println("dynamical_model:      2-body");
+            } else {
+                writer.println("dynamical_model:      n-body");
+            }
             // Perturbing bodies to be taken into account in n-body propagation
             writer.println("perturber.Mercury: " + asTorF(propConfig.getMercury()));
             writer.println("perturber.Venus: " + asTorF(propConfig.getVenus()));
@@ -54,5 +54,20 @@ public class OorbConfigWriter {
             default:
                 throw new IllegalArgumentException("Unsupported gravity mode for OORB: " + mode, null);
         }
+    }
+
+    public static boolean isTwoBody(PropagatorConfiguration propConfig)
+    {
+        return propConfig.getAsteroids().isEmpty()
+            && propConfig.getMercury() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getVenus() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getEarth() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getMoon() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getMars() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getJupiter() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getSaturn() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getUranus() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getNeptune() == PropagatorConfiguration.PlanetGravityMode.OMIT
+            && propConfig.getPluto() == PropagatorConfiguration.PlanetGravityMode.OMIT;
     }
 }
