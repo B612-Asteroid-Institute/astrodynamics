@@ -16,7 +16,6 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 public class OrbitDeterminationParameters extends AdamObject {
-
     /** Logging level for output of forensic data during OD run **/
     private int loggingLevel;
 
@@ -46,6 +45,21 @@ public class OrbitDeterminationParameters extends AdamObject {
      *  - Base64 DES File
      **/
     private String measurements;
+
+    /** The Indices of observations to subsample (or empty if want all **/
+    @Singular
+    private List<Integer> measurementSampleIndices;
+
+    /**
+     * Indicates whether to subsample measurements, assuming there are indices specified, only only bootstrapping
+     *  passes rather than on all passes
+     */
+    private boolean subSampleMeasurementsBootstrappingOnly;
+    /**
+     *  Indicates whether to use a simplified force model during bootstrapping. The simplification is up to the OD
+     *  tool that is implemented. For example, switching to a two-body propagation for the first pass of an IOD.
+     */
+    private boolean bootstrapWithSimplifiedModel;
 
     /** Settings for the numeric propagator - the ID. */
     private String orbit_determination_config_uuid;
