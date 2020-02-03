@@ -24,7 +24,7 @@ public class OdmCommonMetadata implements Serializable {
    */
   public enum ReferenceFrame {
     /**
-     * The two local frames that can be used only for manuevers or covariances. Radial, Transverse, Normal. Can also be
+     * The two local frames that can be used only for maneuvers or covariances. Radial, Transverse, Normal. Can also be
      * marked as RSW.
      */
     RTN,
@@ -35,7 +35,7 @@ public class OdmCommonMetadata implements Serializable {
     TNW,
 
     // The rest of the frames can be used for state vectors, Keplerian elements,
-    // manuevers, or covariances.
+    // maneuvers, or covariances.
     /** Earth Mean Equator and Equinox of J2000 */
     EME2000,
     /** Earth Mean Ecliptic and Equinox of J2000. Any center may be specified. */
@@ -117,7 +117,7 @@ public class OdmCommonMetadata implements Serializable {
    */
   private String refFrameEpoch = null;
 
-  /** Time system applies to state vector, manuever, and covariance data. */
+  /** Time system applies to state vector, maneuver, and covariance data. */
   private TimeSystem timeSystem = null;
 
   public OdmCommonMetadata deepCopy() {

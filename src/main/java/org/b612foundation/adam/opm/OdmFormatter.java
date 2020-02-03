@@ -118,7 +118,7 @@ public final class OdmFormatter {
       result.setCovariance(parseLongFormCovariance(lines));
     }
     while (containsLater(lines, MAN_EPOCH_IGNITION)) {
-      result.addManuever(parseManeuver(lines));
+      result.addManeuver(parseManeuver(lines));
     }
 
     // CCSDS ODM standard allows for USER_DEFINED_X fields. We store
@@ -468,9 +468,9 @@ public final class OdmFormatter {
     return result;
   }
 
-  /** Parses manuever data. Removes parsed lines from the list. */
-  private static Manuever parseManeuver(ArrayList<String> lines) throws OdmParseException {
-    Manuever result = new Manuever();
+  /** Parses maneuver data. Removes parsed lines from the list. */
+  private static Maneuver parseManeuver(ArrayList<String> lines) throws OdmParseException {
+    Maneuver result = new Maneuver();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
     }
