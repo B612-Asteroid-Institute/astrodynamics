@@ -25,8 +25,8 @@ public class OrbitParameterMessage implements Serializable {
   private SpacecraftParameters spacecraft;
   /** Covariance for position/velocity, optional. */
   private CovarianceMatrix covariance;
-  /** 0 or more manuevers. */
-  private List<Manuever> manuevers = new ArrayList<>();
+  /** 0 or more maneuvers. */
+  private List<Maneuver> maneuvers = new ArrayList<>();
   /**
    * The standard also allows USER_DEFINED_X parameters. We ignore all except ADAM-specific ones (start with
    * USER_DEFINED_ADAM_). The order of user-defined fields matters, because there is no way to group these fields other
@@ -50,8 +50,8 @@ public class OrbitParameterMessage implements Serializable {
       res.setSpacecraft(spacecraft.deepCopy());
     if (covariance != null)
       res.setCovariance(covariance.deepCopy());
-    for (Manuever man : manuevers)
-      res.addManuever(man.deepCopy());
+    for (Maneuver man : maneuvers)
+      res.addManeuver(man.deepCopy());
     for (AdamField af : adamFields)
       res.addAdam_field(af.getKey(), af.getValue());
     return res;
@@ -120,17 +120,17 @@ public class OrbitParameterMessage implements Serializable {
     return this;
   }
 
-  public List<Manuever> getManuevers() {
-    return manuevers;
+  public List<Maneuver> getManeuvers() {
+    return maneuvers;
   }
 
-  public OrbitParameterMessage setManuevers(List<Manuever> manuevers) {
-    this.manuevers = manuevers;
+  public OrbitParameterMessage setManeuvers(List<Maneuver> maneuvers) {
+    this.maneuvers = maneuvers;
     return this;
   }
 
-  public OrbitParameterMessage addManuever(Manuever manuever) {
-    this.manuevers.add(manuever);
+  public OrbitParameterMessage addManeuver(Maneuver maneuver) {
+    this.maneuvers.add(maneuver);
     return this;
   }
 
@@ -150,7 +150,7 @@ public class OrbitParameterMessage implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(adamFields, ccsdsOpmVers, covariance, header, keplerian, manuevers, metadata, spacecraft,
+    return Objects.hash(adamFields, ccsdsOpmVers, covariance, header, keplerian, maneuvers, metadata, spacecraft,
         stateVector);
   }
 
@@ -169,7 +169,7 @@ public class OrbitParameterMessage implements Serializable {
         Objects.equals(covariance, other.covariance) &&
         Objects.equals(header, other.header) &&
         Objects.equals(keplerian, other.keplerian) &&
-        Objects.equals(manuevers, other.manuevers) &&
+        Objects.equals(maneuvers, other.maneuvers) &&
         Objects.equals(metadata, other.metadata) &&
         Objects.equals(spacecraft, other.spacecraft) &&
         Objects.equals(stateVector, other.stateVector);
@@ -182,7 +182,7 @@ public class OrbitParameterMessage implements Serializable {
     builder.append("OrbitParameterMessage [ccsdsOpmVers=").append(ccsdsOpmVers).append(", header=").append(header)
         .append(", metadata=").append(metadata).append(", stateVector=").append(stateVector).append(", keplerian=")
         .append(keplerian).append(", spacecraft=").append(spacecraft).append(", covariance=").append(covariance)
-        .append(", manuevers=").append(manuevers).append(", adamFields=").append(adamFields).append("]");
+        .append(", maneuvers=").append(maneuvers).append(", adamFields=").append(adamFields).append("]");
     return builder.toString();
   }
 }

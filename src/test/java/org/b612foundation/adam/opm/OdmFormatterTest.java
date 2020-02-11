@@ -45,9 +45,9 @@ public class OdmFormatterTest {
   }
 
   @Test
-  public void testParseKeplerianAndManueversOpmHappy() throws Exception {
-    OrbitParameterMessage expected = OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers();
-    OrbitParameterMessage parsed = OdmFormatter.parseOpmString(OdmScenarioBuilder.getOpmWithKepelerianAndManuevers());
+  public void testParseKeplerianAndManeuversOpmHappy() throws Exception {
+    OrbitParameterMessage expected = OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers();
+    OrbitParameterMessage parsed = OdmFormatter.parseOpmString(OdmScenarioBuilder.getOpmWithKeplerianAndManeuvers());
     Assert.assertEquals(parsed, expected);
   }
 

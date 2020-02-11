@@ -36,18 +36,18 @@ public class OrbitParameterMessageTest {
     Assert.assertNotEquals(OdmScenarioBuilder.buildSimpleOpm().hashCode(), opmSimple.hashCode());
 
     // Also has keplerian and maneuvers.
-    OrbitParameterMessage opmKeplerianAndManeuvers = OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers();
-    Assert.assertEquals(OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers(), opmKeplerianAndManeuvers);
-    Assert.assertEquals(OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers().hashCode(),
+    OrbitParameterMessage opmKeplerianAndManeuvers = OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers();
+    Assert.assertEquals(OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers(), opmKeplerianAndManeuvers);
+    Assert.assertEquals(OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers().hashCode(),
         opmKeplerianAndManeuvers.hashCode());
     opmKeplerianAndManeuvers.getKeplerian().addComment("new");
-    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers(), opmKeplerianAndManeuvers);
-    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers().hashCode(),
+    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers(), opmKeplerianAndManeuvers);
+    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers().hashCode(),
         opmKeplerianAndManeuvers.hashCode());
-    opmKeplerianAndManeuvers = OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers();
-    opmKeplerianAndManeuvers.getManuevers().get(0).addComment("new");
-    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers(), opmKeplerianAndManeuvers);
-    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers().hashCode(),
+    opmKeplerianAndManeuvers = OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers();
+    opmKeplerianAndManeuvers.getManeuvers().get(0).addComment("new");
+    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers(), opmKeplerianAndManeuvers);
+    Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers().hashCode(),
         opmKeplerianAndManeuvers.hashCode());
 
     // Also has covariance and ADAM fields.
@@ -74,7 +74,7 @@ public class OrbitParameterMessageTest {
     Assert.assertEquals(opmSimple, opmSimple.deepCopy());
 
     // Includes metadata, header, state vector, spacecraft, keplerian, and maneuvers.
-    OrbitParameterMessage opmKeplerianAndManeuvers = OdmScenarioBuilder.buildOpmWithKepelerianAndManuevers();
+    OrbitParameterMessage opmKeplerianAndManeuvers = OdmScenarioBuilder.buildOpmWithKeplerianAndManeuvers();
     Assert.assertEquals(opmKeplerianAndManeuvers, opmKeplerianAndManeuvers.deepCopy());
 
     // Includes metadata, header, state vector, spacecraft, covariance, and ADAM fields.
