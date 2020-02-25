@@ -9,31 +9,55 @@ import java.util.Objects;
 public class BatchRequest {
 
   // Parts specified by the user.
-  /** Human-readable description of this batch request. */
+  /**
+   * Human-readable description of this batch request.
+   */
   private String description;
-  /** Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time. */
+  /**
+   * Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time.
+   */
   private String start_time;
-  /** End of the ephemerides. This should be UTC. Generated ephemerides will end at this time. */
+  /**
+   * End of the ephemerides. This should be UTC. Generated ephemerides will end at this time.
+   */
   private String end_time;
-  /** Time step for the output ephemeris, seconds. If <=0, output will match integrator steps, no interpolation. */
+  /**
+   * Time step for the output ephemeris, seconds. If <=0, output will match integrator steps, no interpolation.
+   */
   private long step_duration_sec;
-  /** Settings for the numeric propagator - the ID. */
+  /**
+   * Settings for the numeric propagator - the ID.
+   */
   private String propagator_uuid;
-  /** OPM as a single string in CCSDS format */
+  /**
+   * OPM as a single string in CCSDS format
+   */
   private String opm_string;
 
   // Parts added by the server.
-  /** Unique id for a pending batch request, generated on creation. A single request can result in multiple runs. */
+  /**
+   * Unique id for a pending batch request, generated on creation. A single request can result in multiple runs.
+   */
   private String uuid;
-  /** Total number of parts (individual runs) for this request. */
+  /**
+   * Total number of parts (individual runs) for this request.
+   */
   private int partsCount = -1;
-  /** State of the calculation for the whole batch */
+  /**
+   * State of the calculation for the whole batch
+   */
   private CalculationState calcState;
-  /** If calc_state is FAILED, error will have more information. */
+  /**
+   * If calc_state is FAILED, error will have more information.
+   */
   private String error;
-  /** Summary of the batch results. */
+  /**
+   * Summary of the batch results.
+   */
   private String summary;
-  /** Batch manager that processes this request. Not used in equals or hashcode. */
+  /**
+   * Batch manager that processes this request. Not used in equals or hashcode.
+   */
   private String manager;
 
   public String getDescription() {
@@ -170,13 +194,11 @@ public class BatchRequest {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("BatchRequest [description=").append(description).append(", start_time=").append(start_time)
-        .append(", end_time=").append(end_time).append(", step_duration_sec=").append(step_duration_sec)
-        .append(", propagator_uuid=").append(propagator_uuid).append(", opm_string=").append(opm_string)
-        .append(", uuid=").append(uuid).append(", partsCount=").append(partsCount).append(", calcState=")
-        .append(calcState).append(", error=").append(error).append(", summary=").append(summary).append(", manager=")
-        .append(manager).append("]");
-    return builder.toString();
+    return "BatchRequest [description=" + description + ", start_time=" + start_time +
+        ", end_time=" + end_time + ", step_duration_sec=" + step_duration_sec +
+        ", propagator_uuid=" + propagator_uuid + ", opm_string=" + opm_string +
+        ", uuid=" + uuid + ", partsCount=" + partsCount + ", calcState=" +
+        calcState + ", error=" + error + ", summary=" + summary + ", manager=" +
+        manager + "]";
   }
 }

@@ -9,13 +9,19 @@ import java.util.Objects;
  * Header fields are common for all three ODM messages. https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class OdmCommonHeader implements Serializable {
-  /** Optional comments. */
+  /**
+   * Optional comments.
+   */
   private List<String> comments = new ArrayList<>();
 
-  /** Creation date is always in UTC. */
+  /**
+   * Creation date is always in UTC.
+   */
   private String creationDate = null;
 
-  /** Creating agency or operator. */
+  /**
+   * Creating agency or operator.
+   */
   private String originator = null;
 
   public OdmCommonHeader deepCopy() {
@@ -74,9 +80,7 @@ public class OdmCommonHeader implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("OdmCommonHeader [comments=").append(comments).append(", creationDate=").append(creationDate)
-        .append(", originator=").append(originator).append("]");
-    return builder.toString();
+    return "OdmCommonHeader [comments=" + comments + ", creationDate=" + creationDate +
+        ", originator=" + originator + "]";
   }
 }

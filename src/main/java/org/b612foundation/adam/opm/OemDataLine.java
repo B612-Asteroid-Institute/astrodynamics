@@ -3,7 +3,9 @@ package org.b612foundation.adam.opm;
 import java.util.Arrays;
 import java.util.Objects;
 
-/** Data line of OrbitEphemerisMessage: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore them for now. */
+/**
+ * Data line of OrbitEphemerisMessage: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore them for now.
+ */
 public class OemDataLine {
   private String date;
   private double[] point = new double[6];

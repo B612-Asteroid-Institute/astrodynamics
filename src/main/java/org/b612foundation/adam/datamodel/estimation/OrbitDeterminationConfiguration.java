@@ -14,20 +14,25 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class OrbitDeterminationConfiguration extends AdamObject {
-    /** Specific executor to be used, e.g. OpenOrb, Orekit, etc. The behavior is up to the server implementation. */
-    private String executor;
+  /**
+   * Specific executor to be used, e.g. OpenOrb, Orekit, etc. The behavior is up to the server implementation.
+   */
+  private String executor;
 
-    /** Settings for the numeric propagator - the ID. */
-    private String propagator_config_uuid;
+  /**
+   * Settings for the numeric propagator - the ID.
+   */
+  private String propagator_config_uuid;
 
-    @Singular
-    private Map<String, String> convergenceSettings;
+  @Singular
+  private Map<String, String> convergenceSettings;
 
-    @Singular
-    private Map<String, String> executionSettings;
+  @Singular
+  private Map<String, String> executionSettings;
 
-    @Singular
-    private Map<String, String> measurementSettings;
+  @Singular
+  private Map<String, String> measurementSettings;
 
 }

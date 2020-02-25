@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNotNull;
 
 public class OorbEstimateConfigurationFactoryTest {
 
-    @Test
-    public void testDefaultConfigHappy() {
-        assertNotNull(OorbEstimateConfigurationFactory.buildDefaultConfig());
-    }
+  @Test
+  public void testDefaultConfigHappy() {
+    assertNotNull(OorbEstimateConfigurationFactory.buildDefaultConfig());
+  }
 }

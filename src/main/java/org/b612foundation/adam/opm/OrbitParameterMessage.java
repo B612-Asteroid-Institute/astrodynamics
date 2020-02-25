@@ -11,21 +11,37 @@ import java.util.Objects;
  */
 public class OrbitParameterMessage implements Serializable {
 
-  /** OPM version is required by standard. Should be the same value always. */
+  /**
+   * OPM version is required by standard. Should be the same value always.
+   */
   private String ccsdsOpmVers = "2.0";
-  /** Headers are common for all message types. */
+  /**
+   * Headers are common for all message types.
+   */
   private OdmCommonHeader header;
-  /** Most of the metadata fields are common for all message types. */
+  /**
+   * Most of the metadata fields are common for all message types.
+   */
   private OdmCommonMetadata metadata;
-  /** Position/velocity at a given time. */
+  /**
+   * Position/velocity at a given time.
+   */
   private StateVector stateVector;
-  /** Keplerian elements. */
+  /**
+   * Keplerian elements.
+   */
   private KeplerianElements keplerian;
-  /** Optional spacecraft details. */
+  /**
+   * Optional spacecraft details.
+   */
   private SpacecraftParameters spacecraft;
-  /** Covariance for position/velocity, optional. */
+  /**
+   * Covariance for position/velocity, optional.
+   */
   private CovarianceMatrix covariance;
-  /** 0 or more maneuvers. */
+  /**
+   * 0 or more maneuvers.
+   */
   private List<Maneuver> maneuvers = new ArrayList<>();
   /**
    * The standard also allows USER_DEFINED_X parameters. We ignore all except ADAM-specific ones (start with
@@ -178,11 +194,9 @@ public class OrbitParameterMessage implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("OrbitParameterMessage [ccsdsOpmVers=").append(ccsdsOpmVers).append(", header=").append(header)
-        .append(", metadata=").append(metadata).append(", stateVector=").append(stateVector).append(", keplerian=")
-        .append(keplerian).append(", spacecraft=").append(spacecraft).append(", covariance=").append(covariance)
-        .append(", maneuvers=").append(maneuvers).append(", adamFields=").append(adamFields).append("]");
-    return builder.toString();
+    return "OrbitParameterMessage [ccsdsOpmVers=" + ccsdsOpmVers + ", header=" + header +
+        ", metadata=" + metadata + ", stateVector=" + stateVector + ", keplerian=" +
+        keplerian + ", spacecraft=" + spacecraft + ", covariance=" + covariance +
+        ", maneuvers=" + maneuvers + ", adamFields=" + adamFields + "]";
   }
 }

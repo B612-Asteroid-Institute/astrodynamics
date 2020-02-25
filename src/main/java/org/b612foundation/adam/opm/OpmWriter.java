@@ -34,8 +34,7 @@ public class OpmWriter {
       throw new IllegalArgumentException("OPM must have state vector data (cartesian or keplerian) to correctly serialize");
     }
 
-    if(opm.getState_vector() != null)
-    {
+    if (opm.getState_vector() != null) {
       StateVector stateVector = opm.getState_vector();
       outputComments(builder, stateVector.getComments());
       builder.append("EPOCH = " + stateVector.getEpoch() + "\n");
@@ -69,8 +68,7 @@ public class OpmWriter {
       builder.append("DRAG_COEFF = " + spacecraft.getDrag_coeff() + "\n");
     }
 
-    if (opm.getManeuvers() != null)
-    {
+    if (opm.getManeuvers() != null) {
       for (var m : opm.getManeuvers()) {
         outputComments(builder, m.getComments());
         builder.append("MAN_EPOCH_IGNITION = " + m.getMan_epoch_ignition() + "\n");
@@ -111,15 +109,12 @@ public class OpmWriter {
     return builder.toString();
   }
 
-  private static void outputComments(StringBuilder builder, List<String> comments)
-  {
-    if(comments == null)
-    {
+  private static void outputComments(StringBuilder builder, List<String> comments) {
+    if (comments == null) {
       return;
     }
 
-    for(String comment : comments)
-    {
+    for (String comment : comments) {
       builder.append("COMMENT " + comment + "\n");
     }
   }

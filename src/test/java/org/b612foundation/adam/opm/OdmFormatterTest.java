@@ -14,32 +14,34 @@ public class OdmFormatterTest {
     OrbitParameterMessage parsed = OdmFormatter.parseOpmString(OdmScenarioBuilder.getSimpleOpm());
     Assert.assertEquals(parsed, expected);
   }
-  
-  /** Returns OPM from figure 3-1 in the ODM standard but USING 'TT' as the TIME_SYSTEM instead of 'UTC' */
+
+  /**
+   * Returns OPM from figure 3-1 in the ODM standard but USING 'TT' as the TIME_SYSTEM instead of 'UTC'
+   */
   private String getSimpleOpmTT() {
     return "CCSDS_OPM_VERS = 2.0\n"
-         + "CREATION_DATE = 1998-11-06T09:23:57\n"
-         + "ORIGINATOR = JAXA\n"
-         + "COMMENT GEOCENTRIC, CARTESIAN, EARTH FIXED\n"
-         + "OBJECT_NAME = GODZILLA 5\n"
-         + "OBJECT_ID = 1998-057A\n"
-         + "CENTER_NAME = EARTH\n"
-         + "REF_FRAME = ITRF-97\n"
-         + "TIME_SYSTEM = TT\n"
-         + "EPOCH = 1998-12-18T14:28:15.1172\n"
-         + "X = 6503.514000\n"
-         + "Y = 1239.647000\n"
-         + "Z = -717.490000\n"
-         + "X_DOT = -0.873160\n"
-         + "Y_DOT = 8.740420\n"
-         + "Z_DOT = -4.191076\n"
-         + "MASS = 3000.000000\n"
-         + "SOLAR_RAD_AREA = 18.770000\n"
-         + "SOLAR_RAD_COEFF = 1.000000\n"
-         + "DRAG_AREA = 18.770000\n"
-         + "DRAG_COEFF = 2.500000\n";
+        + "CREATION_DATE = 1998-11-06T09:23:57\n"
+        + "ORIGINATOR = JAXA\n"
+        + "COMMENT GEOCENTRIC, CARTESIAN, EARTH FIXED\n"
+        + "OBJECT_NAME = GODZILLA 5\n"
+        + "OBJECT_ID = 1998-057A\n"
+        + "CENTER_NAME = EARTH\n"
+        + "REF_FRAME = ITRF-97\n"
+        + "TIME_SYSTEM = TT\n"
+        + "EPOCH = 1998-12-18T14:28:15.1172\n"
+        + "X = 6503.514000\n"
+        + "Y = 1239.647000\n"
+        + "Z = -717.490000\n"
+        + "X_DOT = -0.873160\n"
+        + "Y_DOT = 8.740420\n"
+        + "Z_DOT = -4.191076\n"
+        + "MASS = 3000.000000\n"
+        + "SOLAR_RAD_AREA = 18.770000\n"
+        + "SOLAR_RAD_COEFF = 1.000000\n"
+        + "DRAG_AREA = 18.770000\n"
+        + "DRAG_COEFF = 2.500000\n";
   }
-  
+
   @Test
   public void testParseSimpleOpmTTHappy() throws Exception {
     OrbitParameterMessage expected = OdmScenarioBuilder.buildSimpleOpm();
@@ -78,7 +80,7 @@ public class OdmFormatterTest {
   }
 
   @Test
-  public void testBasicOorbOemHappy() throws OdmParseException {
+  public void testBasicOorbOemHappy() {
     String objectName = UUID.randomUUID().toString();
     String objectId = UUID.randomUUID().toString();
     String oorbEphemerisString = String.join("\n",
@@ -116,7 +118,7 @@ public class OdmFormatterTest {
   }
 
   @Test
-  public void testOorbOemWithFrameConversionHappy() throws OdmParseException {
+  public void testOorbOemWithFrameConversionHappy() {
     String objectName = UUID.randomUUID().toString();
     String objectId = UUID.randomUUID().toString();
     String oorbEphemerisString = String.join("\n",

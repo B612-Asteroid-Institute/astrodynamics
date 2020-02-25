@@ -4,63 +4,63 @@ import lombok.Data;
 
 @Data
 public class LsstMeasurement {
-    //objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v mag detected D_km
-    private String objectId;
+  //objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v mag detected D_km
+  private String objectId;
 
-    private String stationId;
+  private String stationId;
 
-    private int visitId;
+  private int visitId;
 
-    private double mjd;
+  private double mjd;
 
-    private double raDeg;
+  private double raDeg;
 
-    private double decDeg;
+  private double decDeg;
 
-    private double vra;
+  private double vra;
 
-    private double vdec;
+  private double vdec;
 
-    private double phase;
+  private double phase;
 
-    private double solarElon;
+  private double solarElon;
 
-    private double helioD;
+  private double helioD;
 
-    private double geoD;
+  private double geoD;
 
-    private double Vmag;
+  private double Vmag;
 
-    private double trueAnomaly;
+  private double trueAnomaly;
 
-    private double H;
+  private double H;
 
-    private double G;
+  private double G;
 
-    private double raFieldDeg;
+  private double raFieldDeg;
 
-    private double decFieldDeg;
+  private double decFieldDeg;
 
-    private double mjdField;
+  private double mjdField;
 
-    private String filter;
+  private String filter;
 
-    private double visitTime;
+  private double visitTime;
 
-    private double visitExposureTime;
+  private double visitExposureTime;
 
-    private double seeingFwhmEff;
+  private double seeingFwhmEff;
 
-    private double fiveSigmaDepth;
+  private double fiveSigmaDepth;
 
-    private String orbitClass;
+  private String orbitClass;
 
-    private double pV;
+  private double pV;
 
-    private double mag;
+  private double mag;
 
-    private double detected;
+  private double detected;
 
-    private double Dkm;
+  private double Dkm;
 
 }

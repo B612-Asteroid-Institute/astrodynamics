@@ -36,7 +36,9 @@ public class LsstAccessCalculation extends AdamObject {
    */
   private String pointingsTableName;
 
-  /** Human-readable description of this object. */
+  /**
+   * Human-readable description of this object.
+   */
   private String description;
 
   /**
@@ -129,6 +131,6 @@ public class LsstAccessCalculation extends AdamObject {
         && Objects.equals(accessStartTime, other.accessStartTime) && Objects.equals(accessEndTime, other.accessEndTime)
         && Objects.equals(pointingsTableName, other.pointingsTableName)
         && Objects.equals(description, other.description) && accesses == null ? other.accesses == null
-            : accesses.equals(other.accesses);
+        : accesses.equals(other.accesses);
   }
 }

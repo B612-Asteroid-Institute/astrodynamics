@@ -10,11 +10,17 @@ import java.util.Objects;
  * https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class OrbitEphemerisMessage implements Serializable {
-  /** OEM version is required by standard. Should be the same value always. */
+  /**
+   * OEM version is required by standard. Should be the same value always.
+   */
   private String ccsdsOemVers = "2.0";
-  /** Headers are common for all message types. */
+  /**
+   * Headers are common for all message types.
+   */
   private OdmCommonHeader header;
-  /** One OEM message can contain several ephemerides, each with its own metadata block and optional covariance. */
+  /**
+   * One OEM message can contain several ephemerides, each with its own metadata block and optional covariance.
+   */
   private List<OemDataBlock> data = new ArrayList<>();
 
   public String getCcsds_oem_vers() {

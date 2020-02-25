@@ -1,12 +1,10 @@
 package org.b612foundation.adam.astro;
 
-import org.b612foundation.adam.astro.AstroUtils;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -21,13 +19,13 @@ public class AstroUtilsTest {
 
     mjd = 54617 + 4.66817129629631e-01;
     expected = LocalDateTime.of(2008, 5, 31, 11, 12, 12)
-            .plusNanos(999999937);
+        .plusNanos(999999937);
     actual = AstroUtils.localDateTimefromMJD(mjd);
     assertEquals(expected, actual);
 
     mjd = 58485.00079861111111111;
     expected = LocalDateTime.of(2019, 1, 2, 0, 1, 8)
-            .plusNanos(999999784);
+        .plusNanos(999999784);
     actual = AstroUtils.localDateTimefromMJD(mjd);
     assertEquals(expected.toString(), actual.toString());
 

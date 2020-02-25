@@ -7,34 +7,52 @@ import java.util.Objects;
 
 /**
  * Osculating Keplerian Elements in the specified reference frame (none or all parameters of this block must be given.)
- * 
+ * <p>
  * https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class KeplerianElements implements Serializable {
-  /** Optional comments. */
+  /**
+   * Optional comments.
+   */
   private List<String> comments = new ArrayList<>();
   /*
    * In TLE-based OMM mean_motion is used instead of semi_major_axis. Have separate fields here to keep things simpler.
    */
-  /** Semi-major axis, km */
+  /**
+   * Semi-major axis, km
+   */
   private double semiMajorAxis;
-  /** Mean motion, rev/day, used in TLE-based OMM instead of semi-major axis. */
+  /**
+   * Mean motion, rev/day, used in TLE-based OMM instead of semi-major axis.
+   */
   private double meanMotion;
-  /** Eccentricity, unitless */
+  /**
+   * Eccentricity, unitless
+   */
   private double eccentricity;
-  /** Inclination, degrees */
+  /**
+   * Inclination, degrees
+   */
   private double inclination;
-  /** Right ascention of ascending node, degrees */
+  /**
+   * Right ascention of ascending node, degrees
+   */
   private double raOfAscNode;
-  /** Argument of pericenter, degrees */
+  /**
+   * Argument of pericenter, degrees
+   */
   private double argOfPericenter;
   /**
    * Technically, it's true anomaly OR mean anomaly, but have separate fields to keep things simpler.
    */
   private double trueAnomaly;
-  /** Mean anomaly, degrees */
+  /**
+   * Mean anomaly, degrees
+   */
   private double meanAnomaly;
-  /** Gravitational Coefficient (G x Mass). km^3/s^2. */
+  /**
+   * Gravitational Coefficient (G x Mass). km^3/s^2.
+   */
   private double gm;
 
   public KeplerianElements deepCopy() {
@@ -179,12 +197,10 @@ public class KeplerianElements implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("KeplerianElements [comments=").append(comments).append(", semiMajorAxis=").append(semiMajorAxis)
-        .append(", meanMotion=").append(meanMotion).append(", eccentricity=").append(eccentricity)
-        .append(", inclination=").append(inclination).append(", raOfAscNode=").append(raOfAscNode)
-        .append(", argOfPericenter=").append(argOfPericenter).append(", trueAnomaly=").append(trueAnomaly)
-        .append(", meanAnomaly=").append(meanAnomaly).append(", gm=").append(gm).append("]");
-    return builder.toString();
+    return "KeplerianElements [comments=" + comments + ", semiMajorAxis=" + semiMajorAxis +
+        ", meanMotion=" + meanMotion + ", eccentricity=" + eccentricity +
+        ", inclination=" + inclination + ", raOfAscNode=" + raOfAscNode +
+        ", argOfPericenter=" + argOfPericenter + ", trueAnomaly=" + trueAnomaly +
+        ", meanAnomaly=" + meanAnomaly + ", gm=" + gm + "]";
   }
 }

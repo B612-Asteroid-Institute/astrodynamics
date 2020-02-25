@@ -9,13 +9,21 @@ import java.util.Objects;
  * covariances.
  */
 public class OemDataBlock {
-  /** Optional comments. */
+  /**
+   * Optional comments.
+   */
   private List<String> comments = new ArrayList<>();
-  /** Metadata, required */
+  /**
+   * Metadata, required
+   */
   private OemMetadata metadata = null;
-  /** Data, required: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore them for now. */
+  /**
+   * Data, required: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore them for now.
+   */
   private List<OemDataLine> ephemeris = new ArrayList<>();
-  /** Optional covariances, each with its own epoch. */
+  /**
+   * Optional covariances, each with its own epoch.
+   */
   private List<CovarianceMatrix> covariances = new ArrayList<>();
 
   public List<String> getComments() {

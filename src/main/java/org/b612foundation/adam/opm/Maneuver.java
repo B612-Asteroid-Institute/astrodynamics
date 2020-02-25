@@ -9,17 +9,29 @@ import java.util.Objects;
  * Description of an individual maneuver (burn). Used in OPM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class Maneuver implements Serializable {
-  /** Optional comments. */
+  /**
+   * Optional comments.
+   */
   private List<String> comments = new ArrayList<>();
-  /** Epoch of ignition. */
+  /**
+   * Epoch of ignition.
+   */
   private String manEpochIgnition;
-  /** Durations in seconds, >=0. */
+  /**
+   * Durations in seconds, >=0.
+   */
   private double duration;
-  /** Mass change in kg, <=0. */
+  /**
+   * Mass change in kg, <=0.
+   */
   private double deltaMass;
-  /** Coordinate system for velocity increment vector. */
+  /**
+   * Coordinate system for velocity increment vector.
+   */
   private OdmCommonMetadata.ReferenceFrame manRefFrame;
-  /** Velocity increment vector components, km/s */
+  /**
+   * Velocity increment vector components, km/s
+   */
   private double manDv1, manDv2, manDv3;
 
   public Maneuver deepCopy() {
@@ -141,11 +153,9 @@ public class Maneuver implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("Maneuver [comments=").append(comments).append(", manEpochIgnition=").append(manEpochIgnition)
-        .append(", duration=").append(duration).append(", deltaMass=").append(deltaMass).append(", manRefFrame=")
-        .append(manRefFrame).append(", manDv1=").append(manDv1).append(", manDv2=").append(manDv2).append(", manDv3=")
-        .append(manDv3).append("]");
-    return builder.toString();
+    return "Maneuver [comments=" + comments + ", manEpochIgnition=" + manEpochIgnition +
+        ", duration=" + duration + ", deltaMass=" + deltaMass + ", manRefFrame=" +
+        manRefFrame + ", manDv1=" + manDv1 + ", manDv2=" + manDv2 + ", manDv3=" +
+        manDv3 + "]";
   }
 }

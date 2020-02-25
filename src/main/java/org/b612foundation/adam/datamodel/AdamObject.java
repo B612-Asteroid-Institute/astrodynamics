@@ -5,7 +5,9 @@ import java.util.UUID;
 
 public abstract class AdamObject {
 
-  /** Id for an object, unique among all AdamObjects. */
+  /**
+   * Id for an object, unique among all AdamObjects.
+   */
   private String uuid;
 
   public String getUuid() {
@@ -17,8 +19,7 @@ public abstract class AdamObject {
     return this;
   }
 
-  public AdamObject()
-  {
+  public AdamObject() {
     this.uuid = UUID.randomUUID().toString();
   }
 
