@@ -22,7 +22,7 @@ target/
 #Eclipse Settings Files
 .settings
 .classpath
-.settings
+.project
 
 #IntelliJ Project file
 .idea
