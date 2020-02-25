@@ -1,6 +1,5 @@
 package org.b612foundation.adam.opm;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.List;
 
 /**
@@ -70,9 +69,9 @@ public class OpmWriter {
       builder.append("DRAG_COEFF = " + spacecraft.getDrag_coeff() + "\n");
     }
 
-    if (opm.getManuevers() != null)
+    if (opm.getManeuvers() != null)
     {
-      for (Manuever m : opm.getManuevers()) {
+      for (var m : opm.getManeuvers()) {
         outputComments(builder, m.getComments());
         builder.append("MAN_EPOCH_IGNITION = " + m.getMan_epoch_ignition() + "\n");
         builder.append("MAN_DURATION = " + m.getDuration() + "\n");
