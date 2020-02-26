@@ -15,7 +15,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public final class OrbitDeterminationConfiguration extends AdamObject {
+public class OrbitDeterminationConfiguration extends AdamObject {
   /**
    * Specific executor to be used, e.g. OpenOrb, Orekit, etc. The behavior is up to the server implementation.
    */
