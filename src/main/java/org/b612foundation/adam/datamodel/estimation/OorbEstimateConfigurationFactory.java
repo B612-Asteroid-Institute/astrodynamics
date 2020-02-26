@@ -1,6 +1,6 @@
 package org.b612foundation.adam.datamodel.estimation;
 
-public class OorbEstimateConfigurationFactory {
+public final class OorbEstimateConfigurationFactory {
   public static final String OORB_EXECUTOR = "OpenOrb";
 
   public static OrbitDeterminationConfiguration buildDefaultConfig() {

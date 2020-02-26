@@ -2,7 +2,7 @@ package org.b612foundation.adam.astro;
 
 import static java.lang.Math.*;
 
-public class ReferenceFrameConverter {
+public final class ReferenceFrameConverter {
   private static final double J2000_TO_JPL_ECLIPTIC_OBLIQUITY = toRadians(84381.448 / 3600.0);
 
   /**

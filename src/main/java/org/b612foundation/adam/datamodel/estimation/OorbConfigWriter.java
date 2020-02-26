@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 
-public class OorbConfigWriter {
+public final class OorbConfigWriter {
 
   public static void writeConfiguration(Path configFilePath,
                                         OrbitDeterminationConfiguration odConfig,

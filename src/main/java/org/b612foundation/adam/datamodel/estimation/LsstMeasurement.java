@@ -3,7 +3,7 @@ package org.b612foundation.adam.datamodel.estimation;
 import lombok.Data;
 
 @Data
-public class LsstMeasurement {
+public final class LsstMeasurement {
   //objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v mag detected D_km
   private String objectId;
 

@@ -15,7 +15,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class OrbitDeterminationConfiguration extends AdamObject {
+public final class OrbitDeterminationConfiguration extends AdamObject {
   /**
    * Specific executor to be used, e.g. OpenOrb, Orekit, etc. The behavior is up to the server implementation.
    */
@@ -24,7 +24,7 @@ public class OrbitDeterminationConfiguration extends AdamObject {
   /**
    * Settings for the numeric propagator - the ID.
    */
-  private String propagator_config_uuid;
+  private String propagatorConfigUuid;
 
   @Singular
   private Map<String, String> convergenceSettings;

@@ -1,6 +1,6 @@
 package org.b612foundation.adam.astro;
 
-public class AstroConstants {
+public final class AstroConstants {
   public static final double GM = 132712440041.93938;   //From JPL Horizons
   public static final double KM_TO_M = 1000.0;
   public static final double M_TO_KM = 1.0 / KM_TO_M;

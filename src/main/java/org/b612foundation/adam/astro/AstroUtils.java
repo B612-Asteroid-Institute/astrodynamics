@@ -6,7 +6,7 @@ import java.time.temporal.JulianFields;
 
 import static org.b612foundation.adam.astro.AstroConstants.*;
 
-public class AstroUtils {
+public final class AstroUtils {
 
   /**
    * Given a Modified Julian Date return a LocalDateTime object with the Gregorian style date/time.

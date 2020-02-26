@@ -39,7 +39,7 @@ public class OdDataExamplesTest {
     // but representative ones to show the variety of system-specific elements that can be configured
     var thorIodConfig = OrbitDeterminationConfiguration.builder()
         .executor("Thor")
-        .propagator_config_uuid(propagatorConfig.getUuid())
+        .propagatorConfigUuid(propagatorConfig.getUuid())
         .measurementSetting("samplingSetting", "first+middle+last")
         .executionSetting("method", "gibbs")
         .build();
@@ -57,11 +57,11 @@ public class OdDataExamplesTest {
         .convergenceSetting("sor.iterate_bounds", "T T T T")
         .convergenceSetting("apriori.a.min", "0.5")
         .convergenceSetting("apriori.a.max", "10")
-        .propagator_config_uuid(propagatorConfig.getUuid())
+        .propagatorConfigUuid(propagatorConfig.getUuid())
         .build();
 
     var iodParams = OrbitDeterminationParameters.builder()
-        .orbit_determination_config_uuid(thorIodConfig.getUuid())
+        .orbitDeterminationConfigUuid(thorIodConfig.getUuid())
         .loggingLevel(5)
         .observerId("568")
         .observerId("807")
@@ -69,7 +69,7 @@ public class OdDataExamplesTest {
         .outputFrame("ICRF")
         .measurementsFormatType("DES")
         .measurements(base64ObsFile)
-        .type(OrbitDeterminationParameters.OdType.Initial)
+        .type(OrbitDeterminationParameters.OdType.INITIAL)
         .build();
 
     // A call to the REST service ran the IOD and generated IOD values, let's say so now have OPM...
@@ -82,7 +82,7 @@ public class OdDataExamplesTest {
     // but representative ones to show the variety of system-specific elements that can be configured
     var oorbFullOdConfig = OrbitDeterminationConfiguration.builder()
         .executor("OpenOrb")
-        .propagator_config_uuid(propagatorConfig.getUuid())
+        .propagatorConfigUuid(propagatorConfig.getUuid())
         .measurementSetting("stdev.ra", "1.0")
         .measurementSetting("stdev.dec", "1.0")
         .measurementSetting("outlier_rejection", "T")
@@ -97,7 +97,7 @@ public class OdDataExamplesTest {
 
     var orekitFullOdConfig = OrbitDeterminationConfiguration.builder()
         .executor("Orekit")
-        .propagator_config_uuid(propagatorConfig.getUuid())
+        .propagatorConfigUuid(propagatorConfig.getUuid())
         .measurementSetting("ra.dec.outlier.rejection.multiplier", "6")
         .measurementSetting("ra.dec.outlier.rejection.starting.iteration", "2")
         .measurementSetting("ra.measurements.base.weight", "1.0")
@@ -111,7 +111,7 @@ public class OdDataExamplesTest {
         .build();
 
     var fullOdParams = OrbitDeterminationParameters.builder()
-        .orbit_determination_config_uuid(oorbFullOdConfig.getUuid())
+        .orbitDeterminationConfigUuid(oorbFullOdConfig.getUuid())
         .loggingLevel(5)
         .observerId("568")
         .observerId("807")
@@ -123,7 +123,7 @@ public class OdDataExamplesTest {
         .initialStateEstimateCr(1.3)
         .initialStateEstimateMass(9.3e20)
         .initialStateEstimateSrpArea(2.95e6)
-        .type(OrbitDeterminationParameters.OdType.Full)
+        .type(OrbitDeterminationParameters.OdType.FULL)
         .build();
 
 

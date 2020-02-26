@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.List;
 
-public class OorbMeasurementWriter {
+public final class OorbMeasurementWriter {
   public static final double DEFAULT_RA_ERROR_ESTIMATE_ASEC = 1.000;
   public static final double DEFAULT_DEC_ERROR_ESTIMATE_ASEC = 1.000;
   public static final double DEFAULT_VMAG_ERROR_ESTIMATE = 1.000; //means ignore

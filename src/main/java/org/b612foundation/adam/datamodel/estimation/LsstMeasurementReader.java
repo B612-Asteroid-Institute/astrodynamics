@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LsstMeasurementReader {
+public final class LsstMeasurementReader {
   //objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v mag detected D_km
   private static final int objIdIdx = 0;
   private static final int visitIdIdx = 1;
@@ -20,22 +20,22 @@ public class LsstMeasurementReader {
   private static final int helioDIdx = 9;
   private static final int geoDIdx = 10;
   private static final int VmagIdx = 11;
-  private static final int true_anomalyIdx = 12;
+  private static final int trueAnomalyIdx = 12;
   private static final int HIdx = 13;
   private static final int GIdx = 14;
-  private static final int ra_fieldIdx = 15;
-  private static final int dec_fieldIdx = 16;
-  private static final int mjd_fieldIdx = 17;
+  private static final int raFieldIdx = 15;
+  private static final int decFieldIdx = 16;
+  private static final int mjdFieldIdx = 17;
   private static final int filterIdx = 18;
   private static final int visitTimeIdx = 19;
   private static final int visitExposureTimeIdx = 20;
   private static final int seeingFwhmEffIdx = 21;
   private static final int fiveSigmaDepthIdx = 22;
   private static final int classIdx = 23;
-  private static final int p_vIdx = 24;
+  private static final int pvIdx = 24;
   private static final int magIdx = 25;
   private static final int detectedIdx = 26;
-  private static final int D_kmIdx = 27;
+  private static final int distanceKmIdx = 27;
   private static final int expectedItemCount = 28;
 
   public static List<LsstMeasurement> readSingleObjectCsvFile(Path csvFile, String stationId) throws IOException {
@@ -69,22 +69,22 @@ public class LsstMeasurementReader {
       m.setHelioD(Double.parseDouble(elements[helioDIdx]));
       m.setGeoD(Double.parseDouble(elements[geoDIdx]));
       m.setVmag(Double.parseDouble(elements[VmagIdx]));
-      m.setTrueAnomaly(Double.parseDouble(elements[true_anomalyIdx]));
+      m.setTrueAnomaly(Double.parseDouble(elements[trueAnomalyIdx]));
       m.setH(Double.parseDouble(elements[HIdx]));
       m.setG(Double.parseDouble(elements[GIdx]));
-      m.setRaFieldDeg(Double.parseDouble(elements[ra_fieldIdx]));
-      m.setDecFieldDeg(Double.parseDouble(elements[dec_fieldIdx]));
-      m.setMjdField(Double.parseDouble(elements[mjd_fieldIdx]));
+      m.setRaFieldDeg(Double.parseDouble(elements[raFieldIdx]));
+      m.setDecFieldDeg(Double.parseDouble(elements[decFieldIdx]));
+      m.setMjdField(Double.parseDouble(elements[mjdFieldIdx]));
       m.setFilter(elements[filterIdx]);
       m.setVisitTime(Double.parseDouble(elements[visitTimeIdx]));
       m.setVisitExposureTime(Double.parseDouble(elements[visitExposureTimeIdx]));
       m.setSeeingFwhmEff(Double.parseDouble(elements[seeingFwhmEffIdx]));
       m.setFiveSigmaDepth(Double.parseDouble(elements[fiveSigmaDepthIdx]));
       m.setOrbitClass(elements[classIdx]);
-      m.setPV(Double.parseDouble(elements[p_vIdx]));
+      m.setPV(Double.parseDouble(elements[pvIdx]));
       m.setMag(Double.parseDouble(elements[magIdx]));
       m.setDetected(Double.parseDouble(elements[detectedIdx]));
-      m.setDkm(Double.parseDouble(elements[D_kmIdx]));
+      m.setDkm(Double.parseDouble(elements[distanceKmIdx]));
       measurements.add(m);
     }
 

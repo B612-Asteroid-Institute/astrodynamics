@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class OrbitDeterminationParameters extends AdamObject {
+public final class OrbitDeterminationParameters extends AdamObject {
   /**
    * Logging level for output of forensic data during OD run
    **/
@@ -82,7 +82,7 @@ public class OrbitDeterminationParameters extends AdamObject {
   /**
    * Settings for the numeric propagator - the ID.
    */
-  private String orbit_determination_config_uuid;
+  private String orbitDeterminationConfigUuid;
 
 
   /**
@@ -104,12 +104,12 @@ public class OrbitDeterminationParameters extends AdamObject {
   private OdType type;
 
   public enum OdType {
-    Initial,
-    Full
+    INITIAL,
+    FULL
   }
 
   public enum MeasurumentType {
-    LsstCsvFilePath,
-    DesFilePath
+    LSST_CSV_FILE_PATH,
+    DES_FILE_PATH
   }
 }
