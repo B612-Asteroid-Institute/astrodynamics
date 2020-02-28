@@ -1,26 +1,38 @@
 package org.b612foundation.adam.datamodel;
 
-import java.util.Objects;
-
 import org.b612foundation.adam.opm.OdmFormatter;
 import org.b612foundation.adam.opm.OdmParseException;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 
+import java.util.Objects;
+
 public class PropagationParameters {
 
-  /** Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time. */
+  /**
+   * Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time.
+   */
   private String start_time;
-  /** End of the ephemerides. This should be UTC. Generated ephemerides will end at this time. */
+  /**
+   * End of the ephemerides. This should be UTC. Generated ephemerides will end at this time.
+   */
   private String end_time;
-  /** Time step for the output ephemeris, seconds. If <=0, output will match integrator steps, no interpolation. */
+  /**
+   * Time step for the output ephemeris, seconds. If <=0, output will match integrator steps, no interpolation.
+   */
   private long step_duration_sec;
-  /** Settings for the numeric propagator - the ID. */
+  /**
+   * Settings for the numeric propagator - the ID.
+   */
   private String propagator_uuid;
-  /** Specific executor to be used, e.g. STK, OpenOrb. The behavior is up to the server implementation. */
+  /**
+   * Specific executor to be used, e.g. STK, OpenOrb. The behavior is up to the server implementation.
+   */
   private String executor;
-  /** OPM as parsed from a single string in CCSDS format */
+  /**
+   * OPM as parsed from a single string in CCSDS format
+   */
   private OrbitParameterMessage opm;
-  
+
   public PropagationParameters deepCopy() {
     PropagationParameters copy = new PropagationParameters();
     copy.setEnd_time(end_time);
@@ -80,12 +92,12 @@ public class PropagationParameters {
   public OrbitParameterMessage getOpm() {
     return opm;
   }
-  
+
   public PropagationParameters setOpm(OrbitParameterMessage opm) {
     this.opm = opm;
     return this;
   }
-  
+
   public void setOpmFromString(String opmString) throws OdmParseException {
     this.opm = OdmFormatter.parseOpmString(opmString);
   }

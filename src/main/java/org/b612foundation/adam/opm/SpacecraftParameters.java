@@ -9,17 +9,29 @@ import java.util.Objects;
  * Description of a spacecraft. May be included in OPM or OMM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class SpacecraftParameters implements Serializable {
-  /** Optional comments. */
+  /**
+   * Optional comments.
+   */
   private List<String> comments = new ArrayList<>();
-  /** Mass, kg */
+  /**
+   * Mass, kg
+   */
   private double mass;
-  /** Solar radiation pressure area, m^2. */
+  /**
+   * Solar radiation pressure area, m^2.
+   */
   private double solarRadArea;
-  /** Solar radiation pressure coefficient. */
+  /**
+   * Solar radiation pressure coefficient.
+   */
   private double solarRadCoeff;
-  /** Drag area, m^2. */
+  /**
+   * Drag area, m^2.
+   */
   private double dragArea;
-  /** Drag coefficient. */
+  /**
+   * Drag coefficient.
+   */
   private double dragCoeff;
 
   public SpacecraftParameters deepCopy() {
@@ -120,10 +132,8 @@ public class SpacecraftParameters implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("SpacecraftParameters [comments=").append(comments).append(", mass=").append(mass)
-        .append(", solarRadArea=").append(solarRadArea).append(", solarRadCoeff=").append(solarRadCoeff)
-        .append(", dragArea=").append(dragArea).append(", dragCoeff=").append(dragCoeff).append("]");
-    return builder.toString();
+    return "SpacecraftParameters [comments=" + comments + ", mass=" + mass +
+        ", solarRadArea=" + solarRadArea + ", solarRadCoeff=" + solarRadCoeff +
+        ", dragArea=" + dragArea + ", dragCoeff=" + dragCoeff + "]";
   }
 }

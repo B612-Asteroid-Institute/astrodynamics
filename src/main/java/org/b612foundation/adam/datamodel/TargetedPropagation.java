@@ -9,11 +9,11 @@ public class TargetedPropagation extends AdamObject {
 
   /**
    * Parameters used to initialize targeter.
-   * 
+   * <p>
    * The stopping time should be an estimate of the time of the perigee for which targeting should be run.
-   * 
+   * <p>
    * The step size will be used for any generated ephemeris files.
-   * 
+   * <p>
    * The specified OPM may provide a maneuver, which will be used as the initial maneuver for targeting. Currently only
    * maneuvers of 0 seconds and 0 change in mass are supported. The only reference frame currently supported is TNW,
    * which is a local orbital coordinate frame that has the x-axis along the velocity vector, W along the orbital
@@ -26,7 +26,9 @@ public class TargetedPropagation extends AdamObject {
    */
   private TargetingParameters targetingParameters;
 
-  /** Human-readable description of this object. */
+  /**
+   * Human-readable description of this object.
+   */
   private String description;
 
   /**

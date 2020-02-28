@@ -1,7 +1,15 @@
 package org.b612foundation.adam.opm;
 
+import org.b612foundation.adam.astro.AstroUtils;
+import org.b612foundation.adam.astro.ReferenceFrameConverter;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.b612foundation.adam.astro.AstroConstants.AU_PER_DAY_TO_KM_PER_SEC;
+import static org.b612foundation.adam.astro.AstroConstants.AU_TO_KM;
 
 /**
  * Class for translating between text-based ODM formats and classes in this package. The CCSDS ODM standard is here:
@@ -118,7 +126,7 @@ public final class OdmFormatter {
       result.setCovariance(parseLongFormCovariance(lines));
     }
     while (containsLater(lines, MAN_EPOCH_IGNITION)) {
-      result.addManuever(parseManeuver(lines));
+      result.addManeuver(parseManeuver(lines));
     }
 
     // CCSDS ODM standard allows for USER_DEFINED_X fields. We store
@@ -168,6 +176,74 @@ public final class OdmFormatter {
       throw new OdmParseException("Unparsed lines in OEM: " + lines);
     }
     return result;
+  }
+
+  public static OrbitEphemerisMessage parseOorbEphemerisString(String buffer,
+                                                               String objectName,
+                                                               String objectId,
+                                                               boolean convertToIcrf) {
+    //TODO fill in optional covariance
+    final int xIndex = 2;
+    final int yIndex = 3;
+    final int zIndex = 4;
+    final int vxIndex = 5;
+    final int vyIndex = 6;
+    final int vzIndex = 7;
+    final int epochIndex = 9;
+    OemDataBlock ephemBlock = new OemDataBlock();
+
+    String[] lines = buffer.split("\n");
+    for (String line : lines) {
+      String trimmedLine = line.trim();
+      if (trimmedLine.isEmpty() || trimmedLine.startsWith("!!") || trimmedLine.startsWith("#")) {
+        continue;
+      }
+
+      String[] elements = line.split("\\s+");
+      double[] posVel = {
+          Double.parseDouble(elements[xIndex]) * AU_TO_KM,
+          Double.parseDouble(elements[yIndex]) * AU_TO_KM,
+          Double.parseDouble(elements[zIndex]) * AU_TO_KM,
+          Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
+          Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
+          Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_KM_PER_SEC
+      };
+
+      if (convertToIcrf) {
+        posVel = ReferenceFrameConverter.convertJplEclipticToICRF(posVel);
+      }
+
+      double mjd = Double.parseDouble(elements[epochIndex]);
+
+      String epoch = AstroUtils.localDateTimefromMJD(mjd).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+      ephemBlock.addLine(epoch, posVel[0], posVel[1], posVel[2], posVel[3], posVel[4], posVel[5]);
+    }
+
+    OemMetadata metadata = new OemMetadata();
+    metadata.setCenter_name(OdmCommonMetadata.CenterName.SUN);
+    if (convertToIcrf) {
+      metadata.setRef_frame(OdmCommonMetadata.ReferenceFrame.ICRF);
+    } else {
+      metadata.setRef_frame(OdmCommonMetadata.ReferenceFrame.J2000_IAU76ECLIP);
+    }
+
+    metadata.setInterpolation("HERMITE");
+    metadata.setInterpolation_degree(5);
+    metadata.setStart_time(ephemBlock.getLines().get(0).getDate());
+    metadata.setUsable_start_time(metadata.getStart_time());
+    metadata.setStop_time(ephemBlock.getLines().get(ephemBlock.getLines().size() - 1).getDate());
+    metadata.setUsable_stop_time(metadata.getStop_time());
+    metadata.setObject_id(objectId);
+    metadata.setObject_name(objectName);
+    metadata.setTime_system(OdmCommonMetadata.TimeSystem.TT);
+    ephemBlock.setMetadata(metadata);
+
+    OdmCommonHeader header = new OdmCommonHeader();
+    header.setCreation_date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    OrbitEphemerisMessage message = new OrbitEphemerisMessage().setHeader(header);
+    message.addBlock(ephemBlock);
+
+    return message;
   }
 
   /**
@@ -266,6 +342,15 @@ public final class OdmFormatter {
     lines.remove(0); // consume START
     parseCommonMetadata(lines, result);
     result.setStart_time(extractField(lines, START_TIME));
+
+    if (containsNext(lines, REF_FRAME)) {
+      String frame = extractField(lines, COV_REF_FRAME);
+      result.setRef_frame(parseReferenceFrame(frame));
+    }
+    if (containsNext(lines, CENTER_NAME)) {
+      String centerName = extractField(lines, CENTER_NAME);
+      result.setCenter_name(parseCenterName(centerName));
+    }
     if (containsNext(lines, USEABLE_START_TIME)) {
       result.setUsable_start_time(extractField(lines, USEABLE_START_TIME));
     }
@@ -290,7 +375,9 @@ public final class OdmFormatter {
     lines.remove(0); // consume STOP
   }
 
-  /** Parses the state vector section. Removes parsed lines from the list. */
+  /**
+   * Parses the state vector section. Removes parsed lines from the list.
+   */
   private static StateVector parseStateVector(List<String> lines) throws OdmParseException {
     StateVector result = new StateVector();
     while (containsNext(lines, COMMENT)) {
@@ -329,7 +416,9 @@ public final class OdmFormatter {
     return result;
   }
 
-  /** Parses spacecraft data. Removes parsed lines from the list. */
+  /**
+   * Parses spacecraft data. Removes parsed lines from the list.
+   */
   private static SpacecraftParameters parseSpacecraft(ArrayList<String> lines) throws OdmParseException {
     SpacecraftParameters result = new SpacecraftParameters();
     while (containsNext(lines, COMMENT)) {
@@ -468,9 +557,11 @@ public final class OdmFormatter {
     return result;
   }
 
-  /** Parses manuever data. Removes parsed lines from the list. */
-  private static Manuever parseManeuver(ArrayList<String> lines) throws OdmParseException {
-    Manuever result = new Manuever();
+  /**
+   * Parses maneuver data. Removes parsed lines from the list.
+   */
+  private static Maneuver parseManeuver(ArrayList<String> lines) throws OdmParseException {
+    Maneuver result = new Maneuver();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
     }
@@ -532,7 +623,9 @@ public final class OdmFormatter {
     }
   }
 
-  /** Returns true iff the list contains a string starting with the prefix. */
+  /**
+   * Returns true iff the list contains a string starting with the prefix.
+   */
   private static boolean containsLater(List<String> lines, String prefix) {
     for (String s : lines) {
       if (s.startsWith(prefix)) {
@@ -542,7 +635,9 @@ public final class OdmFormatter {
     return false;
   }
 
-  /** Returns true iff the first line in the list starts with the prefix. */
+  /**
+   * Returns true iff the first line in the list starts with the prefix.
+   */
   private static boolean containsNext(List<String> lines, String prefix) {
     return !lines.isEmpty() && lines.get(0).startsWith(prefix);
   }
@@ -580,7 +675,9 @@ public final class OdmFormatter {
     return value;
   }
 
-  /** Splits the string into a list of non-empty lines. */
+  /**
+   * Splits the string into a list of non-empty lines.
+   */
   private static ArrayList<String> getNonEmptyLines(String buffer) {
     ArrayList<String> list = new ArrayList<>();
     for (String s : buffer.split("\n")) {

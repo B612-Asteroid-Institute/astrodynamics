@@ -10,11 +10,17 @@ import java.util.Objects;
  * https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class CovarianceMatrix implements Serializable {
-  /** Optional comments. */
+  /**
+   * Optional comments.
+   */
   private List<String> comments = new ArrayList<>();
-  /** Separate Epoch for covariance, used only in OEM. */
+  /**
+   * Separate Epoch for covariance, used only in OEM.
+   */
   private String epoch;
-  /** Reference frame. If omited, same as metadata */
+  /**
+   * Reference frame. If omited, same as metadata
+   */
   private OdmCommonMetadata.ReferenceFrame covRefFrame = null;
   /**
    * Covariance matrix. The variables are in order x,y,z,x',y',z'. Units are km and km/s, with corresponding products.
@@ -25,18 +31,18 @@ public class CovarianceMatrix implements Serializable {
   private double CXdotX, CXdotY, CXdotZ, CXdotXdot;
   private double CYdotX, CYdotY, CYdotZ, CYdotXdot, CYdotYdot;
   private double CZdotX, CZdotY, CZdotZ, CZdotXdot, CZdotYdot, CZdotZdot;
-  
+
   public CovarianceMatrix deepCopy() {
     CovarianceMatrix copy = new CovarianceMatrix();
     for (String comment : comments) {
       copy.addComment(comment);
     }
-    
+
     copy.setEpoch(epoch);
     copy.setCov_ref_frame(covRefFrame);
-    
+
     copy.setCx_x(CXX);
-    
+
     copy.setCy_x(CYX);
     copy.setCy_y(CYY);
 
@@ -61,7 +67,7 @@ public class CovarianceMatrix implements Serializable {
     copy.setCz_dot_x_dot(CZdotXdot);
     copy.setCz_dot_y_dot(CZdotYdot);
     copy.setCz_dot_z_dot(CZdotZdot);
-    
+
     return copy;
   }
 
@@ -317,28 +323,26 @@ public class CovarianceMatrix implements Serializable {
         && Objects.equals(CYX, other.CYX) && Objects.equals(CYY, other.CYY)
         && Objects.equals(CZX, other.CZX) && Objects.equals(CZY, other.CZY) && Objects.equals(CZZ, other.CZZ)
         && Objects.equals(CXdotX, other.CXdotX) && Objects.equals(CXdotY, other.CXdotY)
-          && Objects.equals(CXdotZ, other.CXdotZ) && Objects.equals(CXdotXdot, other.CXdotXdot)
+        && Objects.equals(CXdotZ, other.CXdotZ) && Objects.equals(CXdotXdot, other.CXdotXdot)
         && Objects.equals(CYdotX, other.CYdotX) && Objects.equals(CYdotY, other.CYdotY)
-          && Objects.equals(CYdotZ, other.CYdotZ) && Objects.equals(CYdotXdot, other.CYdotXdot)
-          && Objects.equals(CYdotYdot, other.CYdotYdot)
+        && Objects.equals(CYdotZ, other.CYdotZ) && Objects.equals(CYdotXdot, other.CYdotXdot)
+        && Objects.equals(CYdotYdot, other.CYdotYdot)
         && Objects.equals(CZdotX, other.CZdotX) && Objects.equals(CZdotY, other.CZdotY)
-          && Objects.equals(CZdotZ, other.CZdotZ) && Objects.equals(CZdotXdot, other.CZdotXdot)
-          && Objects.equals(CZdotYdot, other.CZdotYdot) && Objects.equals(CZdotZdot, other.CZdotZdot);
+        && Objects.equals(CZdotZ, other.CZdotZ) && Objects.equals(CZdotXdot, other.CZdotXdot)
+        && Objects.equals(CZdotYdot, other.CZdotYdot) && Objects.equals(CZdotZdot, other.CZdotZdot);
     // @formatter:on
   }
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("CovarianceMatrix [comments=").append(comments).append(", epoch=").append(epoch)
-        .append(", covRefFrame=").append(covRefFrame).append(", cXX=").append(CXX).append(", CYX=").append(CYX)
-        .append(", CYY=").append(CYY).append(", CZX=").append(CZX).append(", CZY=").append(CZY).append(", CZZ=")
-        .append(CZZ).append(", CXdotX=").append(CXdotX).append(", CXdotY=").append(CXdotY).append(", CXdotZ=")
-        .append(CXdotZ).append(", CXdotXdot=").append(CXdotXdot).append(", CYdotX=").append(CYdotX).append(", CYdotY=")
-        .append(CYdotY).append(", CYdotZ=").append(CYdotZ).append(", CYdotXdot=").append(CYdotXdot)
-        .append(", CYdotYdot=").append(CYdotYdot).append(", CZdotX=").append(CZdotX).append(", CZdotY=").append(CZdotY)
-        .append(", CZdotZ=").append(CZdotZ).append(", CZdotXdot=").append(CZdotXdot).append(", CZdotYdot=")
-        .append(CZdotYdot).append(", CZdotZdot=").append(CZdotZdot).append("]");
-    return builder.toString();
+    return "CovarianceMatrix [comments=" + comments + ", epoch=" + epoch +
+        ", covRefFrame=" + covRefFrame + ", cXX=" + CXX + ", CYX=" + CYX +
+        ", CYY=" + CYY + ", CZX=" + CZX + ", CZY=" + CZY + ", CZZ=" +
+        CZZ + ", CXdotX=" + CXdotX + ", CXdotY=" + CXdotY + ", CXdotZ=" +
+        CXdotZ + ", CXdotXdot=" + CXdotXdot + ", CYdotX=" + CYdotX + ", CYdotY=" +
+        CYdotY + ", CYdotZ=" + CYdotZ + ", CYdotXdot=" + CYdotXdot +
+        ", CYdotYdot=" + CYdotYdot + ", CZdotX=" + CZdotX + ", CZdotY=" + CZdotY +
+        ", CZdotZ=" + CZdotZ + ", CZdotXdot=" + CZdotXdot + ", CZdotYdot=" +
+        CZdotYdot + ", CZdotZdot=" + CZdotZdot + "]";
   }
 }

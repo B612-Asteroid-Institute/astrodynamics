@@ -6,20 +6,32 @@ import java.util.Objects;
  * Post-processing analysis run against a Run or the whole Batch.
  */
 public class Analysis {
-  /** Type of this analysis. */
+  /**
+   * Type of this analysis.
+   */
   private AnalysisType type;
-  /** Id of the batch this analysis is about */
+  /**
+   * Id of the batch this analysis is about
+   */
   private String batch_uuid;
-  /** Run index within that batch, -1 if the whole batch is used (depends on the type of the analysis). */
+  /**
+   * Run index within that batch, -1 if the whole batch is used (depends on the type of the analysis).
+   */
   private int part_index = -1;
 
   /* TODO some sort of parameter JSON. */
 
-  /** State of the calculation for this analysis. */
+  /**
+   * State of the calculation for this analysis.
+   */
   private CalculationState calc_state;
-  /** If calc_state is FAILED, error will have more information. */
+  /**
+   * If calc_state is FAILED, error will have more information.
+   */
   private String error;
-  /** Results of the analysis, if COMPLETED. This likely has some internal structure. */
+  /**
+   * Results of the analysis, if COMPLETED. This likely has some internal structure.
+   */
   private String result;
 
   public AnalysisType getType() {

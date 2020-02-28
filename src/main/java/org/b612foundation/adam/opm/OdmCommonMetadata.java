@@ -24,7 +24,7 @@ public class OdmCommonMetadata implements Serializable {
    */
   public enum ReferenceFrame {
     /**
-     * The two local frames that can be used only for manuevers or covariances. Radial, Transverse, Normal. Can also be
+     * The two local frames that can be used only for maneuvers or covariances. Radial, Transverse, Normal. Can also be
      * marked as RSW.
      */
     RTN,
@@ -35,31 +35,59 @@ public class OdmCommonMetadata implements Serializable {
     TNW,
 
     // The rest of the frames can be used for state vectors, Keplerian elements,
-    // manuevers, or covariances.
-    /** Earth Mean Equator and Equinox of J2000 */
+    // maneuvers, or covariances.
+    /**
+     * Earth Mean Equator and Equinox of J2000
+     */
     EME2000,
-    /** Earth Mean Ecliptic and Equinox of J2000. Any center may be specified. */
+    /**
+     * Earth Mean Ecliptic and Equinox of J2000. Any center may be specified.
+     */
     EMEME2000,
-    /** Geocentric Celestial Reference Frame */
+    /**
+     * Geocentric Celestial Reference Frame
+     */
     GCRF,
-    /** Greenwich Rotating Coordinates */
+    /**
+     * Greenwich Rotating Coordinates
+     */
     GRC,
-    /** International Celestial Reference Frame */
+    /**
+     * International Celestial Reference Frame
+     */
     ICRF,
-    /** International Terrestrial Reference Frame 2000 */
+    /**
+     * International Terrestrial Reference Frame 2000
+     */
     ITRF2000,
-    /** International Terrestrial Reference Frame 1993 */
+    /**
+     * International Terrestrial Reference Frame 1993
+     */
     ITRF93,
-    /** International Terrestrial Reference Frame 1997 */
+    /**
+     * International Terrestrial Reference Frame 1997
+     */
     ITRF97,
-    /** Mars Centered Inertial */
+    /**
+     * Mars Centered Inertial
+     */
     MCI,
-    /** True of Date, Rotating */
+    /**
+     * True of Date, Rotating
+     */
     TDR,
-    /** True Equator Mean Equinox */
+    /**
+     * True Equator Mean Equinox
+     */
     TEME,
-    /** True of Date */
-    TOD
+    /**
+     * True of Date
+     */
+    TOD,
+    /**
+     * ODM non-standard referenece frame representing the IAU76 Mean Ecliptic Plane at J2000 epoch
+     **/
+    J2000_IAU76ECLIP
   }
 
   /**
@@ -67,21 +95,35 @@ public class OdmCommonMetadata implements Serializable {
    * set as needed.
    */
   public enum TimeSystem {
-    /** Coordinated Universal Time. */
+    /**
+     * Coordinated Universal Time.
+     */
     UTC,
-    /** International Atomic Time. */
+    /**
+     * International Atomic Time.
+     */
     TAI,
-    /** Terrestrial Time. */
+    /**
+     * Terrestrial Time.
+     */
     TT,
-    /** Global Positioning System time. */
+    /**
+     * Global Positioning System time.
+     */
     GPS,
-    /** Barycentric Dynamical Time. */
+    /**
+     * Barycentric Dynamical Time.
+     */
     TDB,
-    /** Barycentric Coordinate Time. */
+    /**
+     * Barycentric Coordinate Time.
+     */
     TCB
   }
 
-  /** Optional comments */
+  /**
+   * Optional comments
+   */
   private List<String> comments = new ArrayList<>();
 
   /**
@@ -117,7 +159,9 @@ public class OdmCommonMetadata implements Serializable {
    */
   private String refFrameEpoch = null;
 
-  /** Time system applies to state vector, manuever, and covariance data. */
+  /**
+   * Time system applies to state vector, maneuver, and covariance data.
+   */
   private TimeSystem timeSystem = null;
 
   public OdmCommonMetadata deepCopy() {
@@ -228,11 +272,9 @@ public class OdmCommonMetadata implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("OdmCommonMetadata [comments=").append(comments).append(", objectName=").append(objectName)
-        .append(", objectId=").append(objectId).append(", centerName=").append(centerName).append(", refFrame=")
-        .append(refFrame).append(", refFrameEpoch=").append(refFrameEpoch).append(", timeSystem=").append(timeSystem)
-        .append("]");
-    return builder.toString();
+    return "OdmCommonMetadata [comments=" + comments + ", objectName=" + objectName +
+        ", objectId=" + objectId + ", centerName=" + centerName + ", refFrame=" +
+        refFrame + ", refFrameEpoch=" + refFrameEpoch + ", timeSystem=" + timeSystem +
+        "]";
   }
 }

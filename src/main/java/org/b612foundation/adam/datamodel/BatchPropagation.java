@@ -4,13 +4,19 @@ import java.util.Objects;
 
 public class BatchPropagation extends AdamObject {
 
-  /** Parameters used to generate the ephemerides of propagations in this batch. */
+  /**
+   * Parameters used to generate the ephemerides of propagations in this batch.
+   */
   private PropagationParameters templatePropagationParameters;
 
-  /** Human-readable description of this object. */
+  /**
+   * Human-readable description of this object.
+   */
   private String description;
 
-  /** Summary of the results. */
+  /**
+   * Summary of the results.
+   */
   private String summary;
 
   public PropagationParameters getTemplatePropagationParameters() {

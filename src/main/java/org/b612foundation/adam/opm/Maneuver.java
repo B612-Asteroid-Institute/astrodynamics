@@ -6,24 +6,36 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Description of an individual manuever (burn). Used in OPM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Description of an individual maneuver (burn). Used in OPM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
-public class Manuever implements Serializable {
-  /** Optional comments. */
+public class Maneuver implements Serializable {
+  /**
+   * Optional comments.
+   */
   private List<String> comments = new ArrayList<>();
-  /** Epoch of ignition. */
+  /**
+   * Epoch of ignition.
+   */
   private String manEpochIgnition;
-  /** Durations in seconds, >=0. */
+  /**
+   * Durations in seconds, >=0.
+   */
   private double duration;
-  /** Mass change in kg, <=0. */
+  /**
+   * Mass change in kg, <=0.
+   */
   private double deltaMass;
-  /** Coordinate system for velocity increment vector. */
+  /**
+   * Coordinate system for velocity increment vector.
+   */
   private OdmCommonMetadata.ReferenceFrame manRefFrame;
-  /** Velocity increment vector components, km/s */
+  /**
+   * Velocity increment vector components, km/s
+   */
   private double manDv1, manDv2, manDv3;
 
-  public Manuever deepCopy() {
-    Manuever res = new Manuever();
+  public Maneuver deepCopy() {
+    Maneuver res = new Maneuver();
     for (String c : comments)
       res.addComment(c);
     res.setMan_epoch_ignition(manEpochIgnition);
@@ -40,12 +52,12 @@ public class Manuever implements Serializable {
     return comments;
   }
 
-  public Manuever setComments(List<String> comments) {
+  public Maneuver setComments(List<String> comments) {
     this.comments = comments;
     return this;
   }
 
-  public Manuever addComment(String comment) {
+  public Maneuver addComment(String comment) {
     this.comments.add(comment);
     return this;
   }
@@ -54,7 +66,7 @@ public class Manuever implements Serializable {
     return manEpochIgnition;
   }
 
-  public Manuever setMan_epoch_ignition(String manEpochIgnition) {
+  public Maneuver setMan_epoch_ignition(String manEpochIgnition) {
     this.manEpochIgnition = manEpochIgnition;
     return this;
   }
@@ -63,7 +75,7 @@ public class Manuever implements Serializable {
     return duration;
   }
 
-  public Manuever setDuration(double duration) {
+  public Maneuver setDuration(double duration) {
     this.duration = duration;
     return this;
   }
@@ -72,7 +84,7 @@ public class Manuever implements Serializable {
     return deltaMass;
   }
 
-  public Manuever setDelta_mass(double deltaMass) {
+  public Maneuver setDelta_mass(double deltaMass) {
     this.deltaMass = deltaMass;
     return this;
   }
@@ -81,7 +93,7 @@ public class Manuever implements Serializable {
     return manRefFrame;
   }
 
-  public Manuever setMan_ref_frame(OdmCommonMetadata.ReferenceFrame manRefFrame) {
+  public Maneuver setMan_ref_frame(OdmCommonMetadata.ReferenceFrame manRefFrame) {
     this.manRefFrame = manRefFrame;
     return this;
   }
@@ -90,7 +102,7 @@ public class Manuever implements Serializable {
     return manDv1;
   }
 
-  public Manuever setMan_dv_1(double manDv1) {
+  public Maneuver setMan_dv_1(double manDv1) {
     this.manDv1 = manDv1;
     return this;
   }
@@ -99,7 +111,7 @@ public class Manuever implements Serializable {
     return manDv2;
   }
 
-  public Manuever setMan_dv_2(double manDv2) {
+  public Maneuver setMan_dv_2(double manDv2) {
     this.manDv2 = manDv2;
     return this;
   }
@@ -108,7 +120,7 @@ public class Manuever implements Serializable {
     return manDv3;
   }
 
-  public Manuever setMan_dv_3(double manDv3) {
+  public Maneuver setMan_dv_3(double manDv3) {
     this.manDv3 = manDv3;
     return this;
   }
@@ -126,7 +138,7 @@ public class Manuever implements Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Manuever other = (Manuever) obj;
+    Maneuver other = (Maneuver) obj;
     // @formatter:off
     return Objects.equals(comments, other.comments)
         && Objects.equals(deltaMass, other.deltaMass)
@@ -141,11 +153,9 @@ public class Manuever implements Serializable {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("Manuever [comments=").append(comments).append(", manEpochIgnition=").append(manEpochIgnition)
-        .append(", duration=").append(duration).append(", deltaMass=").append(deltaMass).append(", manRefFrame=")
-        .append(manRefFrame).append(", manDv1=").append(manDv1).append(", manDv2=").append(manDv2).append(", manDv3=")
-        .append(manDv3).append("]");
-    return builder.toString();
+    return "Maneuver [comments=" + comments + ", manEpochIgnition=" + manEpochIgnition +
+        ", duration=" + duration + ", deltaMass=" + deltaMass + ", manRefFrame=" +
+        manRefFrame + ", manDv1=" + manDv1 + ", manDv2=" + manDv2 + ", manDv3=" +
+        manDv3 + "]";
   }
 }

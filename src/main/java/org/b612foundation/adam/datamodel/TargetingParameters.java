@@ -4,16 +4,24 @@ import java.util.Objects;
 
 public class TargetingParameters {
 
-  /** The distance from earth that should be targeted, in km. */
+  /**
+   * The distance from earth that should be targeted, in km.
+   */
   private double targetDistanceFromEarth;
-  
-  /** The distance from earth that should be targeted, in km, during the first stage of targeting */
+
+  /**
+   * The distance from earth that should be targeted, in km, during the first stage of targeting
+   */
   private double initialTargetDistanceFromEarth = -1.0;
 
-  /** The tolerance on the targeting of the target distance from earth, in km. */
+  /**
+   * The tolerance on the targeting of the target distance from earth, in km.
+   */
   private double tolerance;
 
-  /** If true, runs only the nominal propagation of the targeter. If false, runs full targeting. */
+  /**
+   * If true, runs only the nominal propagation of the targeter. If false, runs full targeting.
+   */
   private boolean runNominalOnly;
 
   public double getTargetDistanceFromEarth() {
@@ -33,7 +41,7 @@ public class TargetingParameters {
     this.initialTargetDistanceFromEarth = initialTargetDistanceFromEarth;
     return this;
   }
-  
+
   public double getTolerance() {
     return tolerance;
   }
