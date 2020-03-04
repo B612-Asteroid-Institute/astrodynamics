@@ -1,5 +1,6 @@
 package org.b612foundation.adam.datamodel.estimation;
 
+import lombok.var;
 import org.junit.Test;
 
 import java.io.IOException;
