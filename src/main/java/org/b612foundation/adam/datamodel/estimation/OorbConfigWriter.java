@@ -1,5 +1,6 @@
 package org.b612foundation.adam.datamodel.estimation;
 
+import lombok.var;
 import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 
 import java.io.FileNotFoundException;

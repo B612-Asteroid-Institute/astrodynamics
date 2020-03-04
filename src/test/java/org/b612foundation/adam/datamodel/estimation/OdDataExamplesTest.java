@@ -3,6 +3,7 @@ package org.b612foundation.adam.datamodel.estimation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.var;
 import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 import org.junit.Test;
