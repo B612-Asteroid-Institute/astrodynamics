@@ -1,5 +1,6 @@
 package org.b612foundation.adam.opm;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.Objects;
  * One OrbitEphemerisMessage can contain multiple ephemerides blocks, each with its own metadata block and optional
  * covariances.
  */
-public class OemDataBlock {
+public class OemDataBlock implements Serializable {
   /**
    * Optional comments.
    */

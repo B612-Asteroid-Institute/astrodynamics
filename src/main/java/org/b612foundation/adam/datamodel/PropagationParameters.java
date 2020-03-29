@@ -1,13 +1,13 @@
 package org.b612foundation.adam.datamodel;
 
+import java.io.Serializable;
 import org.b612foundation.adam.opm.OdmFormatter;
 import org.b612foundation.adam.opm.OdmParseException;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 
 import java.util.Objects;
 
-public class PropagationParameters {
-
+public class PropagationParameters implements Serializable {
   /**
    * Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time.
    */
