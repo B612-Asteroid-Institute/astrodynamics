@@ -5,9 +5,7 @@ import java.util.UUID;
 
 public abstract class AdamObject {
 
-  /**
-   * Id for an object, unique among all AdamObjects.
-   */
+  /** Id for an object, unique among all AdamObjects. */
   private String uuid;
 
   public String getUuid() {
@@ -30,14 +28,10 @@ public abstract class AdamObject {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     AdamObject other = (AdamObject) obj;
     return Objects.equals(uuid, other.uuid);
   }
-
 }

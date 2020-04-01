@@ -8,7 +8,9 @@ import java.util.List;
 import lombok.var;
 
 public final class LsstMeasurementReader {
-  //objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v mag detected D_km
+  // objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field
+  // dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v
+  // mag detected D_km
   private static final int objIdIdx = 0;
   private static final int visitIdIdx = 1;
   private static final int mjdIdx = 2;
@@ -39,7 +41,8 @@ public final class LsstMeasurementReader {
   private static final int distanceKmIdx = 27;
   private static final int expectedItemCount = 28;
 
-  public static List<LsstMeasurement> readSingleObjectCsvFile(Path csvFile, String stationId) throws IOException {
+  public static List<LsstMeasurement> readSingleObjectCsvFile(Path csvFile, String stationId)
+      throws IOException {
     var lines = Files.readAllLines(csvFile);
     var measurements = new ArrayList<LsstMeasurement>();
 

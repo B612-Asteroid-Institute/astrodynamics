@@ -1,8 +1,6 @@
 package org.b612foundation.adam.datamodel;
 
-/**
- * Factory class which produces common configurations for the propagators.
- */
+/** Factory class which produces common configurations for the propagators. */
 public class PropagationConfigurationFactory {
 
   private static final PropagatorConfiguration ALL_MAJOR_BODIES_CONFIG =

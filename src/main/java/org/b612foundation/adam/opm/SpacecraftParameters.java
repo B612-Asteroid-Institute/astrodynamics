@@ -6,32 +6,21 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Description of a spacecraft. May be included in OPM or OMM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Description of a spacecraft. May be included in OPM or OMM.
+ * https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class SpacecraftParameters implements Serializable {
-  /**
-   * Optional comments.
-   */
+  /** Optional comments. */
   private List<String> comments = new ArrayList<>();
-  /**
-   * Mass, kg
-   */
+  /** Mass, kg */
   private double mass;
-  /**
-   * Solar radiation pressure area, m^2.
-   */
+  /** Solar radiation pressure area, m^2. */
   private double solarRadArea;
-  /**
-   * Solar radiation pressure coefficient.
-   */
+  /** Solar radiation pressure coefficient. */
   private double solarRadCoeff;
-  /**
-   * Drag area, m^2.
-   */
+  /** Drag area, m^2. */
   private double dragArea;
-  /**
-   * Drag coefficient.
-   */
+  /** Drag coefficient. */
   private double dragCoeff;
 
   public SpacecraftParameters deepCopy() {
@@ -113,12 +102,9 @@ public class SpacecraftParameters implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     SpacecraftParameters other = (SpacecraftParameters) obj;
     // @formatter:off
     return Objects.equals(comments, other.comments)
@@ -132,8 +118,18 @@ public class SpacecraftParameters implements Serializable {
 
   @Override
   public String toString() {
-    return "SpacecraftParameters [comments=" + comments + ", mass=" + mass +
-        ", solarRadArea=" + solarRadArea + ", solarRadCoeff=" + solarRadCoeff +
-        ", dragArea=" + dragArea + ", dragCoeff=" + dragCoeff + "]";
+    return "SpacecraftParameters [comments="
+        + comments
+        + ", mass="
+        + mass
+        + ", solarRadArea="
+        + solarRadArea
+        + ", solarRadCoeff="
+        + solarRadCoeff
+        + ", dragArea="
+        + dragArea
+        + ", dragCoeff="
+        + dragCoeff
+        + "]";
   }
 }

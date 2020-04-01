@@ -1,5 +1,7 @@
 package org.b612foundation.adam.opm;
 
+import static org.b612foundation.adam.astro.AstroConstants.KM_TO_M;
+
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,13 +9,10 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static org.b612foundation.adam.astro.AstroConstants.KM_TO_M;
-
-/**
- * Given an OEM file write output to an STK Ephemeris File string format
- */
+/** Given an OEM file write output to an STK Ephemeris File string format */
 public class OemWriter {
-  private static final DateTimeFormatter STK_GREG_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss.SSSSSS");
+  private static final DateTimeFormatter STK_GREG_FORMATTER =
+      DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss.SSSSSS");
 
   public static String toStkEphemerisString(OrbitEphemerisMessage oem) {
     StringBuilder sb = new StringBuilder();
@@ -25,7 +24,8 @@ public class OemWriter {
     LocalDateTime startEpoch = dateStringToLocalDateTime(startString);
     sb.append("ScenarioEpoch " + startEpoch.format(STK_GREG_FORMATTER) + "\n");
     sb.append("CentralBody " + firstBlockMetadata.getCenter_name() + "\n");
-    sb.append("CoordinateSystem " + oemToStkCoordinateSystem(firstBlockMetadata.getRef_frame()) + "\n");
+    sb.append(
+        "CoordinateSystem " + oemToStkCoordinateSystem(firstBlockMetadata.getRef_frame()) + "\n");
     sb.append("InterpolationMethod " + firstBlockMetadata.getInterpolation() + "\n");
     sb.append("InterpolationOrder " + firstBlockMetadata.getInterpolation_degree() + "\n");
 
@@ -57,8 +57,16 @@ public class OemWriter {
       for (OemDataLine line : block.getLines()) {
         double dateEpochSec = dateStringToEpochSec(line.getDate(), startEpoch);
         double[] pv = line.getPoint();
-        String stkLine = String.format("%14.12e %14.12e %14.12e %14.12e %14.12e %14.12e %14.12e\n",
-            dateEpochSec, pv[0] * KM_TO_M, pv[1] * KM_TO_M, pv[2] * KM_TO_M, pv[3] * KM_TO_M, pv[4] * KM_TO_M, pv[5] * KM_TO_M);
+        String stkLine =
+            String.format(
+                "%14.12e %14.12e %14.12e %14.12e %14.12e %14.12e %14.12e\n",
+                dateEpochSec,
+                pv[0] * KM_TO_M,
+                pv[1] * KM_TO_M,
+                pv[2] * KM_TO_M,
+                pv[3] * KM_TO_M,
+                pv[4] * KM_TO_M,
+                pv[5] * KM_TO_M);
         sb.append(stkLine);
       }
     }
@@ -69,18 +77,32 @@ public class OemWriter {
         for (CovarianceMatrix cov : block.getCovariances()) {
           double dateEpochSec = dateStringToEpochSec(cov.getEpoch(), startEpoch);
           sb.append(String.format("%14.12e ", dateEpochSec));
-          sb.append(String.format("%14.12e ",
-              cov.getCx_x()));
-          sb.append(String.format("%14.12e %14.12e ",
-              cov.getCy_x(), cov.getCy_y()));
-          sb.append(String.format("%14.12e %14.12e %14.12e ",
-              cov.getCz_x(), cov.getCz_y(), cov.getCz_z()));
-          sb.append(String.format("%14.12e %14.12e %14.12e %14.12e ",
-              cov.getCx_dot_x(), cov.getCx_dot_y(), cov.getCx_dot_z(), cov.getCx_dot_x_dot()));
-          sb.append(String.format("%14.12e %14.12e %14.12e %14.12e %14.12e ",
-              cov.getCy_dot_x(), cov.getCy_dot_y(), cov.getCy_dot_z(), cov.getCy_dot_x_dot(), cov.getCy_dot_y_dot()));
-          sb.append(String.format("%14.12e %14.12e %14.12e %14.12e %14.12e %14.12e\n",
-              cov.getCz_dot_x(), cov.getCz_dot_y(), cov.getCz_dot_z(), cov.getCz_dot_x_dot(), cov.getCz_dot_y_dot(), cov.getCz_dot_z_dot()));
+          sb.append(String.format("%14.12e ", cov.getCx_x()));
+          sb.append(String.format("%14.12e %14.12e ", cov.getCy_x(), cov.getCy_y()));
+          sb.append(
+              String.format(
+                  "%14.12e %14.12e %14.12e ", cov.getCz_x(), cov.getCz_y(), cov.getCz_z()));
+          sb.append(
+              String.format(
+                  "%14.12e %14.12e %14.12e %14.12e ",
+                  cov.getCx_dot_x(), cov.getCx_dot_y(), cov.getCx_dot_z(), cov.getCx_dot_x_dot()));
+          sb.append(
+              String.format(
+                  "%14.12e %14.12e %14.12e %14.12e %14.12e ",
+                  cov.getCy_dot_x(),
+                  cov.getCy_dot_y(),
+                  cov.getCy_dot_z(),
+                  cov.getCy_dot_x_dot(),
+                  cov.getCy_dot_y_dot()));
+          sb.append(
+              String.format(
+                  "%14.12e %14.12e %14.12e %14.12e %14.12e %14.12e\n",
+                  cov.getCz_dot_x(),
+                  cov.getCz_dot_y(),
+                  cov.getCz_dot_z(),
+                  cov.getCz_dot_x_dot(),
+                  cov.getCz_dot_y_dot(),
+                  cov.getCz_dot_z_dot()));
         }
       }
     }
@@ -143,10 +165,29 @@ public class OemWriter {
         builder.append("COV_REF_FRAME = " + cov.getCov_ref_frame() + "\n");
         builder.append(String.format("%9.7e\n", cov.getCx_x()));
         builder.append(String.format("%9.7e %9.7e\n", cov.getCy_x(), cov.getCy_y()));
-        builder.append(String.format("%9.7e %9.7e %9.7e\n", cov.getCz_x(), cov.getCz_y(), cov.getCz_z()));
-        builder.append(String.format("%9.7e %9.7e %9.7e %9.7e\n", cov.getCx_dot_x(), cov.getCx_dot_y(), cov.getCx_dot_z(), cov.getCx_dot_x_dot()));
-        builder.append(String.format("%9.7e %9.7e %9.7e %9.7e %9.7e\n", cov.getCy_dot_x(), cov.getCy_dot_y(), cov.getCy_dot_z(), cov.getCy_dot_x_dot(), cov.getCy_dot_y_dot()));
-        builder.append(String.format("%9.7e %9.7e %9.7e %9.7e %9.7e %9.7e\n", cov.getCz_dot_x(), cov.getCz_dot_y(), cov.getCz_dot_z(), cov.getCz_dot_x_dot(), cov.getCz_dot_y_dot(), cov.getCz_dot_z_dot()));
+        builder.append(
+            String.format("%9.7e %9.7e %9.7e\n", cov.getCz_x(), cov.getCz_y(), cov.getCz_z()));
+        builder.append(
+            String.format(
+                "%9.7e %9.7e %9.7e %9.7e\n",
+                cov.getCx_dot_x(), cov.getCx_dot_y(), cov.getCx_dot_z(), cov.getCx_dot_x_dot()));
+        builder.append(
+            String.format(
+                "%9.7e %9.7e %9.7e %9.7e %9.7e\n",
+                cov.getCy_dot_x(),
+                cov.getCy_dot_y(),
+                cov.getCy_dot_z(),
+                cov.getCy_dot_x_dot(),
+                cov.getCy_dot_y_dot()));
+        builder.append(
+            String.format(
+                "%9.7e %9.7e %9.7e %9.7e %9.7e %9.7e\n",
+                cov.getCz_dot_x(),
+                cov.getCz_dot_y(),
+                cov.getCz_dot_z(),
+                cov.getCz_dot_x_dot(),
+                cov.getCz_dot_y_dot(),
+                cov.getCz_dot_z_dot()));
         builder.append("\n");
       }
       builder.append("COVARIANCE_STOP");
@@ -162,7 +203,8 @@ public class OemWriter {
       case ICRF:
         return "ICRF";
       default:
-        throw new IllegalArgumentException("Unknown conversion for OEM Coordinate Systm: " + ref_frame);
+        throw new IllegalArgumentException(
+            "Unknown conversion for OEM Coordinate Systm: " + ref_frame);
     }
   }
 
@@ -183,15 +225,18 @@ public class OemWriter {
       }
 
       if (metadata.getCenter_name() != centerName) {
-        throw new IllegalArgumentException("STK Ephemeris files do not support multiple CentralBodies");
+        throw new IllegalArgumentException(
+            "STK Ephemeris files do not support multiple CentralBodies");
       }
 
       if (metadata.getTime_system() != timeSystem) {
-        throw new IllegalArgumentException("STk Ephemeris files do not support multiple time systems");
+        throw new IllegalArgumentException(
+            "STk Ephemeris files do not support multiple time systems");
       }
 
       if (metadata.getRef_frame() != refName) {
-        throw new IllegalArgumentException("STK Ephemeris files do not support multiple coordinate systems");
+        throw new IllegalArgumentException(
+            "STK Ephemeris files do not support multiple coordinate systems");
       }
     }
   }
@@ -203,7 +248,7 @@ public class OemWriter {
 
   private static LocalDateTime dateStringToLocalDateTime(String dateString) {
     try {
-      //try to avoid exception if common Z date string used
+      // try to avoid exception if common Z date string used
       if (dateString.trim().endsWith("Z")) {
         return ZonedDateTime.parse(dateString).toLocalDateTime();
       }

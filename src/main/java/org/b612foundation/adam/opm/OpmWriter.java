@@ -3,9 +3,7 @@ package org.b612foundation.adam.opm;
 import java.util.List;
 import lombok.var;
 
-/**
- * Writer class that turns OrbitParameterMessage objects into string representations
- */
+/** Writer class that turns OrbitParameterMessage objects into string representations */
 public class OpmWriter {
 
   public static String toCcsdsOpmString(OrbitParameterMessage opm) {
@@ -32,7 +30,8 @@ public class OpmWriter {
     builder.append("TIME_SYSTEM = " + metadata.getTime_system() + "\n");
 
     if (opm.getState_vector() == null && opm.getKeplerian() == null) {
-      throw new IllegalArgumentException("OPM must have state vector data (cartesian or keplerian) to correctly serialize");
+      throw new IllegalArgumentException(
+          "OPM must have state vector data (cartesian or keplerian) to correctly serialize");
     }
 
     if (opm.getState_vector() != null) {

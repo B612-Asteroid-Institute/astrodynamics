@@ -9,25 +9,18 @@ import java.util.Objects;
  * Header fields are common for all three ODM messages. https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class OdmCommonHeader implements Serializable {
-  /**
-   * Optional comments.
-   */
+  /** Optional comments. */
   private List<String> comments = new ArrayList<>();
 
-  /**
-   * Creation date is always in UTC.
-   */
+  /** Creation date is always in UTC. */
   private String creationDate = null;
 
-  /**
-   * Creating agency or operator.
-   */
+  /** Creating agency or operator. */
   private String originator = null;
 
   public OdmCommonHeader deepCopy() {
     OdmCommonHeader res = new OdmCommonHeader();
-    for (String c : comments)
-      res.addComment(c);
+    for (String c : comments) res.addComment(c);
     res.setCreation_date(creationDate);
     res.setOriginator(originator);
     return res;
@@ -67,20 +60,23 @@ public class OdmCommonHeader implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     OdmCommonHeader other = (OdmCommonHeader) obj;
-    return Objects.equals(comments, other.comments) && Objects.equals(creationDate, other.creationDate)
+    return Objects.equals(comments, other.comments)
+        && Objects.equals(creationDate, other.creationDate)
         && Objects.equals(originator, other.originator);
   }
 
   @Override
   public String toString() {
-    return "OdmCommonHeader [comments=" + comments + ", creationDate=" + creationDate +
-        ", originator=" + originator + "]";
+    return "OdmCommonHeader [comments="
+        + comments
+        + ", creationDate="
+        + creationDate
+        + ", originator="
+        + originator
+        + "]";
   }
 }

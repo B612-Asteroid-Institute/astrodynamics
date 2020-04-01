@@ -1,17 +1,18 @@
 package org.b612foundation.adam.datamodel.estimation;
 
-import lombok.var;
-import org.b612foundation.adam.datamodel.PropagatorConfiguration;
-
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
+import lombok.var;
+import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 
 public final class OorbConfigWriter {
 
-  public static void writeConfiguration(Path configFilePath,
-                                        OrbitDeterminationConfiguration odConfig,
-                                        PropagatorConfiguration propConfig) throws FileNotFoundException {
+  public static void writeConfiguration(
+      Path configFilePath,
+      OrbitDeterminationConfiguration odConfig,
+      PropagatorConfiguration propConfig)
+      throws FileNotFoundException {
     try (var writer = new PrintWriter(configFilePath.toFile())) {
       odConfig.getExecutionSettings().forEach((key, value) -> writer.println(key + ": " + value));
       odConfig.getMeasurementSettings().forEach((key, value) -> writer.println(key + ": " + value));
@@ -39,9 +40,10 @@ public final class OorbConfigWriter {
       // perturber.asteroids: T
       if (!propConfig.getAsteroids().isEmpty()) {
         throw new IllegalArgumentException(
-            "Don't support asteroid selection for OORB, requested " + propConfig.getAsteroidsString(), null);
+            "Don't support asteroid selection for OORB, requested "
+                + propConfig.getAsteroidsString(),
+            null);
       }
-
     }
   }
 

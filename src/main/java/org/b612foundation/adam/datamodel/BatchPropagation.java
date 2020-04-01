@@ -4,26 +4,21 @@ import java.util.Objects;
 
 public class BatchPropagation extends AdamObject {
 
-  /**
-   * Parameters used to generate the ephemerides of propagations in this batch.
-   */
+  /** Parameters used to generate the ephemerides of propagations in this batch. */
   private PropagationParameters templatePropagationParameters;
 
-  /**
-   * Human-readable description of this object.
-   */
+  /** Human-readable description of this object. */
   private String description;
 
-  /**
-   * Summary of the results.
-   */
+  /** Summary of the results. */
   private String summary;
 
   public PropagationParameters getTemplatePropagationParameters() {
     return templatePropagationParameters;
   }
 
-  public BatchPropagation setTemplatePropagationParameters(PropagationParameters templatePropagationParameters) {
+  public BatchPropagation setTemplatePropagationParameters(
+      PropagationParameters templatePropagationParameters) {
     this.templatePropagationParameters = templatePropagationParameters;
     return this;
   }
@@ -53,15 +48,13 @@ public class BatchPropagation extends AdamObject {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     BatchPropagation other = (BatchPropagation) obj;
-    return super.equals(other) && Objects.equals(templatePropagationParameters, other.templatePropagationParameters)
-        && Objects.equals(description, other.description) && Objects.equals(summary, other.summary);
+    return super.equals(other)
+        && Objects.equals(templatePropagationParameters, other.templatePropagationParameters)
+        && Objects.equals(description, other.description)
+        && Objects.equals(summary, other.summary);
   }
-
 }

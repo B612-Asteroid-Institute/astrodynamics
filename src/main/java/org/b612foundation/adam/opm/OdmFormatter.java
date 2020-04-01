@@ -1,19 +1,18 @@
 package org.b612foundation.adam.opm;
 
-import org.b612foundation.adam.astro.AstroUtils;
-import org.b612foundation.adam.astro.ReferenceFrameConverter;
+import static org.b612foundation.adam.astro.AstroConstants.AU_PER_DAY_TO_KM_PER_SEC;
+import static org.b612foundation.adam.astro.AstroConstants.AU_TO_KM;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.b612foundation.adam.astro.AstroConstants.AU_PER_DAY_TO_KM_PER_SEC;
-import static org.b612foundation.adam.astro.AstroConstants.AU_TO_KM;
+import org.b612foundation.adam.astro.AstroUtils;
+import org.b612foundation.adam.astro.ReferenceFrameConverter;
 
 /**
- * Class for translating between text-based ODM formats and classes in this package. The CCSDS ODM standard is here:
- * https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Class for translating between text-based ODM formats and classes in this package. The CCSDS ODM
+ * standard is here: https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public final class OdmFormatter {
   private static final String CCSDS_OPM_VERS = "CCSDS_OPM_VERS";
@@ -91,19 +90,17 @@ public final class OdmFormatter {
   private static final String ADAM_PREFIX = "USER_DEFINED_ADAM_";
 
   /* Do not instantiate. */
-  private OdmFormatter() {
-  }
+  private OdmFormatter() {}
 
-  /**
-   * Returns the string with mutable fields removed to facilitate search for duplicates.
-   */
+  /** Returns the string with mutable fields removed to facilitate search for duplicates. */
   public static String removeMutableFields(String originalOpm) {
     final String OPM_CREATION = "CREATION_DATE.*";
     return originalOpm.replaceAll(OPM_CREATION, "");
   }
 
   /**
-   * Parses OPM message as described in the standard. From all user defined fields, pulls only adam-specific ones.
+   * Parses OPM message as described in the standard. From all user defined fields, pulls only
+   * adam-specific ones.
    */
   public static OrbitParameterMessage parseOpmString(String buffer) throws OdmParseException {
     ArrayList<String> lines = getNonEmptyLines(buffer);
@@ -178,11 +175,9 @@ public final class OdmFormatter {
     return result;
   }
 
-  public static OrbitEphemerisMessage parseOorbEphemerisString(String buffer,
-                                                               String objectName,
-                                                               String objectId,
-                                                               boolean convertToIcrf) {
-    //TODO fill in optional covariance
+  public static OrbitEphemerisMessage parseOorbEphemerisString(
+      String buffer, String objectName, String objectId, boolean convertToIcrf) {
+    // TODO fill in optional covariance
     final int xIndex = 2;
     final int yIndex = 3;
     final int zIndex = 4;
@@ -201,12 +196,12 @@ public final class OdmFormatter {
 
       String[] elements = line.split("\\s+");
       double[] posVel = {
-          Double.parseDouble(elements[xIndex]) * AU_TO_KM,
-          Double.parseDouble(elements[yIndex]) * AU_TO_KM,
-          Double.parseDouble(elements[zIndex]) * AU_TO_KM,
-          Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
-          Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
-          Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_KM_PER_SEC
+        Double.parseDouble(elements[xIndex]) * AU_TO_KM,
+        Double.parseDouble(elements[yIndex]) * AU_TO_KM,
+        Double.parseDouble(elements[zIndex]) * AU_TO_KM,
+        Double.parseDouble(elements[vxIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
+        Double.parseDouble(elements[vyIndex]) * AU_PER_DAY_TO_KM_PER_SEC,
+        Double.parseDouble(elements[vzIndex]) * AU_PER_DAY_TO_KM_PER_SEC
       };
 
       if (convertToIcrf) {
@@ -215,7 +210,8 @@ public final class OdmFormatter {
 
       double mjd = Double.parseDouble(elements[epochIndex]);
 
-      String epoch = AstroUtils.localDateTimefromMJD(mjd).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+      String epoch =
+          AstroUtils.localDateTimefromMJD(mjd).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
       ephemBlock.addLine(epoch, posVel[0], posVel[1], posVel[2], posVel[3], posVel[4], posVel[5]);
     }
 
@@ -247,8 +243,8 @@ public final class OdmFormatter {
   }
 
   /**
-   * Parses common header lines. Assumes the input lines all have data. On success removes the parsed lines from the
-   * list.
+   * Parses common header lines. Assumes the input lines all have data. On success removes the
+   * parsed lines from the list.
    */
   private static OdmCommonHeader parseCommonHeader(List<String> lines) throws OdmParseException {
     OdmCommonHeader result = new OdmCommonHeader();
@@ -274,17 +270,27 @@ public final class OdmFormatter {
     }
 
     // The data comes until the end of file, another META_START, or COVARIANCE_START
-    while (!lines.isEmpty() && !containsNext(lines, META_START) && !containsNext(lines, COVARIANCE_START)) {
+    while (!lines.isEmpty()
+        && !containsNext(lines, META_START)
+        && !containsNext(lines, COVARIANCE_START)) {
       String line = lines.remove(0);
       // Date x y z vx vy vz [ax ay az]. We ignore accelerations for now.
       String[] parts = line.split("\\s+");
-      // for (int i = 0; i < parts.length; i++) System.out.println("LINE " + i + "[" + parts[i] + "]");
+      // for (int i = 0; i < parts.length; i++) System.out.println("LINE " + i + "[" + parts[i] +
+      // "]");
       if (parts.length < 7) {
-        throw new OdmParseException("Ephemeris data should contain at least date, position, and velocity. Got " + line);
+        throw new OdmParseException(
+            "Ephemeris data should contain at least date, position, and velocity. Got " + line);
       }
       try {
-        block.addLine(parts[0], Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), Double.parseDouble(parts[3]),
-            Double.parseDouble(parts[4]), Double.parseDouble(parts[5]), Double.parseDouble(parts[6]));
+        block.addLine(
+            parts[0],
+            Double.parseDouble(parts[1]),
+            Double.parseDouble(parts[2]),
+            Double.parseDouble(parts[3]),
+            Double.parseDouble(parts[4]),
+            Double.parseDouble(parts[5]),
+            Double.parseDouble(parts[6]));
       } catch (NumberFormatException e) {
         throw new OdmParseException("Couldn't parse ephemeris line " + line + ": " + e);
       }
@@ -311,9 +317,11 @@ public final class OdmFormatter {
   }
 
   /**
-   * Parses common metadata fields among three ODM types. On success removes the parsed lines from the list.
+   * Parses common metadata fields among three ODM types. On success removes the parsed lines from
+   * the list.
    */
-  private static void parseCommonMetadata(List<String> lines, OdmCommonMetadata result) throws OdmParseException {
+  private static void parseCommonMetadata(List<String> lines, OdmCommonMetadata result)
+      throws OdmParseException {
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
     }
@@ -332,10 +340,11 @@ public final class OdmFormatter {
   }
 
   /**
-   * Parses OEM metadata block, which has a few fields in addition to the common metadata block. On success removes the
-   * parsed lines from the list.
+   * Parses OEM metadata block, which has a few fields in addition to the common metadata block. On
+   * success removes the parsed lines from the list.
    */
-  private static void parseOemMetadata(List<String> lines, OemMetadata result) throws OdmParseException {
+  private static void parseOemMetadata(List<String> lines, OemMetadata result)
+      throws OdmParseException {
     if (!containsNext(lines, META_START)) {
       throw new OdmParseException("OEM metadata block missing " + META_START);
     }
@@ -375,9 +384,7 @@ public final class OdmFormatter {
     lines.remove(0); // consume STOP
   }
 
-  /**
-   * Parses the state vector section. Removes parsed lines from the list.
-   */
+  /** Parses the state vector section. Removes parsed lines from the list. */
   private static StateVector parseStateVector(List<String> lines) throws OdmParseException {
     StateVector result = new StateVector();
     while (containsNext(lines, COMMENT)) {
@@ -393,10 +400,9 @@ public final class OdmFormatter {
     return result;
   }
 
-  /**
-   * Parses osculating Keplerian elements. Removes parsed lines from the list.
-   */
-  private static KeplerianElements parseKeplerian(ArrayList<String> lines) throws OdmParseException {
+  /** Parses osculating Keplerian elements. Removes parsed lines from the list. */
+  private static KeplerianElements parseKeplerian(ArrayList<String> lines)
+      throws OdmParseException {
     KeplerianElements result = new KeplerianElements();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
@@ -416,10 +422,9 @@ public final class OdmFormatter {
     return result;
   }
 
-  /**
-   * Parses spacecraft data. Removes parsed lines from the list.
-   */
-  private static SpacecraftParameters parseSpacecraft(ArrayList<String> lines) throws OdmParseException {
+  /** Parses spacecraft data. Removes parsed lines from the list. */
+  private static SpacecraftParameters parseSpacecraft(ArrayList<String> lines)
+      throws OdmParseException {
     SpacecraftParameters result = new SpacecraftParameters();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
@@ -433,11 +438,12 @@ public final class OdmFormatter {
   }
 
   /**
-   * Parses the long form of the covariance matrix (each element on a separate line with a variable name). Removes
-   * parsed lines from the list. The long form is used in OPM and OMM. OEM uses a different (short) format for the same
-   * data.
+   * Parses the long form of the covariance matrix (each element on a separate line with a variable
+   * name). Removes parsed lines from the list. The long form is used in OPM and OMM. OEM uses a
+   * different (short) format for the same data.
    */
-  private static CovarianceMatrix parseLongFormCovariance(List<String> lines) throws OdmParseException {
+  private static CovarianceMatrix parseLongFormCovariance(List<String> lines)
+      throws OdmParseException {
     CovarianceMatrix result = new CovarianceMatrix();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
@@ -474,10 +480,11 @@ public final class OdmFormatter {
   }
 
   /**
-   * Parses short form of covariance matrix used in OEM. The matrix is listed as lower triangular, with 1 to 6 numbers
-   * per line.
+   * Parses short form of covariance matrix used in OEM. The matrix is listed as lower triangular,
+   * with 1 to 6 numbers per line.
    */
-  private static CovarianceMatrix parseShortFormCovariance(List<String> lines) throws OdmParseException {
+  private static CovarianceMatrix parseShortFormCovariance(List<String> lines)
+      throws OdmParseException {
     CovarianceMatrix result = new CovarianceMatrix();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
@@ -557,9 +564,7 @@ public final class OdmFormatter {
     return result;
   }
 
-  /**
-   * Parses maneuver data. Removes parsed lines from the list.
-   */
+  /** Parses maneuver data. Removes parsed lines from the list. */
   private static Maneuver parseManeuver(ArrayList<String> lines) throws OdmParseException {
     Maneuver result = new Maneuver();
     while (containsNext(lines, COMMENT)) {
@@ -577,10 +582,11 @@ public final class OdmFormatter {
   }
 
   /**
-   * Translates the given center name into an enum value, or throws if the name is not recognized. The names may contain
-   * spaces in them and may be non-unique.
+   * Translates the given center name into an enum value, or throws if the name is not recognized.
+   * The names may contain spaces in them and may be non-unique.
    */
-  private static OdmCommonMetadata.CenterName parseCenterName(String name) throws OdmParseException {
+  private static OdmCommonMetadata.CenterName parseCenterName(String name)
+      throws OdmParseException {
     try {
       // Some of names are simple and straightforward. Don't want to enumerate
       // them.
@@ -593,10 +599,11 @@ public final class OdmFormatter {
   }
 
   /**
-   * Translates the given reference frame name into an enum value, or throws if the name is not recognized. The names
-   * may contain spaces in them and may be non-unique.
+   * Translates the given reference frame name into an enum value, or throws if the name is not
+   * recognized. The names may contain spaces in them and may be non-unique.
    */
-  private static OdmCommonMetadata.ReferenceFrame parseReferenceFrame(String name) throws OdmParseException {
+  private static OdmCommonMetadata.ReferenceFrame parseReferenceFrame(String name)
+      throws OdmParseException {
     try {
       // Some of names are simple and straightforward. Don't want to enumerate
       // them.
@@ -612,9 +619,11 @@ public final class OdmFormatter {
   }
 
   /**
-   * Translates the given time system name into an enum value, or throws if the name is not recognized.
+   * Translates the given time system name into an enum value, or throws if the name is not
+   * recognized.
    */
-  private static OdmCommonMetadata.TimeSystem parseTimeSystem(String name) throws OdmParseException {
+  private static OdmCommonMetadata.TimeSystem parseTimeSystem(String name)
+      throws OdmParseException {
     // All time system names so far are simple and unique.
     try {
       return OdmCommonMetadata.TimeSystem.valueOf(name);
@@ -623,9 +632,7 @@ public final class OdmFormatter {
     }
   }
 
-  /**
-   * Returns true iff the list contains a string starting with the prefix.
-   */
+  /** Returns true iff the list contains a string starting with the prefix. */
   private static boolean containsLater(List<String> lines, String prefix) {
     for (String s : lines) {
       if (s.startsWith(prefix)) {
@@ -635,19 +642,18 @@ public final class OdmFormatter {
     return false;
   }
 
-  /**
-   * Returns true iff the first line in the list starts with the prefix.
-   */
+  /** Returns true iff the first line in the list starts with the prefix. */
   private static boolean containsNext(List<String> lines, String prefix) {
     return !lines.isEmpty() && lines.get(0).startsWith(prefix);
   }
 
   /**
-   * Expects the first line in the list to start with the prefix and extracts numeric value from that line. The line may
-   * contain more text (units) after the number. Throws if the line is not found or the number doesn't parse. Removes
-   * the parsed line from the list.
+   * Expects the first line in the list to start with the prefix and extracts numeric value from
+   * that line. The line may contain more text (units) after the number. Throws if the line is not
+   * found or the number doesn't parse. Removes the parsed line from the list.
    */
-  private static double extractDoubleNoUnits(List<String> lines, String prefix) throws OdmParseException {
+  private static double extractDoubleNoUnits(List<String> lines, String prefix)
+      throws OdmParseException {
     String line = extractField(lines, prefix);
     int space = line.indexOf(" ");
     if (space > 0) {
@@ -661,8 +667,8 @@ public final class OdmFormatter {
   }
 
   /**
-   * Expects the first line in the list to start with the given prefix. If found, extracts the field value and removes
-   * the line from the list. Otherwise throws.
+   * Expects the first line in the list to start with the given prefix. If found, extracts the field
+   * value and removes the line from the list. Otherwise throws.
    */
   private static String extractField(List<String> lines, String prefix) throws OdmParseException {
     if (lines.isEmpty() || !lines.get(0).startsWith(prefix + " ")) {
@@ -675,9 +681,7 @@ public final class OdmFormatter {
     return value;
   }
 
-  /**
-   * Splits the string into a list of non-empty lines.
-   */
+  /** Splits the string into a list of non-empty lines. */
   private static ArrayList<String> getNonEmptyLines(String buffer) {
     ArrayList<String> list = new ArrayList<>();
     for (String s : buffer.split("\n")) {
