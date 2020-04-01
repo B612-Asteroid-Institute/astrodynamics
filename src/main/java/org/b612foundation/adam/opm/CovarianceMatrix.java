@@ -6,26 +6,22 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Position/Velocity Covariance Matrix (6x6 Lower Triangular Form. None or all parameters of the matrix must be given.
- * https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Position/Velocity Covariance Matrix (6x6 Lower Triangular Form. None or all parameters of the
+ * matrix must be given. https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class CovarianceMatrix implements Serializable {
-  /**
-   * Optional comments.
-   */
+  /** Optional comments. */
   private List<String> comments = new ArrayList<>();
-  /**
-   * Separate Epoch for covariance, used only in OEM.
-   */
+  /** Separate Epoch for covariance, used only in OEM. */
   private String epoch;
-  /**
-   * Reference frame. If omited, same as metadata
-   */
+  /** Reference frame. If omited, same as metadata */
   private OdmCommonMetadata.ReferenceFrame covRefFrame = null;
   /**
-   * Covariance matrix. The variables are in order x,y,z,x',y',z'. Units are km and km/s, with corresponding products.
+   * Covariance matrix. The variables are in order x,y,z,x',y',z'. Units are km and km/s, with
+   * corresponding products.
    */
   private double CXX;
+
   private double CYX, CYY;
   private double CZX, CZY, CZZ;
   private double CXdotX, CXdotY, CXdotZ, CXdotXdot;
@@ -296,53 +292,117 @@ public class CovarianceMatrix implements Serializable {
   public int hashCode() {
     // @formatter:off
     return Objects.hash(
-        comments, covRefFrame, epoch,
+        comments,
+        covRefFrame,
+        epoch,
         CXX,
-        CYX, CYY,
-        CZX, CZY, CZZ,
-        CXdotX, CXdotY, CXdotZ, CXdotXdot,
-        CYdotX, CYdotY, CYdotZ, CYdotXdot, CYdotYdot,
-        CZdotX, CZdotY, CZdotZ, CZdotXdot, CZdotYdot, CZdotZdot);
+        CYX,
+        CYY,
+        CZX,
+        CZY,
+        CZZ,
+        CXdotX,
+        CXdotY,
+        CXdotZ,
+        CXdotXdot,
+        CYdotX,
+        CYdotY,
+        CYdotZ,
+        CYdotXdot,
+        CYdotYdot,
+        CZdotX,
+        CZdotY,
+        CZdotZ,
+        CZdotXdot,
+        CZdotYdot,
+        CZdotZdot);
     // @formatter:on
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     CovarianceMatrix other = (CovarianceMatrix) obj;
     // @formatter:off
     return Objects.equals(comments, other.comments)
         && Objects.equals(covRefFrame, other.covRefFrame)
         && Objects.equals(epoch, other.epoch)
         && Objects.equals(CXX, other.CXX)
-        && Objects.equals(CYX, other.CYX) && Objects.equals(CYY, other.CYY)
-        && Objects.equals(CZX, other.CZX) && Objects.equals(CZY, other.CZY) && Objects.equals(CZZ, other.CZZ)
-        && Objects.equals(CXdotX, other.CXdotX) && Objects.equals(CXdotY, other.CXdotY)
-        && Objects.equals(CXdotZ, other.CXdotZ) && Objects.equals(CXdotXdot, other.CXdotXdot)
-        && Objects.equals(CYdotX, other.CYdotX) && Objects.equals(CYdotY, other.CYdotY)
-        && Objects.equals(CYdotZ, other.CYdotZ) && Objects.equals(CYdotXdot, other.CYdotXdot)
+        && Objects.equals(CYX, other.CYX)
+        && Objects.equals(CYY, other.CYY)
+        && Objects.equals(CZX, other.CZX)
+        && Objects.equals(CZY, other.CZY)
+        && Objects.equals(CZZ, other.CZZ)
+        && Objects.equals(CXdotX, other.CXdotX)
+        && Objects.equals(CXdotY, other.CXdotY)
+        && Objects.equals(CXdotZ, other.CXdotZ)
+        && Objects.equals(CXdotXdot, other.CXdotXdot)
+        && Objects.equals(CYdotX, other.CYdotX)
+        && Objects.equals(CYdotY, other.CYdotY)
+        && Objects.equals(CYdotZ, other.CYdotZ)
+        && Objects.equals(CYdotXdot, other.CYdotXdot)
         && Objects.equals(CYdotYdot, other.CYdotYdot)
-        && Objects.equals(CZdotX, other.CZdotX) && Objects.equals(CZdotY, other.CZdotY)
-        && Objects.equals(CZdotZ, other.CZdotZ) && Objects.equals(CZdotXdot, other.CZdotXdot)
-        && Objects.equals(CZdotYdot, other.CZdotYdot) && Objects.equals(CZdotZdot, other.CZdotZdot);
+        && Objects.equals(CZdotX, other.CZdotX)
+        && Objects.equals(CZdotY, other.CZdotY)
+        && Objects.equals(CZdotZ, other.CZdotZ)
+        && Objects.equals(CZdotXdot, other.CZdotXdot)
+        && Objects.equals(CZdotYdot, other.CZdotYdot)
+        && Objects.equals(CZdotZdot, other.CZdotZdot);
     // @formatter:on
   }
 
   @Override
   public String toString() {
-    return "CovarianceMatrix [comments=" + comments + ", epoch=" + epoch +
-        ", covRefFrame=" + covRefFrame + ", cXX=" + CXX + ", CYX=" + CYX +
-        ", CYY=" + CYY + ", CZX=" + CZX + ", CZY=" + CZY + ", CZZ=" +
-        CZZ + ", CXdotX=" + CXdotX + ", CXdotY=" + CXdotY + ", CXdotZ=" +
-        CXdotZ + ", CXdotXdot=" + CXdotXdot + ", CYdotX=" + CYdotX + ", CYdotY=" +
-        CYdotY + ", CYdotZ=" + CYdotZ + ", CYdotXdot=" + CYdotXdot +
-        ", CYdotYdot=" + CYdotYdot + ", CZdotX=" + CZdotX + ", CZdotY=" + CZdotY +
-        ", CZdotZ=" + CZdotZ + ", CZdotXdot=" + CZdotXdot + ", CZdotYdot=" +
-        CZdotYdot + ", CZdotZdot=" + CZdotZdot + "]";
+    return "CovarianceMatrix [comments="
+        + comments
+        + ", epoch="
+        + epoch
+        + ", covRefFrame="
+        + covRefFrame
+        + ", cXX="
+        + CXX
+        + ", CYX="
+        + CYX
+        + ", CYY="
+        + CYY
+        + ", CZX="
+        + CZX
+        + ", CZY="
+        + CZY
+        + ", CZZ="
+        + CZZ
+        + ", CXdotX="
+        + CXdotX
+        + ", CXdotY="
+        + CXdotY
+        + ", CXdotZ="
+        + CXdotZ
+        + ", CXdotXdot="
+        + CXdotXdot
+        + ", CYdotX="
+        + CYdotX
+        + ", CYdotY="
+        + CYdotY
+        + ", CYdotZ="
+        + CYdotZ
+        + ", CYdotXdot="
+        + CYdotXdot
+        + ", CYdotYdot="
+        + CYdotYdot
+        + ", CZdotX="
+        + CZdotX
+        + ", CZdotY="
+        + CZdotY
+        + ", CZdotZ="
+        + CZdotZ
+        + ", CZdotXdot="
+        + CZdotXdot
+        + ", CZdotYdot="
+        + CZdotYdot
+        + ", CZdotZdot="
+        + CZdotZdot
+        + "]";
   }
 }

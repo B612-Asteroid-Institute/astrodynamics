@@ -1,44 +1,26 @@
 package org.b612foundation.adam.datamodel;
 
+import java.util.Objects;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 
-import java.util.Objects;
-
-/**
- * Single run within a batch.
- */
+/** Single run within a batch. */
 public class RunDescription {
-  /**
-   * Id of the batch this run is from
-   */
+  /** Id of the batch this run is from */
   private String batch_uuid;
-  /**
-   * Sequential index within the parent batch
-   */
+  /** Sequential index within the parent batch */
   private int part_index;
-  /**
-   * State of the calculation for this part.
-   */
+  /** State of the calculation for this part. */
   private CalculationState calc_state;
-  /**
-   * If calc_state is FAILED, error will have more information.
-   */
+  /** If calc_state is FAILED, error will have more information. */
   private String error;
-  /**
-   * Full OPM for this particular run.
-   */
+  /** Full OPM for this particular run. */
   private OrbitParameterMessage opm;
-  /**
-   * Propagated orbit in STK .e format. Available if calcSate is COMPLETED.
-   */
+  /** Propagated orbit in STK .e format. Available if calcSate is COMPLETED. */
   private String stk_ephemeris;
-  /**
-   * Summary for this particular run, both setup and results.
-   */
+  /** Summary for this particular run, both setup and results. */
   private String summary;
 
-  public RunDescription() {
-  }
+  public RunDescription() {}
 
   public RunDescription(String batchUuid, int partIndex, OrbitParameterMessage opm) {
     this.batch_uuid = batchUuid;
@@ -117,20 +99,28 @@ public class RunDescription {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RunDescription other = (RunDescription) obj;
-    return Objects.equals(batch_uuid, other.batch_uuid) && Objects.equals(part_index, other.part_index);
+    return Objects.equals(batch_uuid, other.batch_uuid)
+        && Objects.equals(part_index, other.part_index);
   }
 
   @Override
   public String toString() {
-    return "RunDescription [batch_uuid=" + batch_uuid + ", part_index=" + part_index +
-        ", calc_state=" + calc_state + ", error=" + error + ", summary=" +
-        summary + ", stk_ephemeris=" + stk_ephemeris + "]";
+    return "RunDescription [batch_uuid="
+        + batch_uuid
+        + ", part_index="
+        + part_index
+        + ", calc_state="
+        + calc_state
+        + ", error="
+        + error
+        + ", summary="
+        + summary
+        + ", stk_ephemeris="
+        + stk_ephemeris
+        + "]";
   }
 }

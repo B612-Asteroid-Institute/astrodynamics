@@ -6,30 +6,22 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * State Vector Components. The coordinate system is given in the metadata. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * State Vector Components. The coordinate system is given in the metadata.
+ * https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class StateVector implements Serializable {
-  /**
-   * Optional comments.
-   */
+  /** Optional comments. */
   private List<String> comments = new ArrayList<>();
-  /**
-   * For state vector and Keplerian elements.
-   */
+  /** For state vector and Keplerian elements. */
   private String epoch = null;
-  /**
-   * Coordinates in km
-   */
+  /** Coordinates in km */
   private double x, y, z;
-  /**
-   * Velocity in km/s
-   */
+  /** Velocity in km/s */
   private double xDot, yDot, zDot;
 
   public StateVector deepCopy() {
     StateVector res = new StateVector();
-    for (String c : comments)
-      res.addComment(c);
+    for (String c : comments) res.addComment(c);
     res.setEpoch(epoch);
     res.setX(x);
     res.setY(y);
@@ -124,12 +116,9 @@ public class StateVector implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     StateVector other = (StateVector) obj;
     // @formatter:off
     return Objects.equals(comments, other.comments)
@@ -145,8 +134,22 @@ public class StateVector implements Serializable {
 
   @Override
   public String toString() {
-    return "StateVector [comments=" + comments + ", epoch=" + epoch + ", x=" + x +
-        ", y=" + y + ", z=" + z + ", xDot=" + xDot + ", yDot=" + yDot +
-        ", zDot=" + zDot + "]";
+    return "StateVector [comments="
+        + comments
+        + ", epoch="
+        + epoch
+        + ", x="
+        + x
+        + ", y="
+        + y
+        + ", z="
+        + z
+        + ", xDot="
+        + xDot
+        + ", yDot="
+        + yDot
+        + ", zDot="
+        + zDot
+        + "]";
   }
 }

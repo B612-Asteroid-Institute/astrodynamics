@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public final class LsstMeasurement {
-  //objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v mag detected D_km
+  // objId visitId mjd ra dec vra vdec phase solarElon helioD geoD Vmag true_anomaly H G ra_field
+  // dec_field mjd_field filter visitTime visitExposureTime seeingFwhmEff fiveSigmaDepth class p_v
+  // mag detected D_km
   private String objectId;
 
   private String stationId;
@@ -62,5 +64,4 @@ public final class LsstMeasurement {
   private double detected;
 
   private double Dkm;
-
 }

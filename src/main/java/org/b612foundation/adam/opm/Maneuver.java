@@ -6,38 +6,26 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Description of an individual maneuver (burn). Used in OPM. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Description of an individual maneuver (burn). Used in OPM.
+ * https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class Maneuver implements Serializable {
-  /**
-   * Optional comments.
-   */
+  /** Optional comments. */
   private List<String> comments = new ArrayList<>();
-  /**
-   * Epoch of ignition.
-   */
+  /** Epoch of ignition. */
   private String manEpochIgnition;
-  /**
-   * Durations in seconds, >=0.
-   */
+  /** Durations in seconds, >=0. */
   private double duration;
-  /**
-   * Mass change in kg, <=0.
-   */
+  /** Mass change in kg, <=0. */
   private double deltaMass;
-  /**
-   * Coordinate system for velocity increment vector.
-   */
+  /** Coordinate system for velocity increment vector. */
   private OdmCommonMetadata.ReferenceFrame manRefFrame;
-  /**
-   * Velocity increment vector components, km/s
-   */
+  /** Velocity increment vector components, km/s */
   private double manDv1, manDv2, manDv3;
 
   public Maneuver deepCopy() {
     Maneuver res = new Maneuver();
-    for (String c : comments)
-      res.addComment(c);
+    for (String c : comments) res.addComment(c);
     res.setMan_epoch_ignition(manEpochIgnition);
     res.setDuration(duration);
     res.setDelta_mass(deltaMass);
@@ -127,17 +115,15 @@ public class Maneuver implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(comments, deltaMass, duration, manDv1, manDv2, manDv3, manEpochIgnition, manRefFrame);
+    return Objects.hash(
+        comments, deltaMass, duration, manDv1, manDv2, manDv3, manEpochIgnition, manRefFrame);
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     Maneuver other = (Maneuver) obj;
     // @formatter:off
     return Objects.equals(comments, other.comments)
@@ -153,9 +139,22 @@ public class Maneuver implements Serializable {
 
   @Override
   public String toString() {
-    return "Maneuver [comments=" + comments + ", manEpochIgnition=" + manEpochIgnition +
-        ", duration=" + duration + ", deltaMass=" + deltaMass + ", manRefFrame=" +
-        manRefFrame + ", manDv1=" + manDv1 + ", manDv2=" + manDv2 + ", manDv3=" +
-        manDv3 + "]";
+    return "Maneuver [comments="
+        + comments
+        + ", manEpochIgnition="
+        + manEpochIgnition
+        + ", duration="
+        + duration
+        + ", deltaMass="
+        + deltaMass
+        + ", manRefFrame="
+        + manRefFrame
+        + ", manDv1="
+        + manDv1
+        + ", manDv2="
+        + manDv2
+        + ", manDv3="
+        + manDv3
+        + "]";
   }
 }

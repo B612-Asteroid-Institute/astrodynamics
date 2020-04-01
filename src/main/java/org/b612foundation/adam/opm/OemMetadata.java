@@ -2,33 +2,19 @@ package org.b612foundation.adam.opm;
 
 import java.util.Objects;
 
-/**
- * OEM metadata blocks add a few fields to the common metadata.
- */
+/** OEM metadata blocks add a few fields to the common metadata. */
 public class OemMetadata extends OdmCommonMetadata {
-  /**
-   * Start time of the ephemeris. Required.
-   */
+  /** Start time of the ephemeris. Required. */
   private String startTime = null;
-  /**
-   * Stop time of the ephemeris. Requires.
-   */
+  /** Stop time of the ephemeris. Requires. */
   private String stopTime = null;
-  /**
-   * Usable start time. Optional.
-   */
+  /** Usable start time. Optional. */
   private String usableStartTime = null;
-  /**
-   * Usable stop time. Optional.
-   */
+  /** Usable stop time. Optional. */
   private String usableStopTime = null;
-  /**
-   * Interpolation method: Hermite, Linear, Lagrange. Optional.
-   */
+  /** Interpolation method: Hermite, Linear, Lagrange. Optional. */
   private String interpolation = null;
-  /**
-   * Interpolation degree, optional.
-   */
+  /** Interpolation degree, optional. */
   private int interpolationDegree = 0;
 
   public String getStart_time() {
@@ -81,18 +67,21 @@ public class OemMetadata extends OdmCommonMetadata {
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), startTime, stopTime, usableStartTime, usableStopTime, interpolation,
+    return Objects.hash(
+        super.hashCode(),
+        startTime,
+        stopTime,
+        usableStartTime,
+        usableStopTime,
+        interpolation,
         interpolationDegree);
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     OemMetadata other = (OemMetadata) obj;
     // @formatter:off
     return super.equals(other)

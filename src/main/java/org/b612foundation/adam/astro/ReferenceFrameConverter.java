@@ -33,15 +33,15 @@ public final class ReferenceFrameConverter {
     final int vyi = 4;
     final int vzi = 5;
     double[] rval = new double[6];
-       /*
-        vec_f.X  =  vec_i.X
-        vec_f.Y  =  vec_i.Y*np.cos(phi) + vec_i.Z*np.sin(phi)
-        vec_f.Z  = -vec_i.Y*np.sin(phi) + vec_i.Z*np.cos(phi)
+    /*
+    vec_f.X  =  vec_i.X
+    vec_f.Y  =  vec_i.Y*np.cos(phi) + vec_i.Z*np.sin(phi)
+    vec_f.Z  = -vec_i.Y*np.sin(phi) + vec_i.Z*np.cos(phi)
 
-        vec_f.VX =  vec_i.VX
-        vec_f.VY =  vec_i.VY*np.cos(phi) + vec_i.VZ*np.sin(phi)
-        vec_f.VZ = -vec_i.VY*np.sin(phi) + vec_i.VZ*np.cos(phi)
-         */
+    vec_f.VX =  vec_i.VX
+    vec_f.VY =  vec_i.VY*np.cos(phi) + vec_i.VZ*np.sin(phi)
+    vec_f.VZ = -vec_i.VY*np.sin(phi) + vec_i.VZ*np.cos(phi)
+     */
     rval[xi] = posVel[xi];
     rval[yi] = posVel[yi] * cos(phi) + posVel[zi] * sin(phi);
     rval[zi] = -posVel[yi] * sin(phi) + posVel[zi] * cos(phi);

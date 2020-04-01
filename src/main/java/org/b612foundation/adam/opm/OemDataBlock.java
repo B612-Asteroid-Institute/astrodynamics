@@ -6,25 +6,17 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * One OrbitEphemerisMessage can contain multiple ephemerides blocks, each with its own metadata block and optional
- * covariances.
+ * One OrbitEphemerisMessage can contain multiple ephemerides blocks, each with its own metadata
+ * block and optional covariances.
  */
 public class OemDataBlock implements Serializable {
-  /**
-   * Optional comments.
-   */
+  /** Optional comments. */
   private List<String> comments = new ArrayList<>();
-  /**
-   * Metadata, required
-   */
+  /** Metadata, required */
   private OemMetadata metadata = null;
-  /**
-   * Data, required: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore them for now.
-   */
+  /** Data, required: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore them for now. */
   private List<OemDataLine> ephemeris = new ArrayList<>();
-  /**
-   * Optional covariances, each with its own epoch.
-   */
+  /** Optional covariances, each with its own epoch. */
   private List<CovarianceMatrix> covariances = new ArrayList<>();
 
   public List<String> getComments() {
@@ -54,7 +46,8 @@ public class OemDataBlock implements Serializable {
     return ephemeris;
   }
 
-  public OemDataBlock addLine(String date, double x, double y, double z, double vx, double vy, double vz) {
+  public OemDataBlock addLine(
+      String date, double x, double y, double z, double vx, double vy, double vz) {
     ephemeris.add(new OemDataLine(date, x, y, z, vx, vy, vz));
     return this;
   }
@@ -75,14 +68,13 @@ public class OemDataBlock implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     OemDataBlock other = (OemDataBlock) obj;
-    return Objects.equals(comments, other.comments) && Objects.equals(metadata, other.metadata)
-        && Objects.equals(ephemeris, other.ephemeris) && Objects.equals(covariances, other.covariances);
+    return Objects.equals(comments, other.comments)
+        && Objects.equals(metadata, other.metadata)
+        && Objects.equals(ephemeris, other.ephemeris)
+        && Objects.equals(covariances, other.covariances);
   }
 }

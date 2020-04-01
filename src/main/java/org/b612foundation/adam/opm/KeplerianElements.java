@@ -6,59 +6,42 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Osculating Keplerian Elements in the specified reference frame (none or all parameters of this block must be given.)
- * <p>
- * https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Osculating Keplerian Elements in the specified reference frame (none or all parameters of this
+ * block must be given.)
+ *
+ * <p>https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
 public class KeplerianElements implements Serializable {
-  /**
-   * Optional comments.
-   */
+  /** Optional comments. */
   private List<String> comments = new ArrayList<>();
   /*
    * In TLE-based OMM mean_motion is used instead of semi_major_axis. Have separate fields here to keep things simpler.
    */
-  /**
-   * Semi-major axis, km
-   */
+  /** Semi-major axis, km */
   private double semiMajorAxis;
-  /**
-   * Mean motion, rev/day, used in TLE-based OMM instead of semi-major axis.
-   */
+  /** Mean motion, rev/day, used in TLE-based OMM instead of semi-major axis. */
   private double meanMotion;
-  /**
-   * Eccentricity, unitless
-   */
+  /** Eccentricity, unitless */
   private double eccentricity;
-  /**
-   * Inclination, degrees
-   */
+  /** Inclination, degrees */
   private double inclination;
-  /**
-   * Right ascention of ascending node, degrees
-   */
+  /** Right ascention of ascending node, degrees */
   private double raOfAscNode;
-  /**
-   * Argument of pericenter, degrees
-   */
+  /** Argument of pericenter, degrees */
   private double argOfPericenter;
   /**
-   * Technically, it's true anomaly OR mean anomaly, but have separate fields to keep things simpler.
+   * Technically, it's true anomaly OR mean anomaly, but have separate fields to keep things
+   * simpler.
    */
   private double trueAnomaly;
-  /**
-   * Mean anomaly, degrees
-   */
+  /** Mean anomaly, degrees */
   private double meanAnomaly;
-  /**
-   * Gravitational Coefficient (G x Mass). km^3/s^2.
-   */
+  /** Gravitational Coefficient (G x Mass). km^3/s^2. */
   private double gm;
 
   public KeplerianElements deepCopy() {
     KeplerianElements res = new KeplerianElements();
-    for (String c : comments)
-      res.addComment(c);
+    for (String c : comments) res.addComment(c);
     res.setSemi_major_axis(semiMajorAxis);
     res.setMean_motion(meanMotion);
     res.setEccentricity(eccentricity);
@@ -168,18 +151,24 @@ public class KeplerianElements implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(argOfPericenter, comments, eccentricity, gm, inclination, meanAnomaly, meanMotion, raOfAscNode,
-        semiMajorAxis, trueAnomaly);
+    return Objects.hash(
+        argOfPericenter,
+        comments,
+        eccentricity,
+        gm,
+        inclination,
+        meanAnomaly,
+        meanMotion,
+        raOfAscNode,
+        semiMajorAxis,
+        trueAnomaly);
   }
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     KeplerianElements other = (KeplerianElements) obj;
     // @formatter:off
     return Objects.equals(argOfPericenter, other.argOfPericenter)
@@ -197,10 +186,26 @@ public class KeplerianElements implements Serializable {
 
   @Override
   public String toString() {
-    return "KeplerianElements [comments=" + comments + ", semiMajorAxis=" + semiMajorAxis +
-        ", meanMotion=" + meanMotion + ", eccentricity=" + eccentricity +
-        ", inclination=" + inclination + ", raOfAscNode=" + raOfAscNode +
-        ", argOfPericenter=" + argOfPericenter + ", trueAnomaly=" + trueAnomaly +
-        ", meanAnomaly=" + meanAnomaly + ", gm=" + gm + "]";
+    return "KeplerianElements [comments="
+        + comments
+        + ", semiMajorAxis="
+        + semiMajorAxis
+        + ", meanMotion="
+        + meanMotion
+        + ", eccentricity="
+        + eccentricity
+        + ", inclination="
+        + inclination
+        + ", raOfAscNode="
+        + raOfAscNode
+        + ", argOfPericenter="
+        + argOfPericenter
+        + ", trueAnomaly="
+        + trueAnomaly
+        + ", meanAnomaly="
+        + meanAnomaly
+        + ", gm="
+        + gm
+        + "]";
   }
 }
