@@ -25,6 +25,8 @@ public class PropagationParameters implements Serializable {
   private String executor;
   /** OPM as parsed from a single string in CCSDS format */
   private OrbitParameterMessage opm;
+  /** Whether to stop propagation on impact. */
+  private boolean stopOnImpact;
 
   public PropagationParameters deepCopy() {
     PropagationParameters copy = new PropagationParameters();
@@ -93,6 +95,15 @@ public class PropagationParameters implements Serializable {
 
   public void setOpmFromString(String opmString) throws OdmParseException {
     this.opm = OdmFormatter.parseOpmString(opmString);
+  }
+
+  public boolean getStopOnImpact() {
+    return stopOnImpact;
+  }
+
+  public PropagationParameters setStopOnImpact(boolean shouldStop) {
+    this.stopOnImpact = shouldStop;
+    return this;
   }
 
   @Override
