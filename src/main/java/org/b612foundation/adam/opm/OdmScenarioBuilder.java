@@ -1,5 +1,6 @@
 package org.b612foundation.adam.opm;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.b612foundation.adam.opm.OdmCommonMetadata.CenterName;
 import org.b612foundation.adam.opm.OdmCommonMetadata.ReferenceFrame;
 import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
@@ -11,6 +12,7 @@ import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
  * <p>This class is only for tests, but we are reusing it in multiple packages, so it lives with the
  * main sources.
  */
+@VisibleForTesting
 public class OdmScenarioBuilder {
 
   /** Returns OPM from figure 3-1 in the ODM standard */
