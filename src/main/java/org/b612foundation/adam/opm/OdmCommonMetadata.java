@@ -62,7 +62,11 @@ public class OdmCommonMetadata implements Serializable {
     /**
      * ODM non-standard referenece frame representing the IAU76 Mean Ecliptic Plane at J2000 epoch
      */
-    J2000_IAU76ECLIP
+    J2000_IAU76ECLIP,
+    /** Earth Centered, Earth Fixed */
+    ECEF,
+    /** Earth Centered, Inertial */
+    ECI,
   }
 
   /**
