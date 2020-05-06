@@ -27,6 +27,14 @@ public class PropagationParameters implements Serializable {
   private OrbitParameterMessage opm;
   /** Whether to stop propagation on impact. */
   private boolean stopOnImpact;
+  /** Whether to stop on closest approach. */
+  private boolean stopOnCloseApproach;
+  /** The distance (meters) from the target body to stop on impact. */
+  private long stopOnImpactDistanceMeters;
+  /** The epoch (in UTC) after which to stop on close approach. */
+  private String stopOnCloseApproachAfterEpoch;
+  /** The distance (meters) from the target body at which to log the close approach. */
+  private double closeApproachRadiusFromTargetMeters;
 
   public PropagationParameters deepCopy() {
     PropagationParameters copy = new PropagationParameters();
@@ -103,6 +111,42 @@ public class PropagationParameters implements Serializable {
 
   public PropagationParameters setStopOnImpact(boolean shouldStop) {
     this.stopOnImpact = shouldStop;
+    return this;
+  }
+
+  public boolean getStopOnCloseApproach() {
+    return stopOnCloseApproach;
+  }
+
+  public PropagationParameters setStopOnCloseApproach(boolean stopOnCloseApproach) {
+    this.stopOnCloseApproach = stopOnCloseApproach;
+    return this;
+  }
+
+  public long getStopOnImpactDistanceMeters() {
+    return this.stopOnImpactDistanceMeters;
+  }
+
+  public PropagationParameters setStopOnImpactDistanceMeters(long distance) {
+    this.stopOnImpactDistanceMeters = distance;
+    return this;
+  }
+
+  public String getStopOnCloseApproachAfterEpoch() {
+    return this.stopOnCloseApproachAfterEpoch;
+  }
+
+  public PropagationParameters setStopOnCloseApproachAfterEpoch(String closeApproachAfterEpoch) {
+    this.stopOnCloseApproachAfterEpoch = closeApproachAfterEpoch;
+    return this;
+  }
+
+  public double getCloseApproachRadiusFromTargetMeters() {
+    return this.closeApproachRadiusFromTargetMeters;
+  }
+
+  public PropagationParameters setCloseApproachRadiusFromTargetMeters(double radius) {
+    this.closeApproachRadiusFromTargetMeters = radius;
     return this;
   }
 
