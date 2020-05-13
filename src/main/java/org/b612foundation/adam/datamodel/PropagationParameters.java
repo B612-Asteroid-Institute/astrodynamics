@@ -27,15 +27,6 @@ public class PropagationParameters implements Serializable {
   private String executor;
   /** OPM as parsed from a single string in CCSDS format */
   private OrbitParameterMessage opm;
-
-  /** The type of propagation to perform. */
-  private PropagationType propagationType;
-
-  /** Number of draws for running Monte Carlo */
-  private long monteCarloDraws;
-  /** Keplerian elements standard deviation, for generating Monte Carlo draws */
-  private KeplerianElements keplerianSigma;
-
   /** Whether to stop propagation on impact. */
   private boolean stopOnImpact;
   /** Whether to stop on closest approach. */
@@ -46,6 +37,14 @@ public class PropagationParameters implements Serializable {
   private String stopOnCloseApproachAfterEpoch;
   /** The distance (meters) from the target body at which to log the close approach. */
   private double closeApproachRadiusFromTargetMeters;
+
+  /** The type of propagation to perform. */
+  private PropagationType propagationType;
+
+  /** Number of draws for running Monte Carlo */
+  private long monteCarloDraws;
+  /** Keplerian elements standard deviation, for generating Monte Carlo draws */
+  private KeplerianElements keplerianSigma;
 
   public PropagationParameters deepCopy() {
     PropagationParameters copy = new PropagationParameters();
