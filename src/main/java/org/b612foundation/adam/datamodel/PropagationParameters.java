@@ -2,10 +2,12 @@ package org.b612foundation.adam.datamodel;
 
 import java.io.Serializable;
 import java.util.Objects;
+import org.b612foundation.adam.opm.KeplerianElements;
 import org.b612foundation.adam.opm.OdmFormatter;
 import org.b612foundation.adam.opm.OdmParseException;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 
+/** Propagation parameters sent to ADAM API. */
 public class PropagationParameters implements Serializable {
   /** Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time. */
   private String start_time;
@@ -25,6 +27,15 @@ public class PropagationParameters implements Serializable {
   private String executor;
   /** OPM as parsed from a single string in CCSDS format */
   private OrbitParameterMessage opm;
+
+  /** The type of propagation to perform. */
+  private PropagationType propagationType;
+
+  /** Number of draws for running Monte Carlo */
+  private long monteCarloDraws;
+  /** Keplerian elements standard deviation, for generating Monte Carlo draws */
+  private KeplerianElements keplerianSigma;
+
   /** Whether to stop propagation on impact. */
   private boolean stopOnImpact;
   /** Whether to stop on closest approach. */
@@ -105,6 +116,24 @@ public class PropagationParameters implements Serializable {
     this.opm = OdmFormatter.parseOpmString(opmString);
   }
 
+  public PropagationType getPropagationType() {
+    return propagationType;
+  }
+
+  public PropagationParameters setPropagationType(PropagationType propagationType) {
+    this.propagationType = propagationType;
+    return this;
+  }
+
+  public KeplerianElements getKeplerianSigma() {
+    return keplerianSigma;
+  }
+
+  public PropagationParameters setKeplerianSigma(KeplerianElements elements) {
+    this.keplerianSigma = elements;
+    return this;
+  }
+
   public boolean getStopOnImpact() {
     return stopOnImpact;
   }
@@ -148,6 +177,14 @@ public class PropagationParameters implements Serializable {
   public PropagationParameters setCloseApproachRadiusFromTargetMeters(double radius) {
     this.closeApproachRadiusFromTargetMeters = radius;
     return this;
+  }
+
+  public long getMonteCarloDraws() {
+    return monteCarloDraws;
+  }
+
+  public void setMonteCarloDraws(long monteCarloDraws) {
+    this.monteCarloDraws = monteCarloDraws;
   }
 
   @Override

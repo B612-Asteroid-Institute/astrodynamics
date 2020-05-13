@@ -416,7 +416,7 @@ public class OdmScenarioBuilder {
         + "OBJECT_NAME          = MARS GLOBAL SURVEYOR\n"
         + "OBJECT_ID            = 1996-062A\n"
         + "CENTER_NAME          = SUN\n" // example used "MARS BARYCENTER", which is not supported
-                                         // for now
+        // for now
         + "REF_FRAME            = EME2000\n"
         + "TIME_SYSTEM          = UTC\n"
         + "START_TIME           = 1996-12-28T21:29:07.267\n"
@@ -536,6 +536,33 @@ public class OdmScenarioBuilder {
     block.addCovariance(cov);
 
     result.addBlock(block);
+    return result;
+  }
+
+  public static OrbitParameterMessage buildOpmWithKeplerian() {
+    OrbitParameterMessage result = new OrbitParameterMessage();
+    result.setCcsds_opm_vers("2.0");
+    result.setHeader(new OdmCommonHeader().addComment("Testing"));
+    result.setMetadata(
+        new OdmCommonMetadata()
+            .setObject_name("example_from_John")
+            .setObject_id("example_from_John")
+            .setCenter_name(OdmCommonMetadata.CenterName.SUN)
+            .setRef_frame(ReferenceFrame.ICRF)
+            .setTime_system(OdmCommonMetadata.TimeSystem.UTC));
+    result.setState_vector(
+        new StateVector()
+            .addComment("State Vector")
+            .setEpoch("2028-11-01T00:00:00Z"));
+    result.setKeplerian(
+        new KeplerianElements()
+            .addComment("Test Keplerian elements from John")
+            .setSemi_major_axis(2.2321102129031378)
+            .setEccentricity(0.5836725969822691)
+            .setInclination(0.889253120260506)
+            .setRa_of_asc_node(38.46053156164339)
+            .setArg_of_pericenter(34.36938785036925)
+            .setMean_anomaly(136.4013846143255));
     return result;
   }
 }

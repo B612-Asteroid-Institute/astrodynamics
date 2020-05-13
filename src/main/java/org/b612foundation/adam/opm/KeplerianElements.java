@@ -25,7 +25,7 @@ public class KeplerianElements implements Serializable {
   private double eccentricity;
   /** Inclination, degrees */
   private double inclination;
-  /** Right ascention of ascending node, degrees */
+  /** Right ascension of ascending node, degrees */
   private double raOfAscNode;
   /** Argument of pericenter, degrees */
   private double argOfPericenter;
