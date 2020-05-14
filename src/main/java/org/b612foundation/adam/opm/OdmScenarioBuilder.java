@@ -416,7 +416,7 @@ public class OdmScenarioBuilder {
         + "OBJECT_NAME          = MARS GLOBAL SURVEYOR\n"
         + "OBJECT_ID            = 1996-062A\n"
         + "CENTER_NAME          = SUN\n" // example used "MARS BARYCENTER", which is not supported
-                                         // for now
+        // for now
         + "REF_FRAME            = EME2000\n"
         + "TIME_SYSTEM          = UTC\n"
         + "START_TIME           = 1996-12-28T21:29:07.267\n"

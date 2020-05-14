@@ -2,10 +2,13 @@ package org.b612foundation.adam.datamodel;
 
 import java.io.Serializable;
 import java.util.Objects;
+import org.b612foundation.adam.opm.KeplerianElements;
 import org.b612foundation.adam.opm.OdmFormatter;
 import org.b612foundation.adam.opm.OdmParseException;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
+import org.b612foundation.adam.opm.StateVector;
 
+/** Propagation parameters sent to ADAM API. */
 public class PropagationParameters implements Serializable {
   /** Beginning of the ephemerides. Should be UTC. Generated ephemerides will start at this time. */
   private String start_time;
@@ -36,14 +39,33 @@ public class PropagationParameters implements Serializable {
   /** The distance (meters) from the target body at which to log the close approach. */
   private double closeApproachRadiusFromTargetMeters;
 
+  /** The type of propagation to perform. */
+  private PropagationType propagationType;
+
+  /** Number of draws for running Monte Carlo */
+  private long monteCarloDraws;
+  /** Keplerian elements standard deviation, for generating Monte Carlo draws */
+  private KeplerianElements keplerianSigma;
+  /** Cartesian elements standard deviation, for generating Monte Carlo draws */
+  private StateVector cartesianSigma;
+
   public PropagationParameters deepCopy() {
     PropagationParameters copy = new PropagationParameters();
-    copy.setEnd_time(end_time);
-    copy.setOpm(opm.deepCopy());
-    copy.setPropagator_uuid(propagator_uuid);
     copy.setStart_time(start_time);
+    copy.setEnd_time(end_time);
     copy.setStep_duration_sec(step_duration_sec);
+    copy.setPropagator_uuid(propagator_uuid);
     copy.setExecutor(executor);
+    copy.setOpm(opm.deepCopy());
+    copy.setStopOnImpact(stopOnImpact);
+    copy.setStopOnCloseApproach(stopOnCloseApproach);
+    copy.setStopOnImpactDistanceMeters(stopOnImpactDistanceMeters);
+    copy.setStopOnCloseApproachAfterEpoch(stopOnCloseApproachAfterEpoch);
+    copy.setCloseApproachRadiusFromTargetMeters(closeApproachRadiusFromTargetMeters);
+    copy.setPropagationType(propagationType);
+    copy.setMonteCarloDraws(monteCarloDraws);
+    copy.setKeplerianSigma(keplerianSigma);
+    copy.setCartesianSigma(cartesianSigma);
     return copy;
   }
 
@@ -147,6 +169,41 @@ public class PropagationParameters implements Serializable {
 
   public PropagationParameters setCloseApproachRadiusFromTargetMeters(double radius) {
     this.closeApproachRadiusFromTargetMeters = radius;
+    return this;
+  }
+
+  public long getMonteCarloDraws() {
+    return monteCarloDraws;
+  }
+
+  public void setMonteCarloDraws(long monteCarloDraws) {
+    this.monteCarloDraws = monteCarloDraws;
+  }
+
+  public PropagationType getPropagationType() {
+    return propagationType;
+  }
+
+  public PropagationParameters setPropagationType(PropagationType propagationType) {
+    this.propagationType = propagationType;
+    return this;
+  }
+
+  public KeplerianElements getKeplerianSigma() {
+    return keplerianSigma;
+  }
+
+  public PropagationParameters setKeplerianSigma(KeplerianElements elements) {
+    this.keplerianSigma = elements;
+    return this;
+  }
+
+  public StateVector getCartesianSigma() {
+    return cartesianSigma;
+  }
+
+  public PropagationParameters setCartesianSigma(StateVector stateVector) {
+    this.cartesianSigma = stateVector;
     return this;
   }
 
