@@ -1,12 +1,13 @@
 package org.b612foundation.adam.datamodel;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public abstract class AdamObject {
 
   /** Id for an object, unique among all AdamObjects. */
   private String uuid;
+
+  public AdamObject() {}
 
   public String getUuid() {
     return uuid;
@@ -15,10 +16,6 @@ public abstract class AdamObject {
   public AdamObject setUuid(String uuid) {
     this.uuid = uuid;
     return this;
-  }
-
-  public AdamObject() {
-    this.uuid = UUID.randomUUID().toString();
   }
 
   @Override
