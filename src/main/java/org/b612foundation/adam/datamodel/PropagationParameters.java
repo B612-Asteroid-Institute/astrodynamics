@@ -1,5 +1,7 @@
 package org.b612foundation.adam.datamodel;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
 import java.util.Objects;
 import org.b612foundation.adam.opm.KeplerianElements;
@@ -224,5 +226,15 @@ public class PropagationParameters implements Serializable {
         && Objects.equals(executor, other.executor)
         && Objects.equals(start_time, other.start_time)
         && Objects.equals(step_duration_sec, other.step_duration_sec);
+  }
+
+  public String toJsonString() {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      return mapper.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return "";
+    }
   }
 }
