@@ -72,6 +72,7 @@ public class KeplerianElements implements Serializable {
     return semiMajorAxis;
   }
 
+  // This should be in km
   public KeplerianElements setSemi_major_axis(double semiMajorAxis) {
     this.semiMajorAxis = semiMajorAxis;
     return this;

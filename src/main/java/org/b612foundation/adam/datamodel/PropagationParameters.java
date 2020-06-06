@@ -1,5 +1,7 @@
 package org.b612foundation.adam.datamodel;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
 import java.util.Objects;
 import org.b612foundation.adam.opm.KeplerianElements;
@@ -30,11 +32,16 @@ public class PropagationParameters implements Serializable {
   private OrbitParameterMessage opm;
   /** Whether to stop propagation on impact. */
   private boolean stopOnImpact;
-  /** Whether to stop on closest approach. */
+  /** Whether to record close approaches. */
+  private boolean enableLogCloseApproaches;
+  /** Whether to stop on closest approach. Assumes logging of close approaches is set to true. */
   private boolean stopOnCloseApproach;
   /** The distance (meters) from the target body to stop on impact. */
   private long stopOnImpactDistanceMeters;
-  /** The epoch (in UTC) after which to stop on close approach. */
+  /**
+   * The epoch (in UTC) after which to stop on close approach. Assumes logging of close approaches
+   * is set to true.
+   */
   private String stopOnCloseApproachAfterEpoch;
   /** The distance (meters) from the target body at which to log the close approach. */
   private double closeApproachRadiusFromTargetMeters;
@@ -58,6 +65,7 @@ public class PropagationParameters implements Serializable {
     copy.setExecutor(executor);
     copy.setOpm(opm.deepCopy());
     copy.setStopOnImpact(stopOnImpact);
+    copy.setEnableLogCloseApproaches(enableLogCloseApproaches);
     copy.setStopOnCloseApproach(stopOnCloseApproach);
     copy.setStopOnImpactDistanceMeters(stopOnImpactDistanceMeters);
     copy.setStopOnCloseApproachAfterEpoch(stopOnCloseApproachAfterEpoch);
@@ -133,6 +141,15 @@ public class PropagationParameters implements Serializable {
 
   public PropagationParameters setStopOnImpact(boolean shouldStop) {
     this.stopOnImpact = shouldStop;
+    return this;
+  }
+
+  public boolean getEnableLogCloseApproaches() {
+    return enableLogCloseApproaches;
+  }
+
+  public PropagationParameters setEnableLogCloseApproaches(boolean shouldLogCloseApproaches) {
+    this.enableLogCloseApproaches = shouldLogCloseApproaches;
     return this;
   }
 
@@ -224,5 +241,15 @@ public class PropagationParameters implements Serializable {
         && Objects.equals(executor, other.executor)
         && Objects.equals(start_time, other.start_time)
         && Objects.equals(step_duration_sec, other.step_duration_sec);
+  }
+
+  public String toJsonString() {
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      return mapper.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+      return "";
+    }
   }
 }
