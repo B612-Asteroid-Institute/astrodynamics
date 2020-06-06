@@ -33,7 +33,7 @@ public class PropagationParameters implements Serializable {
   /** Whether to stop propagation on impact. */
   private boolean stopOnImpact;
   /** Whether to record close approaches. */
-  private boolean logCloseApproaches;
+  private boolean enableLogCloseApproaches;
   /** Whether to stop on closest approach. Assumes logging of close approaches is set to true. */
   private boolean stopOnCloseApproach;
   /** The distance (meters) from the target body to stop on impact. */
@@ -65,7 +65,7 @@ public class PropagationParameters implements Serializable {
     copy.setExecutor(executor);
     copy.setOpm(opm.deepCopy());
     copy.setStopOnImpact(stopOnImpact);
-    copy.setLogCloseApproaches(logCloseApproaches);
+    copy.setEnableLogCloseApproaches(enableLogCloseApproaches);
     copy.setStopOnCloseApproach(stopOnCloseApproach);
     copy.setStopOnImpactDistanceMeters(stopOnImpactDistanceMeters);
     copy.setStopOnCloseApproachAfterEpoch(stopOnCloseApproachAfterEpoch);
@@ -144,12 +144,12 @@ public class PropagationParameters implements Serializable {
     return this;
   }
 
-  public boolean getLogCloseApproaches() {
-    return logCloseApproaches;
+  public boolean getEnableLogCloseApproaches() {
+    return enableLogCloseApproaches;
   }
 
-  public PropagationParameters setLogCloseApproaches(boolean shouldLogCloseApproaches) {
-    this.logCloseApproaches = shouldLogCloseApproaches;
+  public PropagationParameters setEnableLogCloseApproaches(boolean shouldLogCloseApproaches) {
+    this.enableLogCloseApproaches = shouldLogCloseApproaches;
     return this;
   }
 
