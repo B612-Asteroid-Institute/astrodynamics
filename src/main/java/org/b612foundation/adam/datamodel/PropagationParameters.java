@@ -32,8 +32,8 @@ public class PropagationParameters implements Serializable {
   private OrbitParameterMessage opm;
   /** Whether to stop propagation on impact. */
   private boolean stopOnImpact;
-  /** Whether to record close approaches. */
-  private boolean enableLogCloseApproaches;
+  /** Whether to record close approaches. Defaults to true. */
+  private boolean enableLogCloseApproaches = true;
   /** Whether to stop on closest approach. Assumes logging of close approaches is set to true. */
   private boolean stopOnCloseApproach;
   /** The distance (meters) from the target body to stop on impact. */
