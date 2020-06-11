@@ -13,6 +13,19 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build and test astrodynamics
-      run: |
-        mvn compile test
+    - name: Build astrodynamics
+      run: mvn clean compile
+
+  test:
+    steps:
+      - name: Test
+        needs: build
+        run: mvn test
+
+  coverage:
+    steps:
+      - name: Coverage report
+        needs: test
+        run: |
+          bash <(curl -s https://codecov.io/bash)
+
