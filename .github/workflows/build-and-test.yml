@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -17,12 +16,16 @@ jobs:
       run: mvn clean compile
 
   test:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Test
         needs: build
         run: mvn test
 
   coverage:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Coverage report
         needs: test
