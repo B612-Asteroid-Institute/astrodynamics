@@ -15,6 +15,7 @@ public class OdDataExamplesTest {
   @Test
   public void configuringInputDataExample() throws JsonProcessingException {
     // Example of turning a raw DES OBS file into a base64 encoded one that could be passed safely to a REST service
+    // @formatter:off
     var desRawObsFileText =
         "433     54617.0000000000 O  78.2887200000  26.5336200000  13.5600000000 X  568   0.0010000000   0.0000000000  -1.0000000000 -0.1000000E+01 X\n" +
             "433     54624.0000000000 O  85.2759500000  26.3621300000  13.5200000000 X  568   0.0010000000   0.0000000000  -1.0000000000 -0.1000000E+01 X\n" +
@@ -25,6 +26,7 @@ public class OdDataExamplesTest {
             "433     54659.0000000000 O 119.7126800000  20.6130900000  13.4000000000 X  568   0.0010000000   0.0010000000  -1.0000000000 -0.1000000E+01 X\n" +
             "433     54666.0000000000 O 126.2366900000  18.6056500000  13.4000000000 X  568   0.0010000000   0.0010000000  -1.0000000000 -0.1000000E+01 X\n" +
             "433     54673.0000000000 O 132.5936500000  16.3820000000  13.4100000000 X  568   0.0010000000   0.0010000000  -1.0000000000 -0.1000000E+01 X";
+    // @formatter:on
     var base64ObsFile = Base64.getEncoder().encodeToString(desRawObsFileText.getBytes());
     // String desObsFileFromBase64 = new String(Base64.getDecoder().decode(base64ObsFile));
 
@@ -130,6 +132,8 @@ public class OdDataExamplesTest {
 
     ObjectMapper om = new ObjectMapper();
     om.configure(SerializationFeature.INDENT_OUTPUT, true);
+
+    // TODO: make assertions to ensure correct behavior of whatever is being tested
     System.out.println("IOD Configuration");
     System.out.println(om.writeValueAsString(thorIodConfig));
     System.out.println("IOD Run Parameters");

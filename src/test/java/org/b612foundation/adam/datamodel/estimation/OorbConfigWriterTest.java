@@ -20,6 +20,7 @@ public class OorbConfigWriterTest {
     OorbConfigWriter.writeConfiguration(tmpConfig, config, PropagationConfigurationFactory.getAllMajorBodiesConfig());
     var lines = Files.readAllLines(tmpConfig);
     lines.forEach(System.out::println);
+    // TODO: make assertions that the written oorb config is correct; prefer assertion over printlns
   }
 
   @Test
