@@ -19,12 +19,12 @@ target/
 *.tar.gz
 *.rar
 
-#Eclipse Settings Files
+# Eclipse Settings Files
 .settings
 .classpath
 .project
 
-#IntelliJ Project file
+# IntelliJ Project file
 .idea
 *.iml
 
@@ -32,3 +32,6 @@ target/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /bin/
+
+# jenv version
+.java-version
