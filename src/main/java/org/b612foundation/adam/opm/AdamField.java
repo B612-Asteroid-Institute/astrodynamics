@@ -6,7 +6,11 @@ import java.util.Objects;
 public class AdamField implements Serializable {
   private String key, value;
 
-  AdamField(String key, String value) {
+  public AdamField() {
+
+  }
+
+  public AdamField(String key, String value) {
     this.key = key;
     this.value = value;
   }

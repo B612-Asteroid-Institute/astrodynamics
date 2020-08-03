@@ -28,6 +28,10 @@ public class CovarianceMatrix implements Serializable {
   private double CYdotX, CYdotY, CYdotZ, CYdotXdot, CYdotYdot;
   private double CZdotX, CZdotY, CZdotZ, CZdotXdot, CZdotYdot, CZdotZdot;
 
+  public CovarianceMatrix() {
+
+  }
+
   public CovarianceMatrix deepCopy() {
     CovarianceMatrix copy = new CovarianceMatrix();
     for (String comment : comments) {
