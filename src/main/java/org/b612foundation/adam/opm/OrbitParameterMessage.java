@@ -24,7 +24,7 @@ public class OrbitParameterMessage implements Serializable {
   /** Optional spacecraft details. */
   private SpacecraftParameters spacecraft;
   /** Covariance for position/velocity, optional. */
-  private CovarianceMatrix covariance;
+  private CartesianCovariance covariance;
   /** 0 or more maneuvers. */
   private List<Maneuver> maneuvers = new ArrayList<>();
   /**
@@ -103,11 +103,11 @@ public class OrbitParameterMessage implements Serializable {
     return this;
   }
 
-  public CovarianceMatrix getCovariance() {
+  public CartesianCovariance getCovariance() {
     return covariance;
   }
 
-  public OrbitParameterMessage setCovariance(CovarianceMatrix covariance) {
+  public OrbitParameterMessage setCovariance(CartesianCovariance covariance) {
     this.covariance = covariance;
     return this;
   }

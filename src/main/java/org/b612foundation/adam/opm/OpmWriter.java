@@ -82,7 +82,7 @@ public class OpmWriter {
     }
 
     if (opm.getCovariance() != null) {
-      CovarianceMatrix cov = opm.getCovariance();
+      CartesianCovariance cov = opm.getCovariance();
       builder.append("CX_X = " + cov.getCx_x() + "\n");
       builder.append("CY_X = " + cov.getCy_x() + "\n");
       builder.append("CY_Y = " + cov.getCy_y() + "\n");

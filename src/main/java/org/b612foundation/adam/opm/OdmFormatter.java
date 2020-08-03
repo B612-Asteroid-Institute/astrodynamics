@@ -442,9 +442,9 @@ public final class OdmFormatter {
    * name). Removes parsed lines from the list. The long form is used in OPM and OMM. OEM uses a
    * different (short) format for the same data.
    */
-  private static CovarianceMatrix parseLongFormCovariance(List<String> lines)
+  private static CartesianCovariance parseLongFormCovariance(List<String> lines)
       throws OdmParseException {
-    CovarianceMatrix result = new CovarianceMatrix();
+    CartesianCovariance result = new CartesianCovariance();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
     }
@@ -483,9 +483,9 @@ public final class OdmFormatter {
    * Parses short form of covariance matrix used in OEM. The matrix is listed as lower triangular,
    * with 1 to 6 numbers per line.
    */
-  private static CovarianceMatrix parseShortFormCovariance(List<String> lines)
+  private static CartesianCovariance parseShortFormCovariance(List<String> lines)
       throws OdmParseException {
-    CovarianceMatrix result = new CovarianceMatrix();
+    CartesianCovariance result = new CartesianCovariance();
     while (containsNext(lines, COMMENT)) {
       result.addComment(extractField(lines, COMMENT));
     }

@@ -74,7 +74,7 @@ public class OemWriter {
     if (covariancePointCount > 0) {
       sb.append("CovarianceTimePosVel\n");
       for (OemDataBlock block : oem.getBlocks()) {
-        for (CovarianceMatrix cov : block.getCovariances()) {
+        for (CartesianCovariance cov : block.getCovariances()) {
           double dateEpochSec = dateStringToEpochSec(cov.getEpoch(), startEpoch);
           sb.append(String.format("%14.12e ", dateEpochSec));
           sb.append(String.format("%14.12e ", cov.getCx_x()));
@@ -160,7 +160,7 @@ public class OemWriter {
       builder.append("\n");
 
       builder.append("COVARIANCE_START\n");
-      for (CovarianceMatrix cov : block.getCovariances()) {
+      for (CartesianCovariance cov : block.getCovariances()) {
         builder.append("EPOCH = " + cov.getEpoch() + "\n");
         builder.append("COV_REF_FRAME = " + cov.getCov_ref_frame() + "\n");
         builder.append(String.format("%9.7e\n", cov.getCx_x()));

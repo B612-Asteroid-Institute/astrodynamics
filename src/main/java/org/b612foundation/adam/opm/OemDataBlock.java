@@ -17,7 +17,7 @@ public class OemDataBlock implements Serializable {
   /** Data, required: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore them for now. */
   private List<OemDataLine> ephemeris = new ArrayList<>();
   /** Optional covariances, each with its own epoch. */
-  private List<CovarianceMatrix> covariances = new ArrayList<>();
+  private List<CartesianCovariance> covariances = new ArrayList<>();
 
   public List<String> getComments() {
     return comments;
@@ -52,11 +52,11 @@ public class OemDataBlock implements Serializable {
     return this;
   }
 
-  public List<CovarianceMatrix> getCovariances() {
+  public List<CartesianCovariance> getCovariances() {
     return covariances;
   }
 
-  public OemDataBlock addCovariance(CovarianceMatrix covariance) {
+  public OemDataBlock addCovariance(CartesianCovariance covariance) {
     this.covariances.add(covariance);
     return this;
   }

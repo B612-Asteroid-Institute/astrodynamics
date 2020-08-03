@@ -71,7 +71,7 @@ public class OorbToOdmConverterTest {
     assertEquals(expectedYdot, state.getY_dot(), velTolerance);
     assertEquals(expectedZdot, state.getZ_dot(), velTolerance);
 
-    final CovarianceMatrix cov = opm.getCovariance();
+    final CartesianCovariance cov = opm.getCovariance();
     assertEquals(expectedCommentSize, cov.getComments().size());
     assertEquals(expectedComment, cov.getComments().get(0));
     assertEquals(expectedEpoch, cov.getEpoch());

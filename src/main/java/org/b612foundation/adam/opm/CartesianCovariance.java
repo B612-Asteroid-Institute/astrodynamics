@@ -9,7 +9,7 @@ import java.util.Objects;
  * Position/Velocity Covariance Matrix (6x6 Lower Triangular Form. None or all parameters of the
  * matrix must be given. https://public.ccsds.org/Pubs/502x0b2c1.pdf
  */
-public class CovarianceMatrix implements Serializable {
+public class CartesianCovariance implements Serializable {
   /** Optional comments. */
   private List<String> comments = new ArrayList<>();
   /** Separate Epoch for covariance, used only in OEM. */
@@ -28,12 +28,12 @@ public class CovarianceMatrix implements Serializable {
   private double CYdotX, CYdotY, CYdotZ, CYdotXdot, CYdotYdot;
   private double CZdotX, CZdotY, CZdotZ, CZdotXdot, CZdotYdot, CZdotZdot;
 
-  public CovarianceMatrix() {
+  public CartesianCovariance() {
 
   }
 
-  public CovarianceMatrix deepCopy() {
-    CovarianceMatrix copy = new CovarianceMatrix();
+  public CartesianCovariance deepCopy() {
+    CartesianCovariance copy = new CartesianCovariance();
     for (String comment : comments) {
       copy.addComment(comment);
     }
@@ -75,12 +75,12 @@ public class CovarianceMatrix implements Serializable {
     return comments;
   }
 
-  public CovarianceMatrix setComments(List<String> comments) {
+  public CartesianCovariance setComments(List<String> comments) {
     this.comments = comments;
     return this;
   }
 
-  public CovarianceMatrix addComment(String comment) {
+  public CartesianCovariance addComment(String comment) {
     this.comments.add(comment);
     return this;
   }
@@ -89,7 +89,7 @@ public class CovarianceMatrix implements Serializable {
     return epoch;
   }
 
-  public CovarianceMatrix setEpoch(String epoch) {
+  public CartesianCovariance setEpoch(String epoch) {
     this.epoch = epoch;
     return this;
   }
@@ -98,7 +98,7 @@ public class CovarianceMatrix implements Serializable {
     return covRefFrame;
   }
 
-  public CovarianceMatrix setCov_ref_frame(OdmCommonMetadata.ReferenceFrame covRefFrame) {
+  public CartesianCovariance setCov_ref_frame(OdmCommonMetadata.ReferenceFrame covRefFrame) {
     this.covRefFrame = covRefFrame;
     return this;
   }
@@ -107,7 +107,7 @@ public class CovarianceMatrix implements Serializable {
     return CXX;
   }
 
-  public CovarianceMatrix setCx_x(double cXX) {
+  public CartesianCovariance setCx_x(double cXX) {
     this.CXX = cXX;
     return this;
   }
@@ -116,7 +116,7 @@ public class CovarianceMatrix implements Serializable {
     return CYX;
   }
 
-  public CovarianceMatrix setCy_x(double cYX) {
+  public CartesianCovariance setCy_x(double cYX) {
     CYX = cYX;
     return this;
   }
@@ -125,7 +125,7 @@ public class CovarianceMatrix implements Serializable {
     return CYY;
   }
 
-  public CovarianceMatrix setCy_y(double cYY) {
+  public CartesianCovariance setCy_y(double cYY) {
     CYY = cYY;
     return this;
   }
@@ -134,7 +134,7 @@ public class CovarianceMatrix implements Serializable {
     return CZX;
   }
 
-  public CovarianceMatrix setCz_x(double cZX) {
+  public CartesianCovariance setCz_x(double cZX) {
     CZX = cZX;
     return this;
   }
@@ -143,7 +143,7 @@ public class CovarianceMatrix implements Serializable {
     return CZY;
   }
 
-  public CovarianceMatrix setCz_y(double cZY) {
+  public CartesianCovariance setCz_y(double cZY) {
     CZY = cZY;
     return this;
   }
@@ -152,7 +152,7 @@ public class CovarianceMatrix implements Serializable {
     return CZZ;
   }
 
-  public CovarianceMatrix setCz_z(double cZZ) {
+  public CartesianCovariance setCz_z(double cZZ) {
     CZZ = cZZ;
     return this;
   }
@@ -161,7 +161,7 @@ public class CovarianceMatrix implements Serializable {
     return CXdotX;
   }
 
-  public CovarianceMatrix setCx_dot_x(double cXdotX) {
+  public CartesianCovariance setCx_dot_x(double cXdotX) {
     CXdotX = cXdotX;
     return this;
   }
@@ -170,7 +170,7 @@ public class CovarianceMatrix implements Serializable {
     return CXdotY;
   }
 
-  public CovarianceMatrix setCx_dot_y(double cXdotY) {
+  public CartesianCovariance setCx_dot_y(double cXdotY) {
     CXdotY = cXdotY;
     return this;
   }
@@ -179,7 +179,7 @@ public class CovarianceMatrix implements Serializable {
     return CXdotZ;
   }
 
-  public CovarianceMatrix setCx_dot_z(double cXdotZ) {
+  public CartesianCovariance setCx_dot_z(double cXdotZ) {
     CXdotZ = cXdotZ;
     return this;
   }
@@ -188,7 +188,7 @@ public class CovarianceMatrix implements Serializable {
     return CXdotXdot;
   }
 
-  public CovarianceMatrix setCx_dot_x_dot(double cXdotXdot) {
+  public CartesianCovariance setCx_dot_x_dot(double cXdotXdot) {
     CXdotXdot = cXdotXdot;
     return this;
   }
@@ -197,7 +197,7 @@ public class CovarianceMatrix implements Serializable {
     return CYdotX;
   }
 
-  public CovarianceMatrix setCy_dot_x(double cYdotX) {
+  public CartesianCovariance setCy_dot_x(double cYdotX) {
     CYdotX = cYdotX;
     return this;
   }
@@ -206,7 +206,7 @@ public class CovarianceMatrix implements Serializable {
     return CYdotY;
   }
 
-  public CovarianceMatrix setCy_dot_y(double cYdotY) {
+  public CartesianCovariance setCy_dot_y(double cYdotY) {
     CYdotY = cYdotY;
     return this;
   }
@@ -215,7 +215,7 @@ public class CovarianceMatrix implements Serializable {
     return CYdotZ;
   }
 
-  public CovarianceMatrix setCy_dot_z(double cYdotZ) {
+  public CartesianCovariance setCy_dot_z(double cYdotZ) {
     CYdotZ = cYdotZ;
     return this;
   }
@@ -224,7 +224,7 @@ public class CovarianceMatrix implements Serializable {
     return CYdotXdot;
   }
 
-  public CovarianceMatrix setCy_dot_x_dot(double cYdotXdot) {
+  public CartesianCovariance setCy_dot_x_dot(double cYdotXdot) {
     CYdotXdot = cYdotXdot;
     return this;
   }
@@ -233,7 +233,7 @@ public class CovarianceMatrix implements Serializable {
     return CYdotYdot;
   }
 
-  public CovarianceMatrix setCy_dot_y_dot(double cYdotYdot) {
+  public CartesianCovariance setCy_dot_y_dot(double cYdotYdot) {
     CYdotYdot = cYdotYdot;
     return this;
   }
@@ -242,7 +242,7 @@ public class CovarianceMatrix implements Serializable {
     return CZdotX;
   }
 
-  public CovarianceMatrix setCz_dot_x(double cZdotX) {
+  public CartesianCovariance setCz_dot_x(double cZdotX) {
     CZdotX = cZdotX;
     return this;
   }
@@ -251,7 +251,7 @@ public class CovarianceMatrix implements Serializable {
     return CZdotY;
   }
 
-  public CovarianceMatrix setCz_dot_y(double cZdotY) {
+  public CartesianCovariance setCz_dot_y(double cZdotY) {
     CZdotY = cZdotY;
     return this;
   }
@@ -260,7 +260,7 @@ public class CovarianceMatrix implements Serializable {
     return CZdotZ;
   }
 
-  public CovarianceMatrix setCz_dot_z(double cZdotZ) {
+  public CartesianCovariance setCz_dot_z(double cZdotZ) {
     CZdotZ = cZdotZ;
     return this;
   }
@@ -269,7 +269,7 @@ public class CovarianceMatrix implements Serializable {
     return CZdotXdot;
   }
 
-  public CovarianceMatrix setCz_dot_x_dot(double cZdotXdot) {
+  public CartesianCovariance setCz_dot_x_dot(double cZdotXdot) {
     CZdotXdot = cZdotXdot;
     return this;
   }
@@ -278,7 +278,7 @@ public class CovarianceMatrix implements Serializable {
     return CZdotYdot;
   }
 
-  public CovarianceMatrix setCz_dot_y_dot(double cZdotYdot) {
+  public CartesianCovariance setCz_dot_y_dot(double cZdotYdot) {
     CZdotYdot = cZdotYdot;
     return this;
   }
@@ -287,7 +287,7 @@ public class CovarianceMatrix implements Serializable {
     return CZdotZdot;
   }
 
-  public CovarianceMatrix setCz_dot_z_dot(double cZdotZdot) {
+  public CartesianCovariance setCz_dot_z_dot(double cZdotZdot) {
     CZdotZdot = cZdotZdot;
     return this;
   }
@@ -328,7 +328,7 @@ public class CovarianceMatrix implements Serializable {
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
-    CovarianceMatrix other = (CovarianceMatrix) obj;
+    CartesianCovariance other = (CartesianCovariance) obj;
     // @formatter:off
     return Objects.equals(comments, other.comments)
         && Objects.equals(covRefFrame, other.covRefFrame)
