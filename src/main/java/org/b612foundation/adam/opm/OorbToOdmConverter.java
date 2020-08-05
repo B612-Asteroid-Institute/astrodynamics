@@ -118,7 +118,7 @@ public class OorbToOdmConverter {
     metadata.setObject_name(metadata.getObject_id());
     OrbitParameterMessage opm = new OrbitParameterMessage();
     opm.setState_vector(stateVector);
-    opm.setCovariance(cartesianCovariance);
+    opm.setCartesianCovariance(cartesianCovariance);
     opm.setHeader(header);
     opm.setMetadata(metadata);
 
@@ -136,7 +136,7 @@ public class OorbToOdmConverter {
         "%-17s%21.14E %21.14E %21.14E %21.14E %21.14E %21.14E %16.8f %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %9.5f %9.6f";
     OdmCommonMetadata m = opm.getMetadata();
     StateVector pv = opm.getState_vector();
-    CartesianCovariance c = opm.getCovariance();
+    CartesianCovariance c = opm.getCartesianCovariance();
     LocalDateTime epoch = LocalDateTime.parse(opm.getState_vector().getEpoch());
     double mjdEpoch = AstroUtils.mjdFromLocalDateTime(epoch);
     return String.format(

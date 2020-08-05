@@ -23,8 +23,10 @@ public class OrbitParameterMessage implements Serializable {
   private KeplerianElements keplerian;
   /** Optional spacecraft details. */
   private SpacecraftParameters spacecraft;
-  /** Covariance for position/velocity, optional. */
-  private CartesianCovariance covariance;
+  /** Covariance for position/velocity state vector, optional. */
+  private CartesianCovariance cartesianCovariance;
+  /** Covariance for Keplerian state vector, optional. */
+  private KeplerianCovariance keplerianCovariance;
   /** 0 or more maneuvers. */
   private List<Maneuver> maneuvers = new ArrayList<>();
   /**
@@ -43,7 +45,7 @@ public class OrbitParameterMessage implements Serializable {
     if (stateVector != null) res.setState_vector(stateVector.deepCopy());
     if (keplerian != null) res.setKeplerian(keplerian.deepCopy());
     if (spacecraft != null) res.setSpacecraft(spacecraft.deepCopy());
-    if (covariance != null) res.setCovariance(covariance.deepCopy());
+    if (cartesianCovariance != null) res.setCartesianCovariance(cartesianCovariance.deepCopy());
     for (Maneuver man : maneuvers) res.addManeuver(man.deepCopy());
     for (AdamField af : adamFields) res.addAdam_field(af.getKey(), af.getValue());
     return res;
@@ -103,12 +105,21 @@ public class OrbitParameterMessage implements Serializable {
     return this;
   }
 
-  public CartesianCovariance getCovariance() {
-    return covariance;
+  public CartesianCovariance getCartesianCovariance() {
+    return cartesianCovariance;
   }
 
-  public OrbitParameterMessage setCovariance(CartesianCovariance covariance) {
-    this.covariance = covariance;
+  public OrbitParameterMessage setCartesianCovariance(CartesianCovariance cartesianCovariance) {
+    this.cartesianCovariance = cartesianCovariance;
+    return this;
+  }
+
+  public KeplerianCovariance getKeplerianCovariance() {
+    return keplerianCovariance;
+  }
+
+  public OrbitParameterMessage setKeplerianCovariance(KeplerianCovariance keplerianCovariance) {
+    this.keplerianCovariance = keplerianCovariance;
     return this;
   }
 
@@ -145,7 +156,7 @@ public class OrbitParameterMessage implements Serializable {
     return Objects.hash(
         adamFields,
         ccsdsOpmVers,
-        covariance,
+        cartesianCovariance,
         header,
         keplerian,
         maneuvers,
@@ -163,7 +174,7 @@ public class OrbitParameterMessage implements Serializable {
     // @formatter:off
     return Objects.equals(adamFields, other.adamFields)
         && Objects.equals(ccsdsOpmVers, other.ccsdsOpmVers)
-        && Objects.equals(covariance, other.covariance)
+        && Objects.equals(cartesianCovariance, other.cartesianCovariance)
         && Objects.equals(header, other.header)
         && Objects.equals(keplerian, other.keplerian)
         && Objects.equals(maneuvers, other.maneuvers)
@@ -188,7 +199,7 @@ public class OrbitParameterMessage implements Serializable {
         + ", spacecraft="
         + spacecraft
         + ", covariance="
-        + covariance
+        + cartesianCovariance
         + ", maneuvers="
         + maneuvers
         + ", adamFields="

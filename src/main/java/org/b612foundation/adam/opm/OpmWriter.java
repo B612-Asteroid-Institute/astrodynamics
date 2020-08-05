@@ -81,8 +81,8 @@ public class OpmWriter {
       }
     }
 
-    if (opm.getCovariance() != null) {
-      CartesianCovariance cov = opm.getCovariance();
+    if (opm.getCartesianCovariance() != null) {
+      CartesianCovariance cov = opm.getCartesianCovariance();
       builder.append("CX_X = " + cov.getCx_x() + "\n");
       builder.append("CY_X = " + cov.getCy_x() + "\n");
       builder.append("CY_Y = " + cov.getCy_y() + "\n");

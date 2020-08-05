@@ -281,7 +281,7 @@ public class OdmScenarioBuilder {
             .setSolar_rad_coeff(1.000000)
             .setDrag_area(18.770000)
             .setDrag_coeff(2.500000));
-    result.setCovariance(
+    result.setCartesianCovariance(
         new CartesianCovariance()
             .setCx_x(3.331349476038534e-04)
             .setCy_x(4.618927349220216e-04)

@@ -120,7 +120,7 @@ public final class OdmFormatter {
       result.setSpacecraft(parseSpacecraft(lines));
     }
     if (containsLater(lines, CX_X)) {
-      result.setCovariance(parseLongFormCovariance(lines));
+      result.setCartesianCovariance(parseLongFormCovariance(lines));
     }
     while (containsLater(lines, MAN_EPOCH_IGNITION)) {
       result.addManeuver(parseManeuver(lines));
