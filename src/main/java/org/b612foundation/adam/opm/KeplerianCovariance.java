@@ -40,6 +40,11 @@ public class KeplerianCovariance {
 
   }
 
+  public KeplerianCovariance setCovRefFrame(OdmCommonMetadata.ReferenceFrame covRefFrame) {
+    this.covRefFrame = covRefFrame;
+    return this;
+  }
+
   public KeplerianCovariance setCAA(double value) {
     this.CAA = value;
     return this;

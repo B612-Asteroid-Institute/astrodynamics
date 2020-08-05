@@ -68,6 +68,33 @@ public final class OdmFormatter {
   private static final String CZ_DOT_X_DOT = "CZ_DOT_X_DOT";
   private static final String CZ_DOT_Y_DOT = "CZ_DOT_Y_DOT";
   private static final String CZ_DOT_Z_DOT = "CZ_DOT_Z_DOT";
+  private static final String CA_A = "USER_DEFINED_CA_A";
+  private static final String CE_A = "USER_DEFINED_CE_A";
+  private static final String CE_E = "USER_DEFINED_CE_E";
+  private static final String CI_A = "USER_DEFINED_CI_A";
+  private static final String CI_E = "USER_DEFINED_CI_E";
+  private static final String CI_I = "USER_DEFINED_CI_I";
+  private static final String CO_A = "USER_DEFINED_CO_A";
+  private static final String CO_E = "USER_DEFINED_CO_E";
+  private static final String CO_I = "USER_DEFINED_CO_I";
+  private static final String CO_O = "USER_DEFINED_CO_O";
+  private static final String CW_A = "USER_DEFINED_CW_A";
+  private static final String CW_E = "USER_DEFINED_CW_E";
+  private static final String CW_I = "USER_DEFINED_CW_I";
+  private static final String CW_O = "USER_DEFINED_CW_O";
+  private static final String CW_W = "USER_DEFINED_CW_W";
+  private static final String CM_A = "USER_DEFINED_CM_A";
+  private static final String CM_E = "USER_DEFINED_CM_E";
+  private static final String CM_I = "USER_DEFINED_CM_I";
+  private static final String CM_O = "USER_DEFINED_CM_O";
+  private static final String CM_W = "USER_DEFINED_CM_W";
+  private static final String CM_M = "USER_DEFINED_CM_M";
+  private static final String CT_A = "USER_DEFINED_CT_A";
+  private static final String CT_E = "USER_DEFINED_CT_E";
+  private static final String CT_I = "USER_DEFINED_CT_I";
+  private static final String CT_O = "USER_DEFINED_CT_O";
+  private static final String CT_W = "USER_DEFINED_CT_W";
+  private static final String CT_T = "USER_DEFINED_CT_T";
   private static final String MAN_EPOCH_IGNITION = "MAN_EPOCH_IGNITION";
   private static final String MAN_DURATION = "MAN_DURATION";
   private static final String MAN_DELTA_MASS = "MAN_DELTA_MASS";
@@ -120,7 +147,10 @@ public final class OdmFormatter {
       result.setSpacecraft(parseSpacecraft(lines));
     }
     if (containsLater(lines, CX_X)) {
-      result.setCartesianCovariance(parseLongFormCovariance(lines));
+      result.setCartesianCovariance(parseLongFormCartesianCovariance(lines));
+    }
+    if (containsLater(lines, CA_A)) {
+      result.setKeplerianCovariance(parseLongFormKeplerianCovariance(lines));
     }
     while (containsLater(lines, MAN_EPOCH_IGNITION)) {
       result.addManeuver(parseManeuver(lines));
@@ -442,7 +472,7 @@ public final class OdmFormatter {
    * name). Removes parsed lines from the list. The long form is used in OPM and OMM. OEM uses a
    * different (short) format for the same data.
    */
-  private static CartesianCovariance parseLongFormCovariance(List<String> lines)
+  private static CartesianCovariance parseLongFormCartesianCovariance(List<String> lines)
       throws OdmParseException {
     CartesianCovariance result = new CartesianCovariance();
     while (containsNext(lines, COMMENT)) {
@@ -478,6 +508,78 @@ public final class OdmFormatter {
     result.setCz_dot_z_dot(extractDoubleNoUnits(lines, CZ_DOT_Z_DOT));
     return result;
   }
+
+  /**
+   * Parses the long form of the covariance matrix (each element on a separate line with a variable
+   * name). Removes parsed lines from the list. The long form is used in OPM and OMM. OEM uses a
+   * different (short) format for the same data.
+   */
+  private static KeplerianCovariance parseLongFormKeplerianCovariance(List<String> lines)
+      throws OdmParseException {
+    KeplerianCovariance result = new KeplerianCovariance();
+
+    // Covariance reference frame may be omitted, in which case the reference
+    // frame from the
+    // metadata section is assumed.
+    if (containsNext(lines, COV_REF_FRAME)) {
+      String frame = extractField(lines, COV_REF_FRAME);
+      result.setCovRefFrame(parseReferenceFrame(frame));
+    }
+    result.setCAA(extractDoubleNoUnits(lines, CA_A));
+
+    result.setCEA(extractDoubleNoUnits(lines, CE_A));
+    result.setCEE(extractDoubleNoUnits(lines, CE_E));
+
+    result.setCIA(extractDoubleNoUnits(lines, CI_A));
+    result.setCIE(extractDoubleNoUnits(lines, CI_E));
+    result.setCII(extractDoubleNoUnits(lines, CI_I));
+
+    result.setCOA(extractDoubleNoUnits(lines, CO_A));
+    result.setCOE(extractDoubleNoUnits(lines, CO_E));
+    result.setCOI(extractDoubleNoUnits(lines, CO_I));
+    result.setCOO(extractDoubleNoUnits(lines, CO_O));
+
+    result.setCWA(extractDoubleNoUnits(lines, CW_A));
+    result.setCWE(extractDoubleNoUnits(lines, CW_E));
+    result.setCWI(extractDoubleNoUnits(lines, CW_I));
+    result.setCWO(extractDoubleNoUnits(lines, CW_O));
+    result.setCWW(extractDoubleNoUnits(lines, CW_W));
+
+    boolean hasMeanAnomalyBased = containsLater(lines, CM_M);
+    boolean hasTrueAnomalyBased = containsLater(lines, CT_T);
+    if (hasMeanAnomalyBased && hasTrueAnomalyBased) {
+      throw new OdmParseException("Keplerian Covariance specified both True and Mean anomaly based rows, " +
+          "need to be only one");
+    }
+
+    if (!hasMeanAnomalyBased && !hasTrueAnomalyBased) {
+      throw new OdmParseException("Keplerian Covariance has neither true nor mean anomaly based rows, " +
+          "need at least one");
+    }
+
+    if (hasMeanAnomalyBased) {
+      result.setCMA(extractDoubleNoUnits(lines, CM_A));
+      result.setCME(extractDoubleNoUnits(lines, CM_E));
+      result.setCMI(extractDoubleNoUnits(lines, CM_I));
+      result.setCMO(extractDoubleNoUnits(lines, CM_O));
+      result.setCMW(extractDoubleNoUnits(lines, CM_W));
+      result.setCMM(extractDoubleNoUnits(lines, CM_M));
+    }
+
+    if (hasTrueAnomalyBased) {
+      result.setCTA(extractDoubleNoUnits(lines, CT_A));
+      result.setCTE(extractDoubleNoUnits(lines, CT_E));
+      result.setCTI(extractDoubleNoUnits(lines, CT_I));
+      result.setCTO(extractDoubleNoUnits(lines, CT_O));
+      result.setCTW(extractDoubleNoUnits(lines, CT_W));
+      result.setCTT(extractDoubleNoUnits(lines, CT_T));
+    }
+
+
+
+    return result;
+  }
+
 
   /**
    * Parses short form of covariance matrix used in OEM. The matrix is listed as lower triangular,
