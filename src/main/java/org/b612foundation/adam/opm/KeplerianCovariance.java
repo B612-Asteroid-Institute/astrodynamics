@@ -6,19 +6,23 @@ import lombok.ToString;
 
 /**
  * Keplerian State Covariance Matrix (6x6 Lower Triangular Form). This is a custom extension to the
- * OPM standard in  https://public.ccsds.org/Pubs/502x0b2c1.pdf . It should be serialized as
+ * OPM standard in https://public.ccsds.org/Pubs/502x0b2c1.pdf . It should be serialized as
  * USER_DEFINED_* terms per the standard.
-
- * Covariance matrix variables are in the following order and with the single letter key shown:
- *  - semi-major axis (A) in km.
- *  - eccentricity (E) which is unitless
- *  - inclination (I) in degrees
- *  - right ascension of the ascending node (O) in degrees
- *  - argument of pericenter (W) in degrees
- *  - true anomaly (T) or mean anomaly (M) in degrees
  *
- * If both the true and mean anomaly fields are set the result could be undefined behaviors
- * by code using this. The Covariance Matrix with mean anomaly used looks like:
+ * <p>Covariance matrix variables are in the following order and with the single letter key shown:
+ *
+ * <ul>
+ *   <li>semi-major axis (A) in km.
+ *   <li>eccentricity (E) which is unitless
+ *   <li>inclination (I) in degrees
+ *   <li>right ascension of the ascending node (O) in degrees
+ *   <li>argument of pericenter (W) in degrees
+ *   <li>true anomaly (T) or mean anomaly (M) in degrees
+ * </ul>
+ *
+ * <p>If both the true and mean anomaly fields are set the result could be undefined behaviors by
+ * code using this. The Covariance Matrix with mean anomaly used looks like:
+ *
  * <pre>
  * | CAA                     |
  * | CEA CEE                 |
@@ -26,8 +30,10 @@ import lombok.ToString;
  * | COA COE COI COO         |
  * | CWA CWE CWI CWO CWW     |
  * | CMA CME CMI CMO CMW CMM |
- *</pre>
+ * </pre>
+ *
  * The Covariance Matrix form with True anomaly used looks like:
+ *
  * <pre>
  * | CAA                     |
  * | CEA CEE                 |
@@ -35,15 +41,15 @@ import lombok.ToString;
  * | COA COE COI COO         |
  * | CWA CWE CWI CWO CWW     |
  * | CTA CTE CTI CTO CTW CTT |
- *</pre>
+ * </pre>
  */
-
 @EqualsAndHashCode
 @Getter
 @ToString
 public class KeplerianCovariance {
   /** Reference frame. If omited, same as metadata */
   private OdmCommonMetadata.ReferenceFrame covRefFrame = null;
+
   private double CAA;
   private double CEA, CEE;
   private double CIA, CIE, CII;
@@ -52,9 +58,7 @@ public class KeplerianCovariance {
   private double CMA, CME, CMI, CMO, CMW, CMM;
   private double CTA, CTE, CTI, CTO, CTW, CTT;
 
-  public KeplerianCovariance() {
-
-  }
+  public KeplerianCovariance() {}
 
   public KeplerianCovariance setCovRefFrame(OdmCommonMetadata.ReferenceFrame covRefFrame) {
     this.covRefFrame = covRefFrame;
@@ -195,5 +199,4 @@ public class KeplerianCovariance {
     this.CTT = value;
     return this;
   }
-
 }

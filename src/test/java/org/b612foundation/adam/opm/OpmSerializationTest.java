@@ -221,63 +221,64 @@ public class OpmSerializationTest {
 
   @Test(expected = OdmParseException.class)
   public void testToCcsdsOpmMultipleAnomalyCovarianceFailure() throws OdmParseException {
-    String expectedString = "CCSDS_OPM_VERS = 2.0\n" +
-        "CREATION_DATE = 2000-06-03T05:33:00.000\n" +
-        "ORIGINATOR = GSOC\n" +
-        "OBJECT_NAME = EUTELSAT W4\n" +
-        "OBJECT_ID = 2000-028A\n" +
-        "CENTER_NAME = EARTH\n" +
-        "REF_FRAME = TOD\n" +
-        "TIME_SYSTEM = UTC\n" +
-        "COMMENT State Vector\n" +
-        "EPOCH = 2006-06-03T00:00:00.000\n" +
-        "X = 6655.9942\n" +
-        "Y = -40218.5751\n" +
-        "Z = -82.9177\n" +
-        "X_DOT = 3.11548208\n" +
-        "Y_DOT = 0.47042605\n" +
-        "Z_DOT = -0.00101495\n" +
-        "COMMENT Keplerian elements\n" +
-        "SEMI_MAJOR_AXIS = 41399.5123\n" +
-        "ECCENTRICITY = 0.020842611\n" +
-        "INCLINATION = 0.117746\n" +
-        "RA_OF_ASC_NODE = 17.604721\n" +
-        "ARG_OF_PERICENTER = 218.242943\n" +
-        "TRUE_ANOMALY = 41.922339\n" +
-        "GM = 398600.4415\n" +
-        "COMMENT Spacecraft parameters\n" +
-        "MASS = 1913.0\n" +
-        "SOLAR_RAD_AREA = 10.0\n" +
-        "SOLAR_RAD_COEFF = 1.3\n" +
-        "DRAG_AREA = 10.0\n" +
-        "DRAG_COEFF = 2.3\n" +
-        "USER_DEFINED_CA_A = 3.331349476038534E-4\n" +
-        "USER_DEFINED_CE_A = 4.618927349220216E-4\n" +
-        "USER_DEFINED_CE_E = 6.782421679971363E-4\n" +
-        "USER_DEFINED_CI_A = -3.070007847730449E-4\n" +
-        "USER_DEFINED_CI_E = -4.221234189514228E-4\n" +
-        "USER_DEFINED_CI_I = 3.231931992380369E-4\n" +
-        "USER_DEFINED_CO_A = -3.34936503392263E-7\n" +
-        "USER_DEFINED_CO_E = -4.686084221046758E-7\n" +
-        "USER_DEFINED_CO_I = 2.484949578400095E-7\n" +
-        "USER_DEFINED_CO_O = 4.29602280558729E-10\n" +
-        "USER_DEFINED_CW_A = -2.211832501084875E-7\n" +
-        "USER_DEFINED_CW_E = -2.864186892102733E-7\n" +
-        "USER_DEFINED_CW_I = 1.798098699846038E-7\n" +
-        "USER_DEFINED_CW_O = 2.608899201686016E-10\n" +
-        "USER_DEFINED_CW_W = 1.767514756338532E-10\n" +
-        "USER_DEFINED_CT_A = -3.041346050686871E-7\n" +
-        "USER_DEFINED_CT_E = -4.989496988610662E-7\n" +
-        "USER_DEFINED_CT_I = 3.540310904497689E-7\n" +
-        "USER_DEFINED_CT_O = 1.86926319295459E-10\n" +
-        "USER_DEFINED_CT_W = 1.008862586240695E-10\n" +
-        "USER_DEFINED_CT_T = 6.2244443386355E-10\n" +
-        "USER_DEFINED_CM_A = -3.041346050686871E-7\n" +
-        "USER_DEFINED_CM_E = -4.989496988610662E-7\n" +
-        "USER_DEFINED_CM_I = 3.540310904497689E-7\n" +
-        "USER_DEFINED_CM_O = 1.86926319295459E-10\n" +
-        "USER_DEFINED_CM_W = 1.008862586240695E-10\n" +
-        "USER_DEFINED_CM_M = 6.2244443386355E-10\n";
+    String expectedString =
+        "CCSDS_OPM_VERS = 2.0\n"
+            + "CREATION_DATE = 2000-06-03T05:33:00.000\n"
+            + "ORIGINATOR = GSOC\n"
+            + "OBJECT_NAME = EUTELSAT W4\n"
+            + "OBJECT_ID = 2000-028A\n"
+            + "CENTER_NAME = EARTH\n"
+            + "REF_FRAME = TOD\n"
+            + "TIME_SYSTEM = UTC\n"
+            + "COMMENT State Vector\n"
+            + "EPOCH = 2006-06-03T00:00:00.000\n"
+            + "X = 6655.9942\n"
+            + "Y = -40218.5751\n"
+            + "Z = -82.9177\n"
+            + "X_DOT = 3.11548208\n"
+            + "Y_DOT = 0.47042605\n"
+            + "Z_DOT = -0.00101495\n"
+            + "COMMENT Keplerian elements\n"
+            + "SEMI_MAJOR_AXIS = 41399.5123\n"
+            + "ECCENTRICITY = 0.020842611\n"
+            + "INCLINATION = 0.117746\n"
+            + "RA_OF_ASC_NODE = 17.604721\n"
+            + "ARG_OF_PERICENTER = 218.242943\n"
+            + "TRUE_ANOMALY = 41.922339\n"
+            + "GM = 398600.4415\n"
+            + "COMMENT Spacecraft parameters\n"
+            + "MASS = 1913.0\n"
+            + "SOLAR_RAD_AREA = 10.0\n"
+            + "SOLAR_RAD_COEFF = 1.3\n"
+            + "DRAG_AREA = 10.0\n"
+            + "DRAG_COEFF = 2.3\n"
+            + "USER_DEFINED_CA_A = 3.331349476038534E-4\n"
+            + "USER_DEFINED_CE_A = 4.618927349220216E-4\n"
+            + "USER_DEFINED_CE_E = 6.782421679971363E-4\n"
+            + "USER_DEFINED_CI_A = -3.070007847730449E-4\n"
+            + "USER_DEFINED_CI_E = -4.221234189514228E-4\n"
+            + "USER_DEFINED_CI_I = 3.231931992380369E-4\n"
+            + "USER_DEFINED_CO_A = -3.34936503392263E-7\n"
+            + "USER_DEFINED_CO_E = -4.686084221046758E-7\n"
+            + "USER_DEFINED_CO_I = 2.484949578400095E-7\n"
+            + "USER_DEFINED_CO_O = 4.29602280558729E-10\n"
+            + "USER_DEFINED_CW_A = -2.211832501084875E-7\n"
+            + "USER_DEFINED_CW_E = -2.864186892102733E-7\n"
+            + "USER_DEFINED_CW_I = 1.798098699846038E-7\n"
+            + "USER_DEFINED_CW_O = 2.608899201686016E-10\n"
+            + "USER_DEFINED_CW_W = 1.767514756338532E-10\n"
+            + "USER_DEFINED_CT_A = -3.041346050686871E-7\n"
+            + "USER_DEFINED_CT_E = -4.989496988610662E-7\n"
+            + "USER_DEFINED_CT_I = 3.540310904497689E-7\n"
+            + "USER_DEFINED_CT_O = 1.86926319295459E-10\n"
+            + "USER_DEFINED_CT_W = 1.008862586240695E-10\n"
+            + "USER_DEFINED_CT_T = 6.2244443386355E-10\n"
+            + "USER_DEFINED_CM_A = -3.041346050686871E-7\n"
+            + "USER_DEFINED_CM_E = -4.989496988610662E-7\n"
+            + "USER_DEFINED_CM_I = 3.540310904497689E-7\n"
+            + "USER_DEFINED_CM_O = 1.86926319295459E-10\n"
+            + "USER_DEFINED_CM_W = 1.008862586240695E-10\n"
+            + "USER_DEFINED_CM_M = 6.2244443386355E-10\n";
 
     testCcsdsSerialization(expectedString);
   }

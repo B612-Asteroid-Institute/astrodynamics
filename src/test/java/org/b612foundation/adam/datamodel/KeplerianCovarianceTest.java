@@ -43,7 +43,6 @@ public class KeplerianCovarianceTest {
     Assert.assertEquals(0.0, cov.getCTO(), TOLERANCE);
     Assert.assertEquals(0.0, cov.getCTW(), TOLERANCE);
     Assert.assertEquals(0.0, cov.getCTT(), TOLERANCE);
-
   }
 
   @Test
@@ -111,5 +110,4 @@ public class KeplerianCovarianceTest {
     cov = new KeplerianCovariance().setCTT(expected);
     Assert.assertEquals(expected, cov.getCTT(), TOLERANCE);
   }
-
 }
