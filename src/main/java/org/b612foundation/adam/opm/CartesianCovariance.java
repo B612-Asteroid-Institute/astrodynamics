@@ -8,6 +8,15 @@ import java.util.Objects;
 /**
  * Position/Velocity Covariance Matrix (6x6 Lower Triangular Form. None or all parameters of the
  * matrix must be given. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * <pre>
+ * | CXX                                                     |
+ * | CYX     CYY                                             |
+ * | CZX     CZY     CZZ                                     |
+ * | CXdotX  CXdotY  CXdotZ  CXdotXdot                       |
+ * | CYdotX  CYdotY  CYdotZ  CYdotXdot  CYdotYdot            |
+ * | CZdotX  CZdotY  CZdotZ  CZdotXdot  CZdotYdot  CZDotZdot |
+ * </pre>
+
  */
 public class CartesianCovariance implements Serializable {
   /** Optional comments. */
