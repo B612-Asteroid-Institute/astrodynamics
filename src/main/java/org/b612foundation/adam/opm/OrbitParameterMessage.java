@@ -1,14 +1,32 @@
 package org.b612foundation.adam.opm;
 
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Orbit Parameter Message, or OPM, one of the three high-level message types defined in CCSDS ODM
  * standard. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ *
+ * <p>This class has fields for state information in Cartesian ({@link
+ * org.b612foundation.adam.opm.StateVector} ) and Keplerian ({@link
+ * org.b612foundation.adam.opm.KeplerianElements}. By specification Cartesian must be filled in but
+ * ADAM workflows where users only input Keplerian elements may only have that element filled in.
+ *
+ * <p>Covariance information also can exist in either or both Cartesian ({@link
+ * org.b612foundation.adam.opm.CartesianCovariance}) or Keplerian ({@link
+ * org.b612foundation.adam.opm.KeplerianCovariance}) forms. The Keplerian form is B612's custom
+ * extensions to OPM, which leverages the USER_DEFINED_ fields. The format does not limit to one
+ * form of the other, just like with the state information. However users reading both state and
+ * covariance will often expect the supplied covariance matrix form to match the given state form.
+ * So if Keplerian state is provided the type of matrix that should be provided is Keplerian form.
+ * If only a Cartesian state is provided then a Cartesian covariance matrix would be expected.
+ * Behavior when there is not a corresponding covariance type will be left up to data users but
+ * would often generate argument exceptions.
  */
+@EqualsAndHashCode
 public class OrbitParameterMessage implements Serializable {
 
   /** OPM version is required by standard. Should be the same value always. */
@@ -23,8 +41,10 @@ public class OrbitParameterMessage implements Serializable {
   private KeplerianElements keplerian;
   /** Optional spacecraft details. */
   private SpacecraftParameters spacecraft;
-  /** Covariance for position/velocity, optional. */
-  private CovarianceMatrix covariance;
+  /** Covariance for position/velocity state vector, optional. */
+  private CartesianCovariance cartesianCovariance;
+  /** Covariance for Keplerian state vector, optional. */
+  private KeplerianCovariance keplerianCovariance;
   /** 0 or more maneuvers. */
   private List<Maneuver> maneuvers = new ArrayList<>();
   /**
@@ -43,7 +63,7 @@ public class OrbitParameterMessage implements Serializable {
     if (stateVector != null) res.setState_vector(stateVector.deepCopy());
     if (keplerian != null) res.setKeplerian(keplerian.deepCopy());
     if (spacecraft != null) res.setSpacecraft(spacecraft.deepCopy());
-    if (covariance != null) res.setCovariance(covariance.deepCopy());
+    if (cartesianCovariance != null) res.setCartesianCovariance(cartesianCovariance.deepCopy());
     for (Maneuver man : maneuvers) res.addManeuver(man.deepCopy());
     for (AdamField af : adamFields) res.addAdam_field(af.getKey(), af.getValue());
     return res;
@@ -103,12 +123,21 @@ public class OrbitParameterMessage implements Serializable {
     return this;
   }
 
-  public CovarianceMatrix getCovariance() {
-    return covariance;
+  public CartesianCovariance getCartesianCovariance() {
+    return cartesianCovariance;
   }
 
-  public OrbitParameterMessage setCovariance(CovarianceMatrix covariance) {
-    this.covariance = covariance;
+  public OrbitParameterMessage setCartesianCovariance(CartesianCovariance cartesianCovariance) {
+    this.cartesianCovariance = cartesianCovariance;
+    return this;
+  }
+
+  public KeplerianCovariance getKeplerianCovariance() {
+    return keplerianCovariance;
+  }
+
+  public OrbitParameterMessage setKeplerianCovariance(KeplerianCovariance keplerianCovariance) {
+    this.keplerianCovariance = keplerianCovariance;
     return this;
   }
 
@@ -141,39 +170,6 @@ public class OrbitParameterMessage implements Serializable {
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(
-        adamFields,
-        ccsdsOpmVers,
-        covariance,
-        header,
-        keplerian,
-        maneuvers,
-        metadata,
-        spacecraft,
-        stateVector);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
-    OrbitParameterMessage other = (OrbitParameterMessage) obj;
-    // @formatter:off
-    return Objects.equals(adamFields, other.adamFields)
-        && Objects.equals(ccsdsOpmVers, other.ccsdsOpmVers)
-        && Objects.equals(covariance, other.covariance)
-        && Objects.equals(header, other.header)
-        && Objects.equals(keplerian, other.keplerian)
-        && Objects.equals(maneuvers, other.maneuvers)
-        && Objects.equals(metadata, other.metadata)
-        && Objects.equals(spacecraft, other.spacecraft)
-        && Objects.equals(stateVector, other.stateVector);
-    // @formatter:on
-  }
-
-  @Override
   public String toString() {
     return "OrbitParameterMessage [ccsdsOpmVers="
         + ccsdsOpmVers
@@ -187,8 +183,10 @@ public class OrbitParameterMessage implements Serializable {
         + keplerian
         + ", spacecraft="
         + spacecraft
-        + ", covariance="
-        + covariance
+        + ", cartesianCovariance="
+        + cartesianCovariance
+        + ", keplerianCovariance="
+        + keplerianCovariance
         + ", maneuvers="
         + maneuvers
         + ", adamFields="

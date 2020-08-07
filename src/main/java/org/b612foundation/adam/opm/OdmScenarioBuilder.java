@@ -281,8 +281,8 @@ public class OdmScenarioBuilder {
             .setSolar_rad_coeff(1.000000)
             .setDrag_area(18.770000)
             .setDrag_coeff(2.500000));
-    result.setCovariance(
-        new CovarianceMatrix()
+    result.setCartesianCovariance(
+        new CartesianCovariance()
             .setCx_x(3.331349476038534e-04)
             .setCy_x(4.618927349220216e-04)
             .setCy_y(6.782421679971363e-04)
@@ -489,7 +489,7 @@ public class OdmScenarioBuilder {
     block.addLine(
         "1996-12-30T01:28:02.267", 2164.375, 1115.811, -688.131, -3.53328, -2.88452, 0.88535);
 
-    CovarianceMatrix cov = new CovarianceMatrix();
+    CartesianCovariance cov = new CartesianCovariance();
     cov.setEpoch("1996-12-28T21:29:07.267");
     cov.setCov_ref_frame(ReferenceFrame.EME2000);
     cov.setCx_x(3.3313494e-04);
@@ -512,7 +512,7 @@ public class OdmScenarioBuilder {
         .setCz_dot_z_dot(6.2244443e-10);
     block.addCovariance(cov);
 
-    cov = new CovarianceMatrix();
+    cov = new CartesianCovariance();
     cov.setEpoch("1996-12-29T21:00:00");
     cov.setCov_ref_frame(ReferenceFrame.EME2000);
     cov.setCx_x(3.4424505e-04);

@@ -46,6 +46,7 @@ public class OpmWriter {
       builder.append("Z_DOT = " + stateVector.getZ_dot() + "\n");
     }
 
+    final double epsilon = 1e-32;
     if (opm.getKeplerian() != null) {
       KeplerianElements keplerian = opm.getKeplerian();
       outputComments(builder, keplerian.getComments());
@@ -54,7 +55,13 @@ public class OpmWriter {
       builder.append("INCLINATION = " + keplerian.getInclination() + "\n");
       builder.append("RA_OF_ASC_NODE = " + keplerian.getRa_of_asc_node() + "\n");
       builder.append("ARG_OF_PERICENTER = " + keplerian.getArg_of_pericenter() + "\n");
-      builder.append("TRUE_ANOMALY = " + keplerian.getTrue_anomaly() + "\n");
+      if (Math.abs(keplerian.getTrue_anomaly()) < epsilon && Math.abs(keplerian.getMean_anomaly()) < epsilon) {
+        builder.append("TRUE_ANOMALY = " + keplerian.getTrue_anomaly() + "\n");
+      } else if (Math.abs(keplerian.getTrue_anomaly()) > epsilon){
+        builder.append("TRUE_ANOMALY = " + keplerian.getTrue_anomaly() + "\n");
+      } else {
+        builder.append("MEAN_ANOMALY = " + keplerian.getMean_anomaly() + "\n");
+      }
       builder.append("GM = " + keplerian.getGm() + "\n");
     }
 
@@ -81,8 +88,8 @@ public class OpmWriter {
       }
     }
 
-    if (opm.getCovariance() != null) {
-      CovarianceMatrix cov = opm.getCovariance();
+    if (opm.getCartesianCovariance() != null) {
+      CartesianCovariance cov = opm.getCartesianCovariance();
       builder.append("CX_X = " + cov.getCx_x() + "\n");
       builder.append("CY_X = " + cov.getCy_x() + "\n");
       builder.append("CY_Y = " + cov.getCy_y() + "\n");
@@ -104,6 +111,40 @@ public class OpmWriter {
       builder.append("CZ_DOT_X_DOT = " + cov.getCz_dot_x_dot() + "\n");
       builder.append("CZ_DOT_Y_DOT = " + cov.getCz_dot_y_dot() + "\n");
       builder.append("CZ_DOT_Z_DOT = " + cov.getCz_dot_z_dot() + "\n");
+    }
+
+    if (opm.getKeplerianCovariance() != null) {
+      KeplerianCovariance cov = opm.getKeplerianCovariance();
+      builder.append("USER_DEFINED_CA_A = " + cov.getCAA() + "\n");
+      builder.append("USER_DEFINED_CE_A = " + cov.getCEA() + "\n");
+      builder.append("USER_DEFINED_CE_E = " + cov.getCEE() + "\n");
+      builder.append("USER_DEFINED_CI_A = " + cov.getCIA() + "\n");
+      builder.append("USER_DEFINED_CI_E = " + cov.getCIE() + "\n");
+      builder.append("USER_DEFINED_CI_I = " + cov.getCII() + "\n");
+      builder.append("USER_DEFINED_CO_A = " + cov.getCOA() + "\n");
+      builder.append("USER_DEFINED_CO_E = " + cov.getCOE() + "\n");
+      builder.append("USER_DEFINED_CO_I = " + cov.getCOI() + "\n");
+      builder.append("USER_DEFINED_CO_O = " + cov.getCOO() + "\n");
+      builder.append("USER_DEFINED_CW_A = " + cov.getCWA() + "\n");
+      builder.append("USER_DEFINED_CW_E = " + cov.getCWE() + "\n");
+      builder.append("USER_DEFINED_CW_I = " + cov.getCWI() + "\n");
+      builder.append("USER_DEFINED_CW_O = " + cov.getCWO() + "\n");
+      builder.append("USER_DEFINED_CW_W = " + cov.getCWW() + "\n");
+      if (cov.getCMM() > 0.0) {
+        builder.append("USER_DEFINED_CM_A = " + cov.getCMA() + "\n");
+        builder.append("USER_DEFINED_CM_E = " + cov.getCME() + "\n");
+        builder.append("USER_DEFINED_CM_I = " + cov.getCMI() + "\n");
+        builder.append("USER_DEFINED_CM_O = " + cov.getCMO() + "\n");
+        builder.append("USER_DEFINED_CM_W = " + cov.getCMW() + "\n");
+        builder.append("USER_DEFINED_CM_M = " + cov.getCMM() + "\n");
+      } else {
+        builder.append("USER_DEFINED_CT_A = " + cov.getCTA() + "\n");
+        builder.append("USER_DEFINED_CT_E = " + cov.getCTE() + "\n");
+        builder.append("USER_DEFINED_CT_I = " + cov.getCTI() + "\n");
+        builder.append("USER_DEFINED_CT_O = " + cov.getCTO() + "\n");
+        builder.append("USER_DEFINED_CT_W = " + cov.getCTW() + "\n");
+        builder.append("USER_DEFINED_CT_T = " + cov.getCTT() + "\n");
+      }
     }
 
     return builder.toString();

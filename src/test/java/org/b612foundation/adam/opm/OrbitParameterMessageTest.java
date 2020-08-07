@@ -54,7 +54,7 @@ public class OrbitParameterMessageTest {
     OrbitParameterMessage opmWithCovariance = OdmScenarioBuilder.buildOpmWithCovariance("FACES");
     Assert.assertEquals(OdmScenarioBuilder.buildOpmWithCovariance("FACES"), opmWithCovariance);
     Assert.assertEquals(OdmScenarioBuilder.buildOpmWithCovariance("FACES").hashCode(), opmWithCovariance.hashCode());
-    opmWithCovariance.getCovariance().addComment("new");
+    opmWithCovariance.getCartesianCovariance().addComment("new");
     Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithCovariance("FACES"), opmWithCovariance);
     Assert.assertNotEquals(OdmScenarioBuilder.buildOpmWithCovariance("FACES").hashCode(), opmWithCovariance.hashCode());
     opmWithCovariance = OdmScenarioBuilder.buildOpmWithCovariance("FACES");

@@ -69,41 +69,41 @@ public class OorbToOdmConverter {
     stateVector.setZ_dot(Double.parseDouble(elems[vzIndex]) * AU_PER_DAY_TO_KM_PER_SEC);
     stateVector.setEpoch(epochString);
 
-    CovarianceMatrix covarianceMatrix = new CovarianceMatrix();
-    covarianceMatrix.setEpoch(epochString);
-    covarianceMatrix.setCov_ref_frame(referenceFrame);
-    covarianceMatrix.getComments().add(comment);
-    covarianceMatrix.setCx_x(Double.parseDouble(elems[covXXIndex]) * posPosCovElemAstroToSI);
-    covarianceMatrix.setCy_y(Double.parseDouble(elems[covYYIndex]) * posPosCovElemAstroToSI);
-    covarianceMatrix.setCz_z(Double.parseDouble(elems[covZZIndex]) * posPosCovElemAstroToSI);
-    covarianceMatrix.setCx_dot_x_dot(
+    CartesianCovariance cartesianCovariance = new CartesianCovariance();
+    cartesianCovariance.setEpoch(epochString);
+    cartesianCovariance.setCov_ref_frame(referenceFrame);
+    cartesianCovariance.getComments().add(comment);
+    cartesianCovariance.setCx_x(Double.parseDouble(elems[covXXIndex]) * posPosCovElemAstroToSI);
+    cartesianCovariance.setCy_y(Double.parseDouble(elems[covYYIndex]) * posPosCovElemAstroToSI);
+    cartesianCovariance.setCz_z(Double.parseDouble(elems[covZZIndex]) * posPosCovElemAstroToSI);
+    cartesianCovariance.setCx_dot_x_dot(
         Double.parseDouble(elems[covXdotXdotIndex]) * velVelCovElemAstroToSI);
-    covarianceMatrix.setCy_dot_y_dot(
+    cartesianCovariance.setCy_dot_y_dot(
         Double.parseDouble(elems[covYdotYdotIndex]) * velVelCovElemAstroToSI);
-    covarianceMatrix.setCz_dot_z_dot(
+    cartesianCovariance.setCz_dot_z_dot(
         Double.parseDouble(elems[covZdotZdotIndex]) * velVelCovElemAstroToSI);
 
-    covarianceMatrix.setCy_x(Double.parseDouble(elems[covXYIndex]) * posPosCovElemAstroToSI);
-    covarianceMatrix.setCz_x(Double.parseDouble(elems[covXZIndex]) * posPosCovElemAstroToSI);
-    covarianceMatrix.setCx_dot_x(Double.parseDouble(elems[covXXdotIndex]) * posVelCovElemAstroToSI);
-    covarianceMatrix.setCy_dot_x(Double.parseDouble(elems[covXYdotIndex]) * posVelCovElemAstroToSI);
-    covarianceMatrix.setCz_dot_x(Double.parseDouble(elems[covXZdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCy_x(Double.parseDouble(elems[covXYIndex]) * posPosCovElemAstroToSI);
+    cartesianCovariance.setCz_x(Double.parseDouble(elems[covXZIndex]) * posPosCovElemAstroToSI);
+    cartesianCovariance.setCx_dot_x(Double.parseDouble(elems[covXXdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCy_dot_x(Double.parseDouble(elems[covXYdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCz_dot_x(Double.parseDouble(elems[covXZdotIndex]) * posVelCovElemAstroToSI);
 
-    covarianceMatrix.setCz_y(Double.parseDouble(elems[covYZIndex]) * posPosCovElemAstroToSI);
-    covarianceMatrix.setCx_dot_y(Double.parseDouble(elems[covYXdotIndex]) * posVelCovElemAstroToSI);
-    covarianceMatrix.setCy_dot_y(Double.parseDouble(elems[covYYdotIndex]) * posVelCovElemAstroToSI);
-    covarianceMatrix.setCz_dot_y(Double.parseDouble(elems[covYZdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCz_y(Double.parseDouble(elems[covYZIndex]) * posPosCovElemAstroToSI);
+    cartesianCovariance.setCx_dot_y(Double.parseDouble(elems[covYXdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCy_dot_y(Double.parseDouble(elems[covYYdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCz_dot_y(Double.parseDouble(elems[covYZdotIndex]) * posVelCovElemAstroToSI);
 
-    covarianceMatrix.setCx_dot_z(Double.parseDouble(elems[covZXdotIndex]) * posVelCovElemAstroToSI);
-    covarianceMatrix.setCy_dot_z(Double.parseDouble(elems[covZYdotIndex]) * posVelCovElemAstroToSI);
-    covarianceMatrix.setCz_dot_z(Double.parseDouble(elems[covZZdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCx_dot_z(Double.parseDouble(elems[covZXdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCy_dot_z(Double.parseDouble(elems[covZYdotIndex]) * posVelCovElemAstroToSI);
+    cartesianCovariance.setCz_dot_z(Double.parseDouble(elems[covZZdotIndex]) * posVelCovElemAstroToSI);
 
-    covarianceMatrix.setCy_dot_x_dot(
+    cartesianCovariance.setCy_dot_x_dot(
         Double.parseDouble(elems[covXdotYdotIndex]) * velVelCovElemAstroToSI);
-    covarianceMatrix.setCz_dot_x_dot(
+    cartesianCovariance.setCz_dot_x_dot(
         Double.parseDouble(elems[covXdotZdotIndex]) * velVelCovElemAstroToSI);
 
-    covarianceMatrix.setCz_dot_y_dot(
+    cartesianCovariance.setCz_dot_y_dot(
         Double.parseDouble(elems[covYdotZdotIndex]) * velVelCovElemAstroToSI);
 
     OdmCommonHeader header = new OdmCommonHeader();
@@ -118,7 +118,7 @@ public class OorbToOdmConverter {
     metadata.setObject_name(metadata.getObject_id());
     OrbitParameterMessage opm = new OrbitParameterMessage();
     opm.setState_vector(stateVector);
-    opm.setCovariance(covarianceMatrix);
+    opm.setCartesianCovariance(cartesianCovariance);
     opm.setHeader(header);
     opm.setMetadata(metadata);
 
@@ -136,7 +136,7 @@ public class OorbToOdmConverter {
         "%-17s%21.14E %21.14E %21.14E %21.14E %21.14E %21.14E %16.8f %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %15.7E %9.5f %9.6f";
     OdmCommonMetadata m = opm.getMetadata();
     StateVector pv = opm.getState_vector();
-    CovarianceMatrix c = opm.getCovariance();
+    CartesianCovariance c = opm.getCartesianCovariance();
     LocalDateTime epoch = LocalDateTime.parse(opm.getState_vector().getEpoch());
     double mjdEpoch = AstroUtils.mjdFromLocalDateTime(epoch);
     return String.format(
