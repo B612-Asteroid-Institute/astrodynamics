@@ -60,6 +60,37 @@ public class KeplerianCovariance {
 
   public KeplerianCovariance() {}
 
+  public KeplerianCovariance deepCopy() {
+    return new KeplerianCovariance()
+        .setCAA(CAA)
+        .setCEA(CEA)
+        .setCEE(CEE)
+        .setCIA(CIA)
+        .setCIE(CIE)
+        .setCII(CII)
+        .setCOA(COA)
+        .setCOE(COE)
+        .setCOI(COI)
+        .setCOO(COO)
+        .setCWA(CWA)
+        .setCWE(CWE)
+        .setCWI(CWI)
+        .setCWO(CWO)
+        .setCWW(CWW)
+        .setCMA(CMA)
+        .setCME(CME)
+        .setCMI(CMI)
+        .setCMO(CMO)
+        .setCMW(CMW)
+        .setCMM(CMM)
+        .setCTA(CTA)
+        .setCTE(CTE)
+        .setCTI(CTI)
+        .setCTO(CTO)
+        .setCTW(CTW)
+        .setCTT(CTT);
+  }
+
   public KeplerianCovariance setCovRefFrame(OdmCommonMetadata.ReferenceFrame covRefFrame) {
     this.covRefFrame = covRefFrame;
     return this;
