@@ -150,6 +150,10 @@ public class KeplerianElements implements Serializable {
     return this;
   }
 
+  public boolean hasMeanAnomaly(double epsilon) {
+    return Math.abs(meanAnomaly) > epsilon;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(
