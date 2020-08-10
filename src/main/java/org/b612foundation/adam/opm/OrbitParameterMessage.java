@@ -64,6 +64,7 @@ public class OrbitParameterMessage implements Serializable {
     if (keplerian != null) res.setKeplerian(keplerian.deepCopy());
     if (spacecraft != null) res.setSpacecraft(spacecraft.deepCopy());
     if (cartesianCovariance != null) res.setCartesianCovariance(cartesianCovariance.deepCopy());
+    if (keplerianCovariance != null) res.setKeplerianCovariance(keplerianCovariance.deepCopy());
     for (Maneuver man : maneuvers) res.addManeuver(man.deepCopy());
     for (AdamField af : adamFields) res.addAdam_field(af.getKey(), af.getValue());
     return res;

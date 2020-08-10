@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * Keplerian State Covariance Matrix (6x6 Lower Triangular Form). This is a custom extension to the
  * OPM standard in https://public.ccsds.org/Pubs/502x0b2c1.pdf . It should be serialized as
@@ -46,7 +48,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Getter
 @ToString
-public class KeplerianCovariance {
+public class KeplerianCovariance implements Serializable {
   /** Reference frame. If omited, same as metadata */
   private OdmCommonMetadata.ReferenceFrame covRefFrame = null;
 
@@ -59,6 +61,37 @@ public class KeplerianCovariance {
   private double CTA, CTE, CTI, CTO, CTW, CTT;
 
   public KeplerianCovariance() {}
+
+  public KeplerianCovariance deepCopy() {
+    return new KeplerianCovariance()
+        .setCAA(CAA)
+        .setCEA(CEA)
+        .setCEE(CEE)
+        .setCIA(CIA)
+        .setCIE(CIE)
+        .setCII(CII)
+        .setCOA(COA)
+        .setCOE(COE)
+        .setCOI(COI)
+        .setCOO(COO)
+        .setCWA(CWA)
+        .setCWE(CWE)
+        .setCWI(CWI)
+        .setCWO(CWO)
+        .setCWW(CWW)
+        .setCMA(CMA)
+        .setCME(CME)
+        .setCMI(CMI)
+        .setCMO(CMO)
+        .setCMW(CMW)
+        .setCMM(CMM)
+        .setCTA(CTA)
+        .setCTE(CTE)
+        .setCTI(CTI)
+        .setCTO(CTO)
+        .setCTW(CTW)
+        .setCTT(CTT);
+  }
 
   public KeplerianCovariance setCovRefFrame(OdmCommonMetadata.ReferenceFrame covRefFrame) {
     this.covRefFrame = covRefFrame;
