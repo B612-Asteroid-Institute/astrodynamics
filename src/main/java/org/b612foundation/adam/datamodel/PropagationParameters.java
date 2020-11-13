@@ -55,6 +55,8 @@ public class PropagationParameters implements Serializable {
   private KeplerianElements keplerianSigma;
   /** Cartesian elements standard deviation, for generating Monte Carlo draws */
   private StateVector cartesianSigma;
+  /** Singular matrix check tolerance */
+  private double singularMatrixThreshold;
 
   public PropagationParameters deepCopy() {
     PropagationParameters copy = new PropagationParameters();
@@ -74,6 +76,7 @@ public class PropagationParameters implements Serializable {
     copy.setMonteCarloDraws(monteCarloDraws);
     copy.setKeplerianSigma(keplerianSigma);
     copy.setCartesianSigma(cartesianSigma);
+    copy.setSingularMatrixThreshold(singularMatrixThreshold);
     return copy;
   }
 
@@ -221,6 +224,15 @@ public class PropagationParameters implements Serializable {
 
   public PropagationParameters setCartesianSigma(StateVector stateVector) {
     this.cartesianSigma = stateVector;
+    return this;
+  }
+
+  public double getSingularMatrixThreshold() {
+    return this.singularMatrixThreshold;
+  }
+
+  public PropagationParameters setSingularMatrixThreshold(double singularMatrixThreshold) {
+    this.singularMatrixThreshold = singularMatrixThreshold;
     return this;
   }
 
