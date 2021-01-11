@@ -9,7 +9,7 @@ import java.util.Objects;
  * Osculating Keplerian Elements in the specified reference frame (none or all parameters of this
  * block must be given.)
  *
- * <p>https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * <p>https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  */
 public class KeplerianElements implements Serializable {
   /** Optional comments. */

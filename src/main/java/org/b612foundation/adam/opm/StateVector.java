@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * State Vector Components. The coordinate system is given in the metadata.
- * https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  */
 public class StateVector implements Serializable {
   /** Optional comments. */

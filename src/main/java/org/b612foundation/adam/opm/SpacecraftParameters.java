@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * Description of a spacecraft. May be included in OPM or OMM.
- * https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  */
 public class SpacecraftParameters implements Serializable {
   /** Optional comments. */

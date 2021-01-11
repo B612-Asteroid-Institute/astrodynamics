@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Orbit Parameter Message, or OPM, one of the three high-level message types defined in CCSDS ODM
- * standard. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Orbit Ephemeris Message, or OEM, one of the three high-level message types defined in CCSDS ODM
+ * standard. https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  */
 public class OrbitEphemerisMessage implements Serializable {
   /** OEM version is required by standard. Should be the same value always. */

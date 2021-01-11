@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * Description of an individual maneuver (burn). Used in OPM.
- * https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  */
 public class Maneuver implements Serializable {
   /** Optional comments. */

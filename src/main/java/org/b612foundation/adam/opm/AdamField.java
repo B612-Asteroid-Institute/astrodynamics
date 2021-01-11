@@ -3,12 +3,14 @@ package org.b612foundation.adam.opm;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Represents a basic ADAM-specific parameter (start with USER_DEFINED_ADAM_) in an {@link
+ * OrbitParameterMessage}
+ */
 public class AdamField implements Serializable {
   private String key, value;
 
-  public AdamField() {
-
-  }
+  public AdamField() {}
 
   public AdamField(String key, String value) {
     this.key = key;
