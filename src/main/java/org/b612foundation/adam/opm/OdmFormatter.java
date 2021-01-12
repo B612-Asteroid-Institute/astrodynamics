@@ -12,7 +12,7 @@ import org.b612foundation.adam.astro.ReferenceFrameConverter;
 
 /**
  * Class for translating between text-based ODM formats and classes in this package. The CCSDS ODM
- * standard is here: https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * standard is here: https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  */
 public final class OdmFormatter {
   private static final String CCSDS_OPM_VERS = "CCSDS_OPM_VERS";

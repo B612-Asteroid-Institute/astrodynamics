@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * Keplerian State Covariance Matrix (6x6 Lower Triangular Form). This is a custom extension to the
- * OPM standard in https://public.ccsds.org/Pubs/502x0b2c1.pdf . It should be serialized as
+ * OPM standard in https://public.ccsds.org/Pubs/502x0b2c1e2.pdf. It should be serialized as
  * USER_DEFINED_* terms per the standard.
  *
  * <p>Covariance matrix variables are in the following order and with the single letter key shown:

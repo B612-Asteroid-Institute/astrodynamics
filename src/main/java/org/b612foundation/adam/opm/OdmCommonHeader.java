@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Header fields are common for all three ODM messages. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * Header fields are common for all three ODM messages.
+ * https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  */
 public class OdmCommonHeader implements Serializable {
   /** Optional comments. */

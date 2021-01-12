@@ -5,8 +5,9 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Data line of OrbitEphemerisMessage: date, x, y, x, vx, vy, vz. Accelerations are optional, ignore
- * them for now.
+ * Data line of {@link OrbitEphemerisMessage}: date, x, y, x, vx, vy, vz.
+ *
+ * <p>Accelerations are optional, ignore them for now.
  */
 public class OemDataLine implements Serializable {
   private String date;

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Orbit Parameter Message, or OPM, one of the three high-level message types defined in CCSDS ODM
- * standard. https://public.ccsds.org/Pubs/502x0b2c1.pdf
+ * standard. https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  *
  * <p>This class has fields for state information in Cartesian ({@link
  * org.b612foundation.adam.opm.StateVector} ) and Keplerian ({@link

@@ -2,7 +2,7 @@ package org.b612foundation.adam.opm;
 
 import java.util.Objects;
 
-/** OEM metadata blocks add a few fields to the common metadata. */
+/** {@link OrbitEphemerisMessage} metadata blocks add a few fields to the common metadata. */
 public class OemMetadata extends OdmCommonMetadata {
   /** Start time of the ephemeris. Required. */
   private String startTime = null;

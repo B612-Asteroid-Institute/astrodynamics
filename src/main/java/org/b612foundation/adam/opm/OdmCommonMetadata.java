@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Metadata fields common to all three ODM messages. https://public.ccsds.org/Pubs/502x0b2c1.pdf */
+/**
+ * Metadata fields common to all three ODM messages. https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
+ */
 public class OdmCommonMetadata implements Serializable {
   /**
    * The origin of the reference frame. The standard does not restrict the value, but we will use an

@@ -3,7 +3,7 @@ package org.b612foundation.adam.opm;
 import java.util.List;
 import lombok.var;
 
-/** Writer class that turns OrbitParameterMessage objects into string representations */
+/** Writer class that turns {@link OrbitParameterMessage} objects into string representations */
 public class OpmWriter {
 
   public static String toCcsdsOpmString(OrbitParameterMessage opm) {

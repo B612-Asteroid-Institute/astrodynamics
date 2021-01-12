@@ -7,13 +7,15 @@ import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
 
 /**
  * Builds example Orbit Data Messages from
- * http://public.ccsds.org/publications/archive/502x0b2c1.pdf
+ * https://public.ccsds.org/Pubs/502x0b2c1e2.pdf
  *
  * <p>This class is only for tests, but we are reusing it in multiple packages, so it lives with the
  * main sources.
  */
 @VisibleForTesting
-public class OdmScenarioBuilder {
+public final class OdmScenarioBuilder {
+
+  private OdmScenarioBuilder() {}
 
   /** Returns OPM from figure 3-1 in the ODM standard */
   public static String getSimpleOpm() {
