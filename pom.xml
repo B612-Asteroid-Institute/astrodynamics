@@ -24,6 +24,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.orekit</groupId>
+      <artifactId>orekit</artifactId>
+      <version>10.3</version>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.12</version>
@@ -43,6 +48,12 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.stefanbirkner</groupId>
+      <artifactId>system-rules</artifactId>
+      <version>1.19.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

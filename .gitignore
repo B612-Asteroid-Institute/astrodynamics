@@ -35,3 +35,6 @@ hs_err_pid*
 
 # jenv version
 .java-version
+
+# Maven
+dependency-reduced-pom.xml
