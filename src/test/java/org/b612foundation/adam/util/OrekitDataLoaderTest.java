@@ -86,7 +86,9 @@ public class OrekitDataLoaderTest {
     assertTrue(OrekitDataLoader.isLoaded());
   }
 
+  // This test can only be executed on a machine with the orekit-data folder on it. CI ignores it.
   @Test
+  @Ignore
   public void testLoadingFromDirectory() throws IOException {
     Path path = Paths.get(System.getProperty("user.home"), "orekit-data");
     OrekitDataLoader.initializeFromFile(path);
@@ -95,6 +97,7 @@ public class OrekitDataLoaderTest {
   }
 
   @Test
+  @Ignore
   public void testLoadingFromZip() throws IOException {
     Path path = Paths.get(System.getProperty("user.home"), "orekit-data.zip");
     OrekitDataLoader.initializeFromFile(path);
@@ -102,7 +105,6 @@ public class OrekitDataLoaderTest {
     assertTrue(OrekitDataLoader.isLoaded());
   }
 
-  // This test can only be executed on a machine with the orekit-data folder on it. CI ignores it.
   @Test
   @Ignore
   public void testInitializeFromEnvironmentVariable() {
