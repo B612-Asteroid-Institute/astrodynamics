@@ -1,9 +1,6 @@
 package org.b612foundation.adam.util;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.orekit.data.DataContext;
 import org.orekit.time.AbsoluteDate;
@@ -19,7 +16,8 @@ public class OrekitDataLoaderTest {
   @Rule public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
   @Before
-  public void before() {
+  @After
+  public void cleanup() {
     environmentVariables.set(OrekitDataLoader.OREKIT_DATA_ENVIRONMENT_VARIABLE_NAME, null);
     System.clearProperty(OrekitDataLoader.OREKIT_DATA_RUNTIME_PROPERTY_NAME);
     OrekitDataLoader.IsLoaded.set(false);
