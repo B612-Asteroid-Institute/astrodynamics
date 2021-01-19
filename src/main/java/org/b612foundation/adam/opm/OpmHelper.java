@@ -22,7 +22,7 @@ public class OpmHelper {
     if (opm.getKeplerian() != null) {
       // ODM uses km for semimajor axis and km^3/s^2 for gravitational constant. Orekit uses m and
       // m^3/s^2.
-      // Because not doing any state or frame transformation but epoch and frame are irrelevant
+      // Because not doing any state or frame transformation but epoch and frame
       // are paramaters setting them to stand-in values
       final Frame standInFrame = FramesFactory.getICRF();
       final AbsoluteDate standInEpoch = AbsoluteDate.ARBITRARY_EPOCH;
