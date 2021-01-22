@@ -4,6 +4,7 @@ on: [ push ]
 
 env:
   ADAM_STK_LICENSE_DATA: ${{ secrets.ADAM_STK_LICENSE_DATA }}
+  SERVER_PROPERTIES_PATH: ${{ secrets.SERVER_PROPERTIES_BUCKET }}/server-properties/server.properties.integration_test
   STK_JARS_PATH: ${{ secrets.CICD_STK_JARS_BUCKET }}/stk-components/repo.tar.gz
 
 jobs:
