@@ -2,6 +2,10 @@ name: Build and Test
 
 on: [ push ]
 
+env:
+  ADAM_STK_LICENSE_DATA: ${{ secrets.ADAM_STK_LICENSE_DATA }}
+  STK_JARS_PATH: ${{ secrets.CICD_STK_JARS_BUCKET }}/stk-components/repo.tar.gz
+
 jobs:
   build:
     runs-on: ubuntu-latest
