@@ -11,6 +11,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
+      - name: Checkout stk-parts
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          repository: B612-Asteroid-Institute/stk-parts
+          path: stk-parts
+          token: ${{ secrets.CICD_PRIVATE_REPO_ACCESS_TOKEN }}
+
       - name: Build astrodynamics
         run: |
           mvn clean install && bash <(curl -s https://codecov.io/bash)
+
