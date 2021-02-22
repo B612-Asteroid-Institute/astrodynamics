@@ -37,7 +37,7 @@ public class OpmHelperTest {
     final AbsoluteDate epoch = new AbsoluteDate(2020, 1, 2, 3, 4, 5.0, TimeScalesFactory.getTT());
     KeplerianOrbit keplerianOrbit =
         new KeplerianOrbit(
-            sma, ecc, inc, raan, pa, ta, PositionAngle.TRUE, FramesFactory.getICRF(), epoch, mu);
+            sma, ecc, inc, pa, raan, ta, PositionAngle.TRUE, FramesFactory.getICRF(), epoch, mu);
     StateVector expected = cartesianStateFromKeplerian(keplerianOrbit);
     OrbitParameterMessage opm = opmFromKeplerian(keplerianOrbit, PositionAngle.TRUE);
     StateVector actual = OpmHelper.getCartesianStateVector(opm);
@@ -58,7 +58,7 @@ public class OpmHelperTest {
     final AbsoluteDate epoch = new AbsoluteDate(2020, 1, 2, 3, 4, 5.0, TimeScalesFactory.getTT());
     KeplerianOrbit keplerianOrbit =
         new KeplerianOrbit(
-            sma, ecc, inc, raan, pa, ma, PositionAngle.MEAN, FramesFactory.getICRF(), epoch, mu);
+            sma, ecc, inc, pa, raan, ma, PositionAngle.MEAN, FramesFactory.getICRF(), epoch, mu);
     StateVector expected = cartesianStateFromKeplerian(keplerianOrbit);
     OrbitParameterMessage opm = opmFromKeplerian(keplerianOrbit, PositionAngle.MEAN);
     StateVector actual = OpmHelper.getCartesianStateVector(opm);
