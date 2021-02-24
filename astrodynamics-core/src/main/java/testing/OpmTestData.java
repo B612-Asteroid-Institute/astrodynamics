@@ -1,10 +1,8 @@
-package org.b612foundation.adam.testing;
-
+package testing;
 
 import org.b612foundation.adam.astro.AstroConstants;
 import org.b612foundation.adam.opm.*;
 
-/** Used in {@link MonteCarloGeneratorTest} */
 public final class OpmTestData {
 
   // Sigmas for Monte Carlo testing
@@ -193,4 +191,3 @@ public final class OpmTestData {
     return result;
   }
 }
-

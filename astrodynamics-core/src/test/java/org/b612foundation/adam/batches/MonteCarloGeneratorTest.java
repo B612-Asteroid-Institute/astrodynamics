@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.b612foundation.adam.testing.OpmTestData.*;
+import static testing.OpmTestData.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
