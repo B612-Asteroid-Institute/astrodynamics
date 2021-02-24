@@ -2,10 +2,10 @@ package org.b612foundation.adam.stk.propagators;
 
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeStandard;
+
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import org.b612foundation.adam.runnable.AdamRunnableException;
 
 // TODO: use this everywhere ISO-format date strings are parsed.
 public class TimeHelper {
@@ -13,17 +13,17 @@ public class TimeHelper {
   /**
    * Parses the given ISO-formatted date string as a timestamp in the given time standard.
    *
-   * @throws AdamRunnableException if there is an error parsing the date.
+   * @throws IllegalArgumentException if there is an error parsing the date.
    */
   public static JulianDate fromIsoFormat(String date, TimeStandard timeStandard)
-      throws AdamRunnableException {
+      throws IllegalArgumentException {
     if (Character.isDigit(date.charAt(date.length() - 1))) {
       date = date + "Z";
     }
     try {
       return new JulianDate(ZonedDateTime.parse(date), timeStandard);
     } catch (DateTimeParseException e) {
-      throw new AdamRunnableException("Could not parse date " + date, e);
+      throw new IllegalArgumentException("Could not parse date " + date, e);
     }
   }
 

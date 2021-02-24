@@ -7,15 +7,15 @@ import lombok.Builder;
 import lombok.Value;
 import org.b612foundation.adam.common.DistanceType;
 import org.b612foundation.adam.common.DistanceUnits;
-import org.b612foundation.adam.job.model.types.propagation.OrbitPositionType;
 import org.b612foundation.adam.opm.OdmCommonMetadata.ReferenceFrame;
 import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
 
 /** TODO: naming? */
 @Value
 @Builder
-public final class OrbitPointSummary implements Serializable {
+public class OrbitPointSummary implements Serializable {
 
+  private static final long serialVersionUID = -8428599044581198764L;
   OrbitPositionType orbitPositionType;
 
   // Whether this was a stopping point in a propagation.

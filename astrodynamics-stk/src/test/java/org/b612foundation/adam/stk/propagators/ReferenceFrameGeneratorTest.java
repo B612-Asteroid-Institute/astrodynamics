@@ -9,15 +9,14 @@ import agi.foundation.geometry.ReferenceFrame;
 import agi.foundation.geometry.ReferenceFrameEvaluator;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeConstants;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import org.b612foundation.adam.opm.OdmCommonMetadata;
-import org.b612foundation.adam.stk.propagators.ClasspathStreamFactory;
-import org.b612foundation.adam.stk.propagators.ForceModelHelper;
 import org.b612foundation.stk.StkLicense;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class ReferenceFrameGeneratorTest {
 

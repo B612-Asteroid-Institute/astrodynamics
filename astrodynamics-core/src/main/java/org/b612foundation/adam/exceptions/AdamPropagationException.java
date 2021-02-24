@@ -8,4 +8,8 @@ public class AdamPropagationException extends Exception {
   public AdamPropagationException(String message, Throwable cause) {
     super(message, cause);
   }
+
+  public AdamPropagationException(String message) {
+    super(message);
+  }
 }

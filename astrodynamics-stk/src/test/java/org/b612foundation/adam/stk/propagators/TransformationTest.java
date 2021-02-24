@@ -1,7 +1,5 @@
 package org.b612foundation.adam.stk.propagators;
 
-import static org.junit.Assert.*;
-
 import agi.foundation.DateMotionCollection1;
 import agi.foundation.Motion1;
 import agi.foundation.celestial.CentralBodiesFacet;
@@ -13,11 +11,6 @@ import agi.foundation.stk.StkEphemerisFile.Ephemeris;
 import agi.foundation.time.Duration;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeStandard;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.time.ZonedDateTime;
-import java.util.List;
-import org.b612foundation.adam.analysis.DatedValue;
 import org.b612foundation.adam.datamodel.PropagationConfigurationFactory;
 import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 import org.b612foundation.adam.opm.OdmCommonMetadata;
@@ -26,9 +19,16 @@ import org.b612foundation.adam.opm.OdmCommonMetadata.ReferenceFrame;
 import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 import org.b612foundation.adam.opm.StateVector;
-import org.b612foundation.adam.stk.propagators.ForceModelHelper;
+import org.b612foundation.adam.stk.analysis.DatedValue;
 import org.b612foundation.stk.StkLicense;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.time.ZonedDateTime;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class TransformationTest {
   // Data for scenarios. Dates are STK's TAIG, coordinates in km, velocity in km/s.

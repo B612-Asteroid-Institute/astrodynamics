@@ -1,20 +1,21 @@
 package org.b612foundation.adam.stk.propagators;
 
-import static junit.framework.TestCase.assertNotNull;
-import static org.b612foundation.adam.testing.PropagatorTestHelper.getOpm;
-
 import agi.foundation.coordinates.Cartesian;
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 import org.b612foundation.adam.datamodel.PropagationConfigurationFactory;
 import org.b612foundation.adam.datamodel.PropagationParameters;
 import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 import org.b612foundation.adam.exceptions.AdamPropagationException;
-import org.b612foundation.adam.opm.*;
-import org.b612foundation.adam.runnable.AdamRunnableException;
+import org.b612foundation.adam.opm.OrbitEphemerisMessage;
+import org.b612foundation.adam.propagators.OrbitPropagator;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
+import static junit.framework.TestCase.assertNotNull;
+import static org.b612foundation.adam.stk.PropagatorTestHelper.getOpm;
 
 public abstract class PropagatorTests {
 

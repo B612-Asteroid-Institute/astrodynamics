@@ -11,16 +11,17 @@ import agi.foundation.stk.StkEphemerisFile;
 import agi.foundation.time.Duration;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeStandard;
+import org.b612foundation.adam.datamodel.PropagationConfigurationFactory;
+import org.b612foundation.adam.datamodel.PropagatorConfiguration;
+import org.b612foundation.adam.datamodel.TargetingParameters;
+import org.b612foundation.adam.exceptions.AdamPropagationException;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import org.b612foundation.adam.datamodel.PropagationConfigurationFactory;
-import org.b612foundation.adam.datamodel.PropagatorConfiguration;
-import org.b612foundation.adam.datamodel.TargetingParameters;
-import org.b612foundation.adam.runnable.AdamRunnableException;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class DistanceFromEarthTargeterTest {
 
@@ -43,7 +44,7 @@ public class DistanceFromEarthTargeterTest {
   }
 
   @Test
-  public void testInitialManeuver() throws AdamRunnableException, IOException {
+  public void testInitialManeuver() throws AdamPropagationException, IOException {
     System.out.println("--- testInitialManeuver");
     // This uses the initial state and computed maneuver from desktop scenario 1.
     DistanceFromEarthTargeter targeter = new DistanceFromEarthTargeter();
@@ -85,7 +86,7 @@ public class DistanceFromEarthTargeterTest {
   }
 
   @Test
-  public void testNominalOnly() throws AdamRunnableException, IOException {
+  public void testNominalOnly() throws AdamPropagationException, IOException {
     System.out.println("--- testNominalOnly");
     // This uses the initial state from desktop scenario 1.
     DistanceFromEarthTargeter targeter = new DistanceFromEarthTargeter();
@@ -136,7 +137,7 @@ public class DistanceFromEarthTargeterTest {
   }
 
   @Test
-  public void testDesktopScenario1() throws AdamRunnableException, IOException {
+  public void testDesktopScenario1() throws AdamPropagationException, IOException {
     System.out.println("--- testDesktopScenario1");
     DistanceFromEarthTargeter targeter = new DistanceFromEarthTargeter();
 
@@ -192,7 +193,7 @@ public class DistanceFromEarthTargeterTest {
   }
 
   @Test
-  public void testDesktopScenario2() throws AdamRunnableException, IOException {
+  public void testDesktopScenario2() throws AdamPropagationException, IOException {
     System.out.println("--- testDesktopScenario2");
     DistanceFromEarthTargeter targeter = new DistanceFromEarthTargeter();
 
@@ -248,7 +249,7 @@ public class DistanceFromEarthTargeterTest {
   }
 
   @Test
-  public void testDesktopScenario3() throws AdamRunnableException, IOException {
+  public void testDesktopScenario3() throws AdamPropagationException, IOException {
     System.out.println("--- testDesktopScenario3");
     DistanceFromEarthTargeter targeter = new DistanceFromEarthTargeter();
 
@@ -304,7 +305,7 @@ public class DistanceFromEarthTargeterTest {
   }
 
   @Test
-  public void testDesktopScenario4() throws AdamRunnableException, IOException {
+  public void testDesktopScenario4() throws AdamPropagationException, IOException {
     System.out.println("--- testDesktopScenario4");
     // This is a 50-year scenario, unlike the others which are 15-year.
     //
@@ -397,7 +398,7 @@ public class DistanceFromEarthTargeterTest {
   }
 
   @Test
-  public void testDesktopScenario5() throws AdamRunnableException, IOException {
+  public void testDesktopScenario5() throws AdamPropagationException, IOException {
     System.out.println("--- testDesktopScenario5");
     // This tests to check if default initial miss distance is not set then it sets it to 5 * target
     // distance and still works.

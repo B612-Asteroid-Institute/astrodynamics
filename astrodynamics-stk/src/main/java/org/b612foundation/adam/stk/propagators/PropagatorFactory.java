@@ -1,5 +1,7 @@
 package org.b612foundation.adam.stk.propagators;
 
+import org.b612foundation.adam.propagators.OrbitPropagator;
+
 import java.io.IOException;
 
 public final class PropagatorFactory {

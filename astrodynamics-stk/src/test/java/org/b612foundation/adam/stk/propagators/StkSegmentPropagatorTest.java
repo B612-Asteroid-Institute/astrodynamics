@@ -1,25 +1,15 @@
 package org.b612foundation.adam.stk.propagators;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.b612foundation.adam.common.PropagationHelper.extractFinalState;
-import static org.b612foundation.adam.stk.StkPropagationHelper.parseUtcAsJulian;
-import static org.b612foundation.adam.testing.PropagatorTestHelper.getOpm;
-
 import agi.foundation.celestial.JplDECentralBody;
 import agi.foundation.celestial.WorldGeodeticSystem1984;
 import agi.foundation.time.JulianDate;
 import com.google.common.collect.ImmutableList;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 import org.b612foundation.adam.common.DistanceType;
 import org.b612foundation.adam.common.DistanceUnits;
 import org.b612foundation.adam.datamodel.PropagationConfigurationFactory;
 import org.b612foundation.adam.datamodel.PropagationParameters;
 import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 import org.b612foundation.adam.exceptions.AdamPropagationException;
-import org.b612foundation.adam.job.model.types.propagation.OrbitPositionType;
 import org.b612foundation.adam.opm.OdmCommonMetadata;
 import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
 import org.b612foundation.adam.opm.OemDataLine;
@@ -28,6 +18,15 @@ import org.b612foundation.adam.opm.StateVector;
 import org.b612foundation.stk.StkLicense;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import static com.google.common.truth.Truth.assertThat;
+import static org.b612foundation.adam.common.PropagationHelper.extractFinalState;
+import static org.b612foundation.adam.stk.PropagatorTestHelper.getOpm;
+import static org.b612foundation.adam.stk.StkPropagationHelper.parseUtcAsJulian;
 
 // TODO: The test assertion tolerances aren't really good, try to find how to make them closer.
 // see if can match up to 7 SD, even better 15 SD
@@ -203,7 +202,8 @@ public final class StkSegmentPropagatorTest {
 
     // Check that actual and expected differ no more than 6 hours
     assertThat(finalState.getOrbitPositionType()).isEqualTo(OrbitPositionType.IMPACT);
-    assertThat(finalState.getTargetBodyReferenceFrame()).isEqualTo(OdmCommonMetadata.ReferenceFrame.ECEF);
+    assertThat(finalState.getTargetBodyReferenceFrame())
+        .isEqualTo(OdmCommonMetadata.ReferenceFrame.ECEF);
     assertThat(finalState.isStopped()).isTrue();
     assertThat(actualImpactDate.secondsDifference(expectedImpactDate)).isAtMost(21600);
     // Check that distance is within 1e3 meters of stopDistance + Earth semimajor axis, which is the
@@ -275,7 +275,8 @@ public final class StkSegmentPropagatorTest {
   }
 
   @Test
-  public void testStkPropagation_stoppedOnCloseApproachAfterEpoch() throws AdamPropagationException {
+  public void testStkPropagation_stoppedOnCloseApproachAfterEpoch()
+      throws AdamPropagationException {
     // 10 years from start, minus 30 days
     String endEpoch = "2010-12-01T01:13:46.620000Z";
     PropagatorConfiguration config = PropagationConfigurationFactory.getAllMajorBodiesConfig();

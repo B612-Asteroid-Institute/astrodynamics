@@ -1,7 +1,9 @@
 package org.b612foundation.adam.stk.propagators;
 
-import java.io.IOException;
+import org.b612foundation.adam.propagators.OrbitPropagator;
 import org.b612foundation.stk.StkLicense;
+
+import java.io.IOException;
 
 public class StkPropagatorTest extends PropagatorTests {
 

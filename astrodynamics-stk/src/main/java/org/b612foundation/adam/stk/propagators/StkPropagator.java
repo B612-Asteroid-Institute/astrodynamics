@@ -1,7 +1,5 @@
 package org.b612foundation.adam.stk.propagators;
 
-import static org.b612foundation.adam.stk.StkPropagationHelper.validateStartAndEndDate;
-
 import agi.foundation.celestial.CentralBodiesFacet;
 import agi.foundation.compatibility.EventHandler;
 import agi.foundation.coordinates.Cartesian;
@@ -9,14 +7,7 @@ import agi.foundation.geometry.GeometryTransformer;
 import agi.foundation.geometry.Point;
 import agi.foundation.geometry.PointEvaluator;
 import agi.foundation.geometry.shapes.Ellipsoid;
-import agi.foundation.numericalmethods.ExtremumType;
-import agi.foundation.numericalmethods.FunctionSegmentSlope;
-import agi.foundation.numericalmethods.JulianDateExtremumFoundEventArgs;
-import agi.foundation.numericalmethods.JulianDateFunctionExplorer;
-import agi.foundation.numericalmethods.JulianDateFunctionSampling;
-import agi.foundation.numericalmethods.JulianDateSampleSuggestionCallback;
-import agi.foundation.numericalmethods.JulianDateSimpleFunction;
-import agi.foundation.numericalmethods.JulianDateThresholdCrossingFoundEventArgs;
+import agi.foundation.numericalmethods.*;
 import agi.foundation.numericalmethods.advanced.JulianDateFunctionExtremumFound;
 import agi.foundation.numericalmethods.advanced.JulianDateFunctionThresholdCrossingFound;
 import agi.foundation.stk.StkEphemerisFile;
@@ -24,6 +15,15 @@ import agi.foundation.time.Duration;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeIntervalCollection;
 import agi.foundation.time.TimeStandard;
+import org.b612foundation.adam.datamodel.PropagationParameters;
+import org.b612foundation.adam.datamodel.PropagatorConfiguration;
+import org.b612foundation.adam.exceptions.AdamPropagationException;
+import org.b612foundation.adam.opm.OrbitEphemerisMessage;
+import org.b612foundation.adam.opm.OrbitParameterMessage;
+import org.b612foundation.adam.propagators.OrbitPropagator;
+import org.b612foundation.adam.stk.analysis.DatedValue;
+import org.b612foundation.stk.StkLicense;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -31,15 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-import org.b612foundation.adam.analysis.DatedValue;
-import org.b612foundation.adam.datamodel.PropagationParameters;
-import org.b612foundation.adam.datamodel.PropagatorConfiguration;
-import org.b612foundation.adam.exceptions.AdamPropagationException;
-import org.b612foundation.adam.opm.OrbitEphemerisMessage;
-import org.b612foundation.adam.opm.OrbitParameterMessage;
-import org.b612foundation.adam.runnable.AdamRunnableException;
-import org.b612foundation.adam.stk.propagators.ForceModelHelper;
-import org.b612foundation.stk.StkLicense;
+
+import static org.b612foundation.adam.stk.StkPropagationHelper.validateStartAndEndDate;
 
 /**
  * Propagator that uses STK components.

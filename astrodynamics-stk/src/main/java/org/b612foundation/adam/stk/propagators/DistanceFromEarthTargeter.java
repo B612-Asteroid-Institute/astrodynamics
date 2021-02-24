@@ -3,67 +3,29 @@ package org.b612foundation.adam.stk.propagators;
 import agi.foundation.DateMotionCollection1;
 import agi.foundation.EvaluatorGroup;
 import agi.foundation.Motion1;
-import agi.foundation.celestial.CentralBodiesFacet;
-import agi.foundation.celestial.EarthCentralBody;
-import agi.foundation.celestial.JplDECentralBody;
-import agi.foundation.celestial.SunCentralBody;
-import agi.foundation.celestial.WorldGeodeticSystem1984;
+import agi.foundation.celestial.*;
 import agi.foundation.coordinates.Cartesian;
 import agi.foundation.coordinates.ITimeBasedState;
 import agi.foundation.coordinates.SphericalElement;
-import agi.foundation.geometry.AxesVelocityOrbitNormal;
-import agi.foundation.geometry.GeometryTransformer;
-import agi.foundation.geometry.Point;
-import agi.foundation.geometry.PointEvaluator;
-import agi.foundation.geometry.PointInterpolator;
-import agi.foundation.geometry.ReferenceFrame;
-import agi.foundation.geometry.Scalar;
-import agi.foundation.geometry.ScalarSphericalElement;
-import agi.foundation.geometry.VectorBPlane;
-import agi.foundation.numericalmethods.DelegateBasedConstraint;
-import agi.foundation.numericalmethods.DelegateBasedConstraintCallback;
-import agi.foundation.numericalmethods.InterpolationAlgorithmType;
-import agi.foundation.numericalmethods.MultivariableFunctionSolverIterationResults;
-import agi.foundation.numericalmethods.MultivariableFunctionSolverResults;
-import agi.foundation.numericalmethods.NewtonRaphsonMultivariableFunctionSolver;
-import agi.foundation.numericalmethods.SegmentPropagatorVariable;
-import agi.foundation.numericalmethods.SetVariableCallback;
-import agi.foundation.numericalmethods.SolvableMultivariableFunctionResults;
-import agi.foundation.numericalmethods.TargetedSegmentListDifferentialCorrector;
-import agi.foundation.numericalmethods.TargetedSegmentListDifferentialCorrectorResults;
-import agi.foundation.numericalmethods.TranslationalMotionInterpolator;
+import agi.foundation.geometry.*;
+import agi.foundation.numericalmethods.*;
 import agi.foundation.propagators.NumericalPropagatorDefinition;
 import agi.foundation.propagators.PropagationNewtonianPoint;
-import agi.foundation.segmentpropagation.ImpulsiveManeuverInformation;
-import agi.foundation.segmentpropagation.ImpulsiveManeuverSegment;
-import agi.foundation.segmentpropagation.MaximumDurationBehavior;
-import agi.foundation.segmentpropagation.NumericalInitialStateSegment;
-import agi.foundation.segmentpropagation.NumericalPropagatorSegment;
-import agi.foundation.segmentpropagation.SegmentPropagator;
-import agi.foundation.segmentpropagation.SegmentResults;
-import agi.foundation.segmentpropagation.TargetedSegmentList;
-import agi.foundation.segmentpropagation.TargetedSegmentListOperator;
-import agi.foundation.segmentpropagation.TargetedSegmentListOperatorBehavior;
-import agi.foundation.segmentpropagation.TargetedSegmentListOperatorResults;
-import agi.foundation.segmentpropagation.TargetedSegmentListResults;
+import agi.foundation.segmentpropagation.*;
 import agi.foundation.stk.StkEphemerisFile;
 import agi.foundation.stk.StkEphemerisFile.StkTimeFormat;
-import agi.foundation.stoppingconditions.ConditionCheckCallback;
-import agi.foundation.stoppingconditions.DelegateStoppingCondition;
-import agi.foundation.stoppingconditions.DurationStoppingCondition;
-import agi.foundation.stoppingconditions.ScalarStoppingCondition;
-import agi.foundation.stoppingconditions.StopType;
+import agi.foundation.stoppingconditions.*;
 import agi.foundation.time.Duration;
 import agi.foundation.time.JulianDate;
+import org.b612foundation.adam.datamodel.PropagatorConfiguration;
+import org.b612foundation.adam.datamodel.TargetingParameters;
+import org.b612foundation.adam.exceptions.AdamPropagationException;
+import org.b612foundation.stk.StkLicense;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.logging.Logger;
-import org.b612foundation.adam.datamodel.PropagatorConfiguration;
-import org.b612foundation.adam.datamodel.TargetingParameters;
-import org.b612foundation.adam.runnable.AdamRunnableException;
-import org.b612foundation.adam.stk.propagators.ForceModelHelper;
-import org.b612foundation.stk.StkLicense;
 
 public class DistanceFromEarthTargeter {
   private static Logger log = Logger.getLogger(DistanceFromEarthTargeter.class.getName());
@@ -117,7 +79,7 @@ public class DistanceFromEarthTargeter {
    *     <p>[runNominalOnly]: Whether to run the nominal sequence only (alternative: run targeted
    *     sequence).
    * @param propagatorConfig Force model configuration for the targeter.
-   * @throws AdamRunnableException
+   * @throws IllegalArgumentException
    */
   // Can we avoid making the user specify the duration? I don't see how, but it's a little janky.
   public void initialize(
@@ -128,7 +90,7 @@ public class DistanceFromEarthTargeter {
       Duration durationToNearEarth,
       TargetingParameters targetingParams,
       PropagatorConfiguration propagatorConfig)
-      throws AdamRunnableException {
+      throws IllegalArgumentException {
     this.referenceFrame = referenceFrame;
 
     SunCentralBody sun = CentralBodiesFacet.getFromContext().getSun();
@@ -138,7 +100,7 @@ public class DistanceFromEarthTargeter {
         targetingParams.getTargetDistanceFromEarth() * 1000.0; // km to m
     if (targetDistanceFromEarth <= 0) {
       log.warning("Target Distance from Earth is <= 0");
-      throw new AdamRunnableException("Target Distance from Earth must be > 0.", null);
+      throw new IllegalArgumentException("Target Distance from Earth must be > 0.");
     }
 
     double initialTargetDistanceFromEarth =
@@ -348,7 +310,7 @@ public class DistanceFromEarthTargeter {
    * object will return the nominal ephemeris.
    */
   public boolean runNominalPropagationToCheckRequiresManeuver(TargetingParameters targetingParams)
-      throws AdamRunnableException {
+      throws AdamPropagationException {
     double targetDistanceFromEarth =
         targetingParams.getTargetDistanceFromEarth() * 1000.0; // km to m
     double tolerance = targetingParams.getTolerance() * 1000.0; // km to m
@@ -388,7 +350,7 @@ public class DistanceFromEarthTargeter {
     }
 
     log.warning("Targeted segment list did not produce TargetedSegmentListResults.");
-    throw new AdamRunnableException(
+    throw new AdamPropagationException(
         "Unexpected result type while checking whether maneuver is required", null);
   }
 
@@ -423,7 +385,7 @@ public class DistanceFromEarthTargeter {
    *
    * @return The computed maneuver.
    */
-  public double[] getManeuver() throws AdamRunnableException {
+  public double[] getManeuver() throws AdamPropagationException {
     double[] totalManeuver = {0, 0, 0};
     if (segmentResults instanceof TargetedSegmentListResults) {
       TargetedSegmentListResults targetedSegmentListResults =
@@ -434,7 +396,7 @@ public class DistanceFromEarthTargeter {
             targetedSegmentListResults.getOperatorResult(operator);
         if (operatorResults == null) {
           log.warning("Operator " + operator.getName() + " did not produce any results.");
-          throw new AdamRunnableException("Targeter had no results.", null);
+          throw new AdamPropagationException("Targeter had no results.");
         }
         if (operatorResults instanceof TargetedSegmentListDifferentialCorrectorResults) {
           TargetedSegmentListDifferentialCorrectorResults dcResults =
@@ -460,23 +422,22 @@ public class DistanceFromEarthTargeter {
           } else {
             log.warning(
                 "Operator " + operatorResults.getIdentifier().getName() + " did not converge.");
-            throw new AdamRunnableException(
+            throw new AdamPropagationException(
                 "Targeter did not converge after "
                     + solverResults.getIterationResults().size()
-                    + " iterations.",
-                null);
+                    + " iterations.");
           }
         } else {
           log.warning(
               "Operator "
                   + operatorResults.getIdentifier().getName()
                   + " did not produce TargetedSegmentListDifferentialCorrectorResults.");
-          throw new AdamRunnableException("Unexpected results type when computing maneuver.", null);
+          throw new AdamPropagationException("Unexpected results type when computing maneuver.");
         }
       }
     } else {
       log.warning("Targeted segment list did not produce TargetedSegmentListResults.");
-      throw new AdamRunnableException("Unexpected results type when computing maneuver.", null);
+      throw new AdamPropagationException("Unexpected results type when computing maneuver.");
     }
 
     return totalManeuver;

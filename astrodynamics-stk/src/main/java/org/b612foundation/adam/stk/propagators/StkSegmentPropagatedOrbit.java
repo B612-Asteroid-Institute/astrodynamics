@@ -1,10 +1,5 @@
 package org.b612foundation.adam.stk.propagators;
 
-import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.CONTINUE_TO_NEXT_EVENT;
-import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.STOP_FUNCTION;
-import static org.b612foundation.adam.astro.AstroConstants.M_TO_KM;
-import static org.b612foundation.adam.stk.StkPropagationHelper.*;
-
 import agi.foundation.DateMotionCollection1;
 import agi.foundation.EvaluatorGroup;
 import agi.foundation.Motion1;
@@ -20,24 +15,20 @@ import agi.foundation.numericalmethods.InterpolationAlgorithmType;
 import agi.foundation.numericalmethods.NumericalIntegrator;
 import agi.foundation.propagators.NumericalPropagatorDefinition;
 import agi.foundation.propagators.PropagationNewtonianPoint;
-import agi.foundation.segmentpropagation.NumericalInitialStateSegment;
-import agi.foundation.segmentpropagation.NumericalPropagatorSegment;
-import agi.foundation.segmentpropagation.SegmentList;
-import agi.foundation.segmentpropagation.SegmentListResults;
-import agi.foundation.segmentpropagation.SegmentPropagator;
+import agi.foundation.segmentpropagation.*;
 import agi.foundation.stk.StkEphemerisFile;
-import agi.foundation.stoppingconditions.ConditionCheckCallback;
-import agi.foundation.stoppingconditions.ConstraintSatisfiedCallback;
-import agi.foundation.stoppingconditions.DelegateStoppingCondition;
-import agi.foundation.stoppingconditions.DelegateStoppingConditionConstraint;
-import agi.foundation.stoppingconditions.ScalarStoppingCondition;
-import agi.foundation.stoppingconditions.StopType;
-import agi.foundation.stoppingconditions.StoppingTriggeredCallback;
-import agi.foundation.stoppingconditions.WhenToCheckConstraint;
+import agi.foundation.stoppingconditions.*;
 import agi.foundation.time.Duration;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeStandard;
 import com.google.common.base.Preconditions;
+import org.b612foundation.adam.common.DistanceType;
+import org.b612foundation.adam.common.DistanceUnits;
+import org.b612foundation.adam.datamodel.PropagationParameters;
+import org.b612foundation.adam.datamodel.PropagatorConfiguration;
+import org.b612foundation.adam.opm.*;
+import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -45,19 +36,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import org.b612foundation.adam.common.DistanceType;
-import org.b612foundation.adam.common.DistanceUnits;
-import org.b612foundation.adam.datamodel.PropagationParameters;
-import org.b612foundation.adam.datamodel.PropagatorConfiguration;
-import org.b612foundation.adam.job.model.types.propagation.OrbitPositionType;
-import org.b612foundation.adam.opm.OdmCommonHeader;
-import org.b612foundation.adam.opm.OdmCommonMetadata;
-import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
-import org.b612foundation.adam.opm.OemDataBlock;
-import org.b612foundation.adam.opm.OemMetadata;
-import org.b612foundation.adam.opm.OrbitEphemerisMessage;
-import org.b612foundation.adam.opm.OrbitParameterMessage;
-import org.b612foundation.adam.stk.propagators.ForceModelHelper;
+import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.CONTINUE_TO_NEXT_EVENT;
+import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.STOP_FUNCTION;
+import static org.b612foundation.adam.astro.AstroConstants.M_TO_KM;
+import static org.b612foundation.adam.stk.StkPropagationHelper.*;
 
 /**
  * Sets up and propagates an orbit, given an {@link OrbitParameterMessage}, {@link
@@ -515,9 +497,11 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
                   earthEvaluator.evaluate(currentState.getCurrentDate(), 2).getValue();
               Cartesian relPosInertial = position.subtract(earthPos);
               double distanceFromTarget = relPosInertial.getMagnitude();
-              ReferenceFrameEvaluator frameEvaluator = GeometryTransformer
-                  .getReferenceFrameTransformation(earth.getInertialFrame(), earth.getFixedFrame());
-              KinematicTransformation frameTransform = frameEvaluator.evaluate(currentState.getCurrentDate());
+              ReferenceFrameEvaluator frameEvaluator =
+                  GeometryTransformer.getReferenceFrameTransformation(
+                      earth.getInertialFrame(), earth.getFixedFrame());
+              KinematicTransformation frameTransform =
+                  frameEvaluator.evaluate(currentState.getCurrentDate());
               Cartesian relPosFixed = frameTransform.transform(relPosInertial);
               impact =
                   Optional.of(

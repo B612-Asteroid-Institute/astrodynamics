@@ -1,10 +1,12 @@
 package org.b612foundation.adam.stk.propagators;
 
-import static junit.framework.TestCase.assertTrue;
+import org.b612foundation.adam.propagators.OrbitPropagator;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.UUID;
-import org.junit.Test;
+
+import static junit.framework.TestCase.assertTrue;
 
 public class PropagatorFactoryTest {
 

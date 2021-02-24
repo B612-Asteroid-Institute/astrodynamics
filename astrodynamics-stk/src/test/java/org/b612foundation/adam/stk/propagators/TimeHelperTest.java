@@ -2,14 +2,13 @@ package org.b612foundation.adam.stk.propagators;
 
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeStandard;
-import org.b612foundation.adam.runnable.AdamRunnableException;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class TimeHelperTest {
 
   @Test
-  public void testTimeHelper() throws AdamRunnableException {
+  public void testTimeHelper() throws IllegalArgumentException {
     String date = "2007-07-22T09:45:20.382Z";
 
     // Check that round-tripping works for a couple different time standards.

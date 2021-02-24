@@ -16,7 +16,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
-/** Helper methods for setting up forces of the solar system correctly for AGI Component propagators. */
+/**
+ * Helper methods for setting up forces of the solar system correctly for AGI Component propagators.
+ */
 public class ForceModelHelper {
   private static Logger log = Logger.getLogger(ForceModelHelper.class.getName());
   // Resource directory with asteroid ephemerides. Files are name.e.
