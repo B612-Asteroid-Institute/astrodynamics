@@ -1,9 +1,10 @@
+package org.b612foundation.adam.stk;
+
 import agi.foundation.Motion1;
 import agi.foundation.coordinates.Cartesian;
 import org.b612foundation.adam.opm.KeplerianElements;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 import org.b612foundation.adam.opm.StateVector;
-import org.b612foundation.adam.stk.StkOpmHelper;
 import org.b612foundation.adam.util.OrekitDataLoader;
 import org.junit.Before;
 import org.junit.Ignore;
