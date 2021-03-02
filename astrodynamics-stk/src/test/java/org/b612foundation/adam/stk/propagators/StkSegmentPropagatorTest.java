@@ -15,6 +15,7 @@ import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
 import org.b612foundation.adam.opm.OemDataLine;
 import org.b612foundation.adam.opm.OrbitEphemerisMessage;
 import org.b612foundation.adam.opm.StateVector;
+import org.b612foundation.adam.propagators.OrbitPositionType;
 import org.b612foundation.stk.StkLicense;
 import org.junit.Before;
 import org.junit.Test;
