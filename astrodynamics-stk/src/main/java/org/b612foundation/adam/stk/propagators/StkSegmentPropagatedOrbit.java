@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import org.b612foundation.adam.propagators.OrbitPositionType;
 
 import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.CONTINUE_TO_NEXT_EVENT;
 import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.STOP_FUNCTION;

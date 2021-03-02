@@ -9,6 +9,7 @@ import org.b612foundation.adam.common.DistanceType;
 import org.b612foundation.adam.common.DistanceUnits;
 import org.b612foundation.adam.opm.OdmCommonMetadata.ReferenceFrame;
 import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
+import org.b612foundation.adam.propagators.OrbitPositionType;
 
 /** TODO: naming? */
 @Value
