@@ -33,7 +33,6 @@ public final class StkSegmentPropagator implements OrbitPropagator {
   private JulianDate startDate;
   private JulianDate endDate;
   private Duration step;
-  private OrbitPointSummary finalState;
 
   public StkSegmentPropagator() {
     StkLicense.activate();
@@ -67,8 +66,6 @@ public final class StkSegmentPropagator implements OrbitPropagator {
       orbit = initializeOrbit(opm, config);
       orbit.propagate(propagationParams, epoch, endDate);
 
-      finalState = determineFinalState();
-
       // Adjust end date to when the propagation actually ended, e.g. when using stopping conditions
       if (orbit.getRawDates().size() > 0) {
         endDate = orbit.getRawDates().get(orbit.getRawDates().size() - 1);
@@ -101,33 +98,8 @@ public final class StkSegmentPropagator implements OrbitPropagator {
     return orbit.getCloseApproaches();
   }
 
-  private OrbitPointSummary determineFinalState() {
-    if (orbit.getImpact().isPresent()) {
-      return orbit.getImpact().get();
-    } else if (orbit.getStoppedOnCloseApproach()) {
-      List<OrbitPointSummary> closeApproaches = getCloseApproaches();
-      return closeApproaches.get(closeApproaches.size() - 1);
-    }
-
-    OrbitPointSummary finalPositionAndTime = orbit.getFinalPositionAndTime();
-    return OrbitPointSummary.builder()
-        .orbitPositionType(OrbitPositionType.MISS)
-        .stopped(finalPositionAndTime.isStopped())
-        .time(finalPositionAndTime.getTime())
-        .timeIsoFormat(finalPositionAndTime.getTimeIsoFormat())
-        .timeSystem(finalPositionAndTime.getTimeSystem())
-        .targetBody(finalPositionAndTime.getTargetBody())
-        .targetBodyCenteredPositionUnits(finalPositionAndTime.getTargetBodyCenteredPositionUnits())
-        .targetBodyCenteredPosition(finalPositionAndTime.getTargetBodyCenteredPosition())
-        .targetBodyReferenceFrame(finalPositionAndTime.getTargetBodyReferenceFrame())
-        .distanceFromTarget(finalPositionAndTime.getDistanceFromTarget())
-        .distanceUnits(finalPositionAndTime.getDistanceUnits())
-        .distanceType(finalPositionAndTime.getDistanceType())
-        .build();
-  }
-
   public OrbitPointSummary getFinalState() {
-    return finalState;
+    return orbit.getFinalPositionAndTime();
   }
 
   public ReferenceFrame getReferenceFrame() {
