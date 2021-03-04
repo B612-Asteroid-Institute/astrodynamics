@@ -193,7 +193,7 @@ public final class StkSegmentPropagatorTest {
             startDate, endDate, SECONDS_IN_DAY, ASTEROID_101_INITIAL_STATE_VECTOR);
     params.setStopOnImpact(true);
     params.setCloseApproachRadiusFromTargetMeters(7.0e9);
-    params.setStopOnImpactDistanceMeters(500_000); // 500km
+    params.setStopOnImpactAltitudeMeters(500_000); // 500km
     JulianDate expectedImpactDate = parseUtcAsJulian("2010-12-31T01:13:46.620000Z");
 
     StkSegmentPropagator propagator = new StkSegmentPropagator();
@@ -212,6 +212,8 @@ public final class StkSegmentPropagatorTest {
     assertThat(finalState.getDistanceFromTarget())
         .isWithin(1e3)
         .of(500000 + WorldGeodeticSystem1984.SemimajorAxis);
+    assertThat(finalState.getDistanceType()).isEqualTo(DistanceType.ALTITUDE);
+    assertThat(finalState.getDistanceUnits()).isEqualTo(DistanceUnits.METERS);
   }
 
   @Test

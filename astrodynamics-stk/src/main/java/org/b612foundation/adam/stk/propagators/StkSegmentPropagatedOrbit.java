@@ -152,11 +152,11 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
       propagateSegment.getStoppingConditions().add(perigeeStoppingCondition);
     }
 
-    // Record impacts
+    // Record impacts, some altitude above target body's surface.
     // TODO: user inputs either a radius (dist from coordinate system) OR altitude (distance from
     //   surface) stopping condition
     ScalarStoppingCondition altitudeStoppingCondition =
-        buildDistanceFromEarthStoppingCondition(earth, propagationParams);
+        buildImpactAltitudeFromEarthStoppingCondition(earth, propagationParams);
     propagateSegment.getStoppingConditions().add(altitudeStoppingCondition);
 
     // Add segments
@@ -195,9 +195,33 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
             earth, ephemOverallTrajectory.get(ephemOverallTrajectory.size() - 1), referenceFrame);
   }
 
-  // TODO: make not Earth-specific
-  private static OrbitPointSummary buildFinalState(
+  /**
+   * Build the final state in a value class, {@link OrbitPointSummary}.
+   *
+   * <p>Final state cases:
+   *
+   * <ul>
+   *   <li>Impact: return the impact as the final state. The {@link Optional} impact is set in
+   *       {@link #buildImpactAltitudeFromEarthStoppingCondition(EarthCentralBody,
+   *       PropagationParameters)}.
+   *   <li>Stopped on a close approach: if user turned on the stopOnCloseApproach flag and the
+   *       propagation stopped on a close approach, return the last close approach in the list of
+   *       detected intervening close approaches. Close approaches are logged in {@link
+   *       #buildPerigeeStoppingCondition(EarthCentralBody, PropagationParameters)}.
+   *   <li>Otherwise, return a Miss.
+   * </ul>
+   *
+   * // TODO: make not Earth-specific
+   */
+  private OrbitPointSummary buildFinalState(
       EarthCentralBody earth, ITimeBasedState state, ReferenceFrame referenceFrame) {
+    if (impact.isPresent()) {
+      return impact.get();
+    } else if (stoppedOnCloseApproach) {
+      List<OrbitPointSummary> closeApproaches = getCloseApproaches();
+      return closeApproaches.get(closeApproaches.size() - 1);
+    }
+
     PointEvaluator earthEvaluator =
         GeometryTransformer.observePoint(earth.getCenterOfMassPoint(), referenceFrame);
     Cartesian pos = (Cartesian) state.getMotion(POINT_OBJECT_ID).getValue();
@@ -206,17 +230,18 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
     double distanceFromTarget = relPos.getMagnitude();
 
     return OrbitPointSummary.builder()
+        .orbitPositionType(OrbitPositionType.MISS)
         .stopped(true)
         .time(state.getCurrentDate())
         .timeIsoFormat(TimeHelper.toIsoFormat(state.getCurrentDate()))
         .timeSystem(TimeSystem.UTC)
         .targetBody(JplDECentralBody.EARTH)
-        .targetBodyCenteredPosition(cartesianToArray(relPos))
         .targetBodyCenteredPositionUnits(DistanceUnits.METERS)
+        .targetBodyCenteredPosition(cartesianToArray(relPos))
         .targetBodyReferenceFrame(OdmCommonMetadata.ReferenceFrame.ICRF)
         .distanceFromTarget(distanceFromTarget)
-        .distanceType(DistanceType.RADIUS)
         .distanceUnits(DistanceUnits.METERS)
+        .distanceType(DistanceType.RADIUS)
         .build();
   }
 
@@ -464,16 +489,18 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
   }
 
   /**
-   * Builds a distance-from-earth {@link ScalarStoppingCondition}.
+   * Builds the impact {@link ScalarStoppingCondition} when object reaches some altitude above
+   * Earth's surface.
    *
-   * <p>The actual distance will be provided via {@link PropagationParameters}.
+   * <p>The actual distance will be provided via {@link
+   * PropagationParameters#getStopOnImpactAltitudeMeters()}.
    *
    * <p>This might be more accurate than we need, but revisit later. We might just be happy with a
    * certain distance from the Earth.
    *
    * <p>TODO: make this not Earth-specific
    */
-  private ScalarStoppingCondition buildDistanceFromEarthStoppingCondition(
+  private ScalarStoppingCondition buildImpactAltitudeFromEarthStoppingCondition(
       EarthCentralBody earth, PropagationParameters propagationParams) {
     ScalarSphericalElement distanceFromEarth =
         new ScalarSphericalElement(
@@ -483,7 +510,7 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
     ScalarStoppingCondition distanceFromEarthStoppingCondition =
         new ScalarStoppingCondition(
             distanceFromEarth,
-            propagationParams.getStopOnImpactDistanceMeters()
+            propagationParams.getStopOnImpactAltitudeMeters()
                 + WorldGeodeticSystem1984.SemimajorAxis,
             1e3 /* 1 km tolerance */,
             StopType.ANY_THRESHOLD);
@@ -517,7 +544,7 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
                           .targetBodyCenteredPositionUnits(DistanceUnits.METERS)
                           .targetBodyReferenceFrame(OdmCommonMetadata.ReferenceFrame.ECEF)
                           .distanceFromTarget(distanceFromTarget)
-                          .distanceType(DistanceType.RADIUS)
+                          .distanceType(DistanceType.ALTITUDE)
                           .distanceUnits(DistanceUnits.METERS)
                           .build());
               if (propagationParams.getStopOnImpact()) {

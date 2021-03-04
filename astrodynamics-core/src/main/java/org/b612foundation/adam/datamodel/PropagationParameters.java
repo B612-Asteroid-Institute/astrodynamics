@@ -33,8 +33,8 @@ public class PropagationParameters implements Serializable {
   private boolean enableLogCloseApproaches = true;
   /** Whether to stop on closest approach. Assumes logging of close approaches is set to true. */
   private boolean stopOnCloseApproach;
-  /** The distance (meters) from the target body to stop on impact. */
-  private long stopOnImpactDistanceMeters;
+  /** The object's altitude (meters) from the target body's surface, at which to stop on impact. */
+  private long stopOnImpactAltitudeMeters;
   /**
    * The epoch (in UTC) after which to stop on close approach. Assumes logging of close approaches
    * is set to true.
@@ -66,7 +66,7 @@ public class PropagationParameters implements Serializable {
     copy.setStopOnImpact(stopOnImpact);
     copy.setEnableLogCloseApproaches(enableLogCloseApproaches);
     copy.setStopOnCloseApproach(stopOnCloseApproach);
-    copy.setStopOnImpactDistanceMeters(stopOnImpactDistanceMeters);
+    copy.setStopOnImpactAltitudeMeters(stopOnImpactAltitudeMeters);
     copy.setStopOnCloseApproachAfterEpoch(stopOnCloseApproachAfterEpoch);
     copy.setCloseApproachRadiusFromTargetMeters(closeApproachRadiusFromTargetMeters);
     copy.setPropagationType(propagationType);
@@ -162,12 +162,12 @@ public class PropagationParameters implements Serializable {
     return this;
   }
 
-  public long getStopOnImpactDistanceMeters() {
-    return this.stopOnImpactDistanceMeters;
+  public long getStopOnImpactAltitudeMeters() {
+    return this.stopOnImpactAltitudeMeters;
   }
 
-  public PropagationParameters setStopOnImpactDistanceMeters(long distance) {
-    this.stopOnImpactDistanceMeters = distance;
+  public PropagationParameters setStopOnImpactAltitudeMeters(long distance) {
+    this.stopOnImpactAltitudeMeters = distance;
     return this;
   }
 
