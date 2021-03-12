@@ -9,15 +9,18 @@ import org.b612foundation.adam.common.DistanceType;
 import org.b612foundation.adam.common.DistanceUnits;
 import org.b612foundation.adam.opm.OdmCommonMetadata.ReferenceFrame;
 import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
-import org.b612foundation.adam.propagators.OrbitPositionType;
+import org.b612foundation.adam.propagators.OrbitEventType;
 
-/** TODO: naming? */
+/**
+ * Details about an ephemeris point for a certain {@link OrbitEventType} and with respect to a
+ * body and reference frame.
+ */
 @Value
 @Builder
-public class OrbitPointSummary implements Serializable {
+public class EventEphemerisPoint implements Serializable {
 
   private static final long serialVersionUID = -8428599044581198764L;
-  OrbitPositionType orbitPositionType;
+  OrbitEventType orbitEventType;
 
   // Whether this was a stopping point in a propagation.
   boolean stopped;
@@ -40,6 +43,8 @@ public class OrbitPointSummary implements Serializable {
   DistanceUnits targetBodyCenteredPositionUnits;
 
   ReferenceFrame targetBodyReferenceFrame;
+
+  double[] velocity;
 
   double distanceFromTarget;
 

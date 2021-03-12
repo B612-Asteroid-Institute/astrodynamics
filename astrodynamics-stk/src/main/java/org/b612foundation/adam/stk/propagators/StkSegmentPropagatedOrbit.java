@@ -1,5 +1,13 @@
 package org.b612foundation.adam.stk.propagators;
 
+import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.CONTINUE_TO_NEXT_EVENT;
+import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.STOP_FUNCTION;
+import static org.b612foundation.adam.astro.AstroConstants.M_TO_KM;
+import static org.b612foundation.adam.stk.StkPropagationHelper.getNumericalPropagator;
+import static org.b612foundation.adam.stk.StkPropagationHelper.initializeCentralBodyForces;
+import static org.b612foundation.adam.stk.StkPropagationHelper.initializePropagationObjectWithReferenceFrame;
+import static org.b612foundation.adam.stk.StkPropagationHelper.parseUtcAsJulian;
+
 import agi.foundation.DateMotionCollection1;
 import agi.foundation.EvaluatorGroup;
 import agi.foundation.Motion1;
@@ -8,39 +16,59 @@ import agi.foundation.celestial.CentralBodiesFacet;
 import agi.foundation.celestial.EarthCentralBody;
 import agi.foundation.celestial.JplDECentralBody;
 import agi.foundation.celestial.WorldGeodeticSystem1984;
-import agi.foundation.coordinates.*;
-import agi.foundation.geometry.*;
+import agi.foundation.coordinates.Cartesian;
+import agi.foundation.coordinates.ITimeBasedState;
+import agi.foundation.coordinates.KinematicTransformation;
+import agi.foundation.coordinates.SphericalElement;
+import agi.foundation.coordinates.UnitCartesian;
+import agi.foundation.geometry.GeometryTransformer;
+import agi.foundation.geometry.PointEvaluator;
+import agi.foundation.geometry.PointInterpolator;
+import agi.foundation.geometry.ReferenceFrame;
+import agi.foundation.geometry.ReferenceFrameEvaluator;
+import agi.foundation.geometry.Scalar;
+import agi.foundation.geometry.ScalarSphericalElement;
 import agi.foundation.numericalmethods.IntegrationSense;
 import agi.foundation.numericalmethods.InterpolationAlgorithmType;
 import agi.foundation.numericalmethods.NumericalIntegrator;
 import agi.foundation.propagators.NumericalPropagatorDefinition;
 import agi.foundation.propagators.PropagationNewtonianPoint;
-import agi.foundation.segmentpropagation.*;
+import agi.foundation.segmentpropagation.NumericalInitialStateSegment;
+import agi.foundation.segmentpropagation.NumericalPropagatorSegment;
+import agi.foundation.segmentpropagation.SegmentList;
+import agi.foundation.segmentpropagation.SegmentListResults;
+import agi.foundation.segmentpropagation.SegmentPropagator;
 import agi.foundation.stk.StkEphemerisFile;
-import agi.foundation.stoppingconditions.*;
+import agi.foundation.stoppingconditions.ConditionCheckCallback;
+import agi.foundation.stoppingconditions.ConstraintSatisfiedCallback;
+import agi.foundation.stoppingconditions.DelegateStoppingCondition;
+import agi.foundation.stoppingconditions.DelegateStoppingConditionConstraint;
+import agi.foundation.stoppingconditions.ScalarStoppingCondition;
+import agi.foundation.stoppingconditions.StopType;
+import agi.foundation.stoppingconditions.StoppingTriggeredCallback;
+import agi.foundation.stoppingconditions.WhenToCheckConstraint;
 import agi.foundation.time.Duration;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeStandard;
 import com.google.common.base.Preconditions;
-import org.b612foundation.adam.common.DistanceType;
-import org.b612foundation.adam.common.DistanceUnits;
-import org.b612foundation.adam.datamodel.PropagationParameters;
-import org.b612foundation.adam.datamodel.PropagatorConfiguration;
-import org.b612foundation.adam.opm.*;
-import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import org.b612foundation.adam.propagators.OrbitPositionType;
-
-import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.CONTINUE_TO_NEXT_EVENT;
-import static agi.foundation.stoppingconditions.StoppingConditionTriggeredBehavior.STOP_FUNCTION;
-import static org.b612foundation.adam.astro.AstroConstants.M_TO_KM;
-import static org.b612foundation.adam.stk.StkPropagationHelper.*;
+import org.b612foundation.adam.common.DistanceType;
+import org.b612foundation.adam.common.DistanceUnits;
+import org.b612foundation.adam.datamodel.PropagationParameters;
+import org.b612foundation.adam.datamodel.PropagatorConfiguration;
+import org.b612foundation.adam.opm.OdmCommonHeader;
+import org.b612foundation.adam.opm.OdmCommonMetadata;
+import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
+import org.b612foundation.adam.opm.OemDataBlock;
+import org.b612foundation.adam.opm.OemMetadata;
+import org.b612foundation.adam.opm.OrbitEphemerisMessage;
+import org.b612foundation.adam.opm.OrbitParameterMessage;
+import org.b612foundation.adam.propagators.OrbitEventType;
 
 /**
  * Sets up and propagates an orbit, given an {@link OrbitParameterMessage}, {@link
@@ -53,7 +81,7 @@ import static org.b612foundation.adam.stk.StkPropagationHelper.*;
  * <p>This class is not intended to be used outside of this package, hence the package-private
  * visibility.
  */
-class StkSegmentPropagatedOrbit extends PropagatedOrbit {
+final class StkSegmentPropagatedOrbit extends PropagatedOrbit {
   private static final Logger log = Logger.getLogger(StkSegmentPropagatedOrbit.class.getName());
   private static final String POINT_OBJECT_ID = "propagatedOrbit";
 
@@ -62,11 +90,11 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
   private List<JulianDate> rawDates = new ArrayList<>();
   private List<double[]> rawValues = new ArrayList<>();
   private boolean stoppedOnCloseApproach;
-  private List<OrbitPointSummary> closeApproaches = new ArrayList<>();
-  private Optional<OrbitPointSummary> impact = Optional.empty();
+  private List<EventEphemerisPoint> closeApproaches = new ArrayList<>();
+  private Optional<EventEphemerisPoint> impact = Optional.empty();
   private ReferenceFrame referenceFrame;
   private PropagationNewtonianPoint pointObject;
-  private OrbitPointSummary finalPositionAndTime;
+  private EventEphemerisPoint finalState;
 
   private StkSegmentPropagatedOrbit() {}
 
@@ -112,8 +140,8 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
    *
    * <p>2. Create stopping conditions on impact and close approach.
    *
-   * <p>A lot of this is taken from the example code:
-   * https://help.agi.com/AGIComponentsJava/html/SegmentPropagationCodeSample.htm
+   * @see <a href="https://help.agi.com/AGIComponentsJava/html/SegmentPropagationCodeSample.htm">STK
+   *     Components Segment Propagation sample</a>
    */
   void propagate(PropagationParameters propagationParams, JulianDate epoch, JulianDate endDate) {
     EarthCentralBody earth = CentralBodiesFacet.getFromContext().getEarth();
@@ -190,13 +218,13 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
       Cartesian vel = (Cartesian) state.getMotion(POINT_OBJECT_ID).getFirstDerivative();
       rawValues.add(cartesianToArray(pos));
     }
-    finalPositionAndTime =
-        buildFinalState(
+    finalState =
+        buildFinalStateDetails(
             earth, ephemOverallTrajectory.get(ephemOverallTrajectory.size() - 1), referenceFrame);
   }
 
   /**
-   * Build the final state in a value class, {@link OrbitPointSummary}.
+   * Build the final state as a {@link EventEphemerisPoint}.
    *
    * <p>Final state cases:
    *
@@ -213,24 +241,25 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
    *
    * // TODO: make not Earth-specific
    */
-  private OrbitPointSummary buildFinalState(
+  private EventEphemerisPoint buildFinalStateDetails(
       EarthCentralBody earth, ITimeBasedState state, ReferenceFrame referenceFrame) {
     if (impact.isPresent()) {
       return impact.get();
     } else if (stoppedOnCloseApproach) {
-      List<OrbitPointSummary> closeApproaches = getCloseApproaches();
+      List<EventEphemerisPoint> closeApproaches = getCloseApproaches();
       return closeApproaches.get(closeApproaches.size() - 1);
     }
 
     PointEvaluator earthEvaluator =
         GeometryTransformer.observePoint(earth.getCenterOfMassPoint(), referenceFrame);
     Cartesian pos = (Cartesian) state.getMotion(POINT_OBJECT_ID).getValue();
+    Cartesian velocity = (Cartesian) state.getMotion(POINT_OBJECT_ID).getFirstDerivative();
     Cartesian earthPos = earthEvaluator.evaluate(state.getCurrentDate(), 2).getValue();
     Cartesian relPos = pos.subtract(earthPos);
     double distanceFromTarget = relPos.getMagnitude();
 
-    return OrbitPointSummary.builder()
-        .orbitPositionType(OrbitPositionType.MISS)
+    return EventEphemerisPoint.builder()
+        .orbitEventType(OrbitEventType.MISS)
         .stopped(true)
         .time(state.getCurrentDate())
         .timeIsoFormat(TimeHelper.toIsoFormat(state.getCurrentDate()))
@@ -239,6 +268,7 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
         .targetBodyCenteredPositionUnits(DistanceUnits.METERS)
         .targetBodyCenteredPosition(cartesianToArray(relPos))
         .targetBodyReferenceFrame(OdmCommonMetadata.ReferenceFrame.ICRF)
+        .velocity(cartesianToArray(velocity))
         .distanceFromTarget(distanceFromTarget)
         .distanceUnits(DistanceUnits.METERS)
         .distanceType(DistanceType.RADIUS)
@@ -362,30 +392,30 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
     return rawValues;
   }
 
-  public boolean getStoppedOnCloseApproach() {
-    return stoppedOnCloseApproach;
-  }
-
-  public List<OrbitPointSummary> getCloseApproaches() {
+  public List<EventEphemerisPoint> getCloseApproaches() {
     return closeApproaches;
   }
 
-  public Optional<OrbitPointSummary> getImpact() {
+  public Optional<EventEphemerisPoint> getImpact() {
     return impact;
   }
 
-  public OrbitPointSummary getFinalPositionAndTime() {
-    return finalPositionAndTime;
+  public EventEphemerisPoint getFinalState() {
+    return finalState;
   }
 
   /**
    * Builds a {@link DelegateStoppingCondition} for perigee.
    *
    * <p>When the stopping condition is triggered (when perigee is reached), the close approach will
-   * be added to a list of {@link OrbitPointSummary} and either stop, if user has opted to, or
-   * continue the propagation and keep adding the close approaches to the list. The user can also
-   * specify an additional constraint on the stopping condition, that is, to stop the propagation
-   * only after a particular epoch.
+   * be added to a list of {@link EventEphemerisPoint} and either stop, if user has opted to, or
+   * continue the propagation and keep logging close approaches (if they continue to occur). The
+   * user can also specify additional constraints on the stopping condition:
+   *
+   * <ul>
+   *   <li>Trigger stopping condition only after a certain epoch
+   *   <li>Trigger stopping condition only if within a certain radius from target body
+   * </ul>
    *
    * <p>The user will provide their input via {@link PropagationParameters}.
    *
@@ -419,19 +449,21 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
             StopType.THRESHOLD_INCREASING);
 
     stoppingCondition.setName("Perigee stopping condition");
-    // When stopping condition is satisfied, record the close approach and other information.
+    // When stopping condition is satisfied, log the close approach and other information.
     stoppingCondition.setSatisfiedCallback(
         StoppingTriggeredCallback.of(
             currentState -> {
               Cartesian position = (Cartesian) currentState.getMotion(POINT_OBJECT_ID).getValue();
+              Cartesian velocity =
+                  (Cartesian) currentState.getMotion(POINT_OBJECT_ID).getFirstDerivative();
               Cartesian earthPos =
                   earthEvaluator.evaluate(currentState.getCurrentDate(), 2).getValue();
               Cartesian relPos = position.subtract(earthPos);
               double distanceFromTarget = relPos.getMagnitude();
 
-              OrbitPointSummary closeApproach =
-                  OrbitPointSummary.builder()
-                      .orbitPositionType(OrbitPositionType.CLOSE_APPROACH)
+              EventEphemerisPoint closeApproach =
+                  EventEphemerisPoint.builder()
+                      .orbitEventType(OrbitEventType.CLOSE_APPROACH)
                       .stopped(propagationParams.getStopOnCloseApproach())
                       .time(currentState.getCurrentDate())
                       .timeIsoFormat(TimeHelper.toIsoFormat(currentState.getCurrentDate()))
@@ -440,6 +472,7 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
                       .targetBodyCenteredPosition(cartesianToArray(relPos))
                       .targetBodyCenteredPositionUnits(DistanceUnits.METERS)
                       .targetBodyReferenceFrame(OdmCommonMetadata.ReferenceFrame.ICRF)
+                      .velocity(cartesianToArray(velocity))
                       .distanceFromTarget(distanceFromTarget)
                       .distanceType(DistanceType.RADIUS)
                       .distanceUnits(DistanceUnits.METERS)
@@ -452,10 +485,12 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
               return CONTINUE_TO_NEXT_EVENT;
             }));
 
-    // Set the stopping condition constraint: after a user-specified epoch.
+    // Stopping condition constraint: after a user-specified epoch.
     if (propagationParams.getStopOnCloseApproach()
         && propagationParams.getStopOnCloseApproachAfterEpoch() != null
         && !propagationParams.getStopOnCloseApproachAfterEpoch().isEmpty()) {
+      // If the date of the current state >= user-specified epoch, then trigger a close approach
+      // stopping condition.
       JulianDate stopAfterEpoch =
           parseUtcAsJulian(propagationParams.getStopOnCloseApproachAfterEpoch());
       DelegateStoppingConditionConstraint closeApproachStopAfterEpochConstraint =
@@ -467,7 +502,10 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
       stoppingCondition.getConstraints().add(closeApproachStopAfterEpochConstraint);
     }
 
+    // Stopping condition constraint: user-specified close approach radius
     if (propagationParams.getCloseApproachRadiusFromTargetMeters() > 0.0) {
+      // If distanceFromTarget <= user-specified radius, then trigger the close approach stopping
+      // condition.
       DelegateStoppingConditionConstraint closeApproachDistanceConstraint =
           new DelegateStoppingConditionConstraint(
               ConstraintSatisfiedCallback.of(
@@ -509,11 +547,11 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
             SphericalElement.MAGNITUDE);
     ScalarStoppingCondition distanceFromEarthStoppingCondition =
         new ScalarStoppingCondition(
-            distanceFromEarth,
-            propagationParams.getStopOnImpactAltitudeMeters()
+            /* scalar= */ distanceFromEarth,
+            /* threshold= */ propagationParams.getStopOnImpactAltitudeMeters()
                 + WorldGeodeticSystem1984.SemimajorAxis,
-            1e3 /* 1 km tolerance */,
-            StopType.ANY_THRESHOLD);
+            /* valueTolerance= */ 1e3 /* 1 km tolerance */,
+            /* stopType= */ StopType.ANY_THRESHOLD);
     distanceFromEarthStoppingCondition.setName("Distance from earth stopping condition");
     distanceFromEarthStoppingCondition.setSatisfiedCallback(
         StoppingTriggeredCallback.of(
@@ -521,6 +559,8 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
               PointEvaluator earthEvaluator =
                   GeometryTransformer.observePoint(earth.getCenterOfMassPoint(), referenceFrame);
               Cartesian position = (Cartesian) currentState.getMotion(POINT_OBJECT_ID).getValue();
+              Cartesian velocity =
+                  (Cartesian) currentState.getMotion(POINT_OBJECT_ID).getFirstDerivative();
               Cartesian earthPos =
                   earthEvaluator.evaluate(currentState.getCurrentDate(), 2).getValue();
               Cartesian relPosInertial = position.subtract(earthPos);
@@ -533,8 +573,8 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
               Cartesian relPosFixed = frameTransform.transform(relPosInertial);
               impact =
                   Optional.of(
-                      OrbitPointSummary.builder()
-                          .orbitPositionType(OrbitPositionType.IMPACT)
+                      EventEphemerisPoint.builder()
+                          .orbitEventType(OrbitEventType.IMPACT)
                           .stopped(propagationParams.getStopOnImpact())
                           .time(currentState.getCurrentDate())
                           .timeIsoFormat(TimeHelper.toIsoFormat(currentState.getCurrentDate()))
@@ -543,6 +583,7 @@ class StkSegmentPropagatedOrbit extends PropagatedOrbit {
                           .targetBodyCenteredPosition(cartesianToArray(relPosFixed))
                           .targetBodyCenteredPositionUnits(DistanceUnits.METERS)
                           .targetBodyReferenceFrame(OdmCommonMetadata.ReferenceFrame.ECEF)
+                          .velocity(cartesianToArray(velocity))
                           .distanceFromTarget(distanceFromTarget)
                           .distanceType(DistanceType.ALTITUDE)
                           .distanceUnits(DistanceUnits.METERS)

@@ -15,7 +15,7 @@ import org.b612foundation.adam.opm.OdmCommonMetadata.TimeSystem;
 import org.b612foundation.adam.opm.OemDataLine;
 import org.b612foundation.adam.opm.OrbitEphemerisMessage;
 import org.b612foundation.adam.opm.StateVector;
-import org.b612foundation.adam.propagators.OrbitPositionType;
+import org.b612foundation.adam.propagators.OrbitEventType;
 import org.b612foundation.stk.StkLicense;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +49,9 @@ public final class StkSegmentPropagatorTest {
           .setY_dot(-11.75744819)
           .setZ_dot(-5.583528281);
   // Asteroid 101 close approaches, within a distance of 7.0e9 meters
-  private static final List<OrbitPointSummary> ASTEROID_101_CLOSE_APPROACHES =
+  private static final List<EventEphemerisPoint> ASTEROID_101_CLOSE_APPROACHES =
       ImmutableList.of(
-          OrbitPointSummary.builder()
+          EventEphemerisPoint.builder()
               .time(parseUtcAsJulian("2004-10-15T01:13:45Z"))
               .timeSystem(TimeSystem.UTC)
               .distanceType(DistanceType.RADIUS)
@@ -59,7 +59,7 @@ public final class StkSegmentPropagatorTest {
               .targetBody(JplDECentralBody.EARTH)
               .distanceFromTarget(6.066052262161629e9)
               .build(),
-          OrbitPointSummary.builder()
+          EventEphemerisPoint.builder()
               .time(parseUtcAsJulian("2007-12-28T08:03:23Z"))
               .timeSystem(TimeSystem.UTC)
               .distanceType(DistanceType.RADIUS)
@@ -198,11 +198,11 @@ public final class StkSegmentPropagatorTest {
 
     StkSegmentPropagator propagator = new StkSegmentPropagator();
     propagator.propagate(params, config, "test-propagator");
-    OrbitPointSummary finalState = propagator.getFinalState();
+    EventEphemerisPoint finalState = propagator.getFinalState();
     JulianDate actualImpactDate = finalState.getTime();
 
     // Check that actual and expected differ no more than 6 hours
-    assertThat(finalState.getOrbitPositionType()).isEqualTo(OrbitPositionType.IMPACT);
+    assertThat(finalState.getOrbitEventType()).isEqualTo(OrbitEventType.IMPACT);
     assertThat(finalState.getTargetBodyReferenceFrame())
         .isEqualTo(OdmCommonMetadata.ReferenceFrame.ECEF);
     assertThat(finalState.isStopped()).isTrue();
@@ -226,14 +226,14 @@ public final class StkSegmentPropagatorTest {
             ASTEROID_101_EPOCH, endEpoch, SECONDS_IN_DAY, ASTEROID_101_INITIAL_STATE_VECTOR);
     params.setEnableLogCloseApproaches(true);
     params.setCloseApproachRadiusFromTargetMeters(7.0e9);
-    OrbitPointSummary expectedCloseApproach1 = ASTEROID_101_CLOSE_APPROACHES.get(0);
-    OrbitPointSummary expectedCloseApproach2 = ASTEROID_101_CLOSE_APPROACHES.get(1);
+    EventEphemerisPoint expectedCloseApproach1 = ASTEROID_101_CLOSE_APPROACHES.get(0);
+    EventEphemerisPoint expectedCloseApproach2 = ASTEROID_101_CLOSE_APPROACHES.get(1);
 
     StkSegmentPropagator propagator = new StkSegmentPropagator();
     propagator.propagate(params, config, "test-propagator");
-    List<OrbitPointSummary> actual = propagator.getCloseApproaches();
-    OrbitPointSummary actualCloseApproach1 = actual.get(0);
-    OrbitPointSummary actualCloseApproach2 = actual.get(1);
+    List<EventEphemerisPoint> actual = propagator.getCloseApproaches();
+    EventEphemerisPoint actualCloseApproach1 = actual.get(0);
+    EventEphemerisPoint actualCloseApproach2 = actual.get(1);
 
     // Check that the close approach date is within some time range
     assertThat(actualCloseApproach1.getTime().secondsDifference(expectedCloseApproach1.getTime()))
@@ -260,12 +260,12 @@ public final class StkSegmentPropagatorTest {
     params.setEnableLogCloseApproaches(true);
     params.setStopOnCloseApproach(true);
     params.setCloseApproachRadiusFromTargetMeters(7.0e9);
-    OrbitPointSummary expectedCloseApproach1 = ASTEROID_101_CLOSE_APPROACHES.get(0);
+    EventEphemerisPoint expectedCloseApproach1 = ASTEROID_101_CLOSE_APPROACHES.get(0);
 
     StkSegmentPropagator propagator = new StkSegmentPropagator();
     propagator.propagate(params, config, "test-propagator");
-    List<OrbitPointSummary> actual = propagator.getCloseApproaches();
-    OrbitPointSummary actualCloseApproach1 = actual.get(0);
+    List<EventEphemerisPoint> actual = propagator.getCloseApproaches();
+    EventEphemerisPoint actualCloseApproach1 = actual.get(0);
 
     assertThat(actual).hasSize(1);
     // Check that the close approach date is within some time range
@@ -292,12 +292,12 @@ public final class StkSegmentPropagatorTest {
     params.setStopOnCloseApproachAfterEpoch("2004-10-16T01:13:45Z");
     // Since the first close approach is 2004-10-15 and the stop-after-epoch is 2004-10-16, expect
     // that the actual close approach matches the second close approach for Asteroid 101.
-    OrbitPointSummary expectedCloseApproach2 = ASTEROID_101_CLOSE_APPROACHES.get(1);
+    EventEphemerisPoint expectedCloseApproach2 = ASTEROID_101_CLOSE_APPROACHES.get(1);
 
     StkSegmentPropagator propagator = new StkSegmentPropagator();
     propagator.propagate(params, config, "test-propagator");
-    List<OrbitPointSummary> actual = propagator.getCloseApproaches();
-    OrbitPointSummary actualCloseApproach1 = actual.get(0);
+    List<EventEphemerisPoint> actual = propagator.getCloseApproaches();
+    EventEphemerisPoint actualCloseApproach1 = actual.get(0);
 
     assertThat(actual).hasSize(1);
     // Check that the close approach date is within some time range
@@ -322,7 +322,7 @@ public final class StkSegmentPropagatorTest {
 
     StkSegmentPropagator propagator = new StkSegmentPropagator();
     propagator.propagate(params, config, "test-propagator");
-    List<OrbitPointSummary> actual = propagator.getCloseApproaches();
+    List<EventEphemerisPoint> actual = propagator.getCloseApproaches();
 
     assertThat(actual).isEmpty();
   }
