@@ -12,10 +12,10 @@
 
     <parent>
         <groupId>org.b612foundation.adam</groupId>
-        <artifactId>AdamAstrodynamics</artifactId>
+        <artifactId>adam-astrodynamics</artifactId>
         <version>2.0-SNAPSHOT</version>
     </parent>
-    <artifactId>AdamAstrodynamicsStk</artifactId>
+    <artifactId>adam-astrodynamics-stk</artifactId>
     <packaging>jar</packaging>
 
     <name>ADAM Astrodynamics STK libraries</name>
@@ -29,7 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>org.b612foundation.adam</groupId>
-            <artifactId>AdamAstrodynamicsCore</artifactId>
+            <artifactId>adam-astrodynamics-core</artifactId>
             <version>2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -43,5 +43,13 @@
             <version>2.5</version>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+      <repository>
+        <id>github</id>
+        <name>GitHub B612-Asteroid-Institute Apache Maven Packages</name>
+        <url>https://maven.pkg.github.com/B612-Asteroid-Institute/astrodynamics</url>
+      </repository>
+    </distributionManagement>
 
 </project>
