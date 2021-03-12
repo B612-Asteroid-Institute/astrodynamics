@@ -10,7 +10,6 @@ import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 import org.b612foundation.adam.exceptions.AdamPropagationException;
 import org.b612foundation.adam.opm.OrbitEphemerisMessage;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
-import org.b612foundation.adam.propagators.OrbitPositionType;
 import org.b612foundation.adam.propagators.OrbitPropagator;
 import org.b612foundation.stk.StkLicense;
 
@@ -94,12 +93,12 @@ public final class StkSegmentPropagator implements OrbitPropagator {
   }
 
   /** The close approaches that occurred during propagation. */
-  public List<OrbitPointSummary> getCloseApproaches() {
+  public List<EventEphemerisPoint> getCloseApproaches() {
     return orbit.getCloseApproaches();
   }
 
-  public OrbitPointSummary getFinalState() {
-    return orbit.getFinalPositionAndTime();
+  public EventEphemerisPoint getFinalState() {
+    return orbit.getFinalState();
   }
 
   public ReferenceFrame getReferenceFrame() {
