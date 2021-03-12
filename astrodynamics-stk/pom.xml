@@ -26,6 +26,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+      <repository>
+        <id>github</id>
+        <name>GitHub B612-Asteroid-Institute Apache Maven Packages</name>
+        <url>https://maven.pkg.github.com/B612-Asteroid-Institute/stk-parts</url>
+      </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.b612foundation.adam</groupId>
@@ -34,7 +42,7 @@
         </dependency>
         <dependency>
             <groupId>org.b612foundation.adam</groupId>
-            <artifactId>StkParts</artifactId>
+            <artifactId>stkparts</artifactId>
             <version>2018r3</version>
         </dependency>
         <dependency>

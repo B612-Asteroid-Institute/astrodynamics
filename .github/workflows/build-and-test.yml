@@ -49,28 +49,13 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-
-      - name: Setup gcloud environment to get proprietary jars
-        uses: google-github-actions/setup-gcloud@v0.2.0
-        with:
-          service_account_key: ${{ secrets.CICD_STK_JARS_SA_KEY }}
-
-      - name: Checkout stk-parts
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-          repository: B612-Asteroid-Institute/stk-parts
-          path: stk-parts
-          token: ${{ secrets.CICD_PRIVATE_REPO_ACCESS_TOKEN }}
-
-      - name: Build stk-parts
-        run: |
-          cd stk-parts
-          gsutil cp $STK_JARS_PATH .
-          tar xzf repo.tar.gz
-          mvn clean install -ntp
+          server-id: github
+          server-username: GITHUB_USER_REF
+          server-password: GITHUB_TOKEN_REF
 
       - name: Publish package
         run: mvn -X deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER_REF: carise
+          GITHUB_TOKEN_REF: ${{ secrets.CICD_PRIVATE_REPO_ACCESS_TOKEN }}
