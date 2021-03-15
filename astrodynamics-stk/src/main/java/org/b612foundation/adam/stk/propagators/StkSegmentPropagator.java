@@ -1,10 +1,16 @@
 package org.b612foundation.adam.stk.propagators;
 
+import static org.b612foundation.adam.stk.StkPropagationHelper.parseUtcAsJulian;
+import static org.b612foundation.adam.stk.StkPropagationHelper.validateStartAndEndDate;
+import static org.b612foundation.adam.stk.propagators.StkSegmentPropagatedOrbit.initializeOrbit;
+
 import agi.foundation.geometry.ReferenceFrame;
 import agi.foundation.segmentpropagation.SegmentPropagator;
 import agi.foundation.time.Duration;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeStandard;
+import java.util.List;
+import java.util.logging.Logger;
 import org.b612foundation.adam.datamodel.PropagationParameters;
 import org.b612foundation.adam.datamodel.PropagatorConfiguration;
 import org.b612foundation.adam.exceptions.AdamPropagationException;
@@ -12,13 +18,6 @@ import org.b612foundation.adam.opm.OrbitEphemerisMessage;
 import org.b612foundation.adam.opm.OrbitParameterMessage;
 import org.b612foundation.adam.propagators.OrbitPropagator;
 import org.b612foundation.stk.StkLicense;
-
-import java.util.List;
-import java.util.logging.Logger;
-
-import static org.b612foundation.adam.stk.StkPropagationHelper.parseUtcAsJulian;
-import static org.b612foundation.adam.stk.StkPropagationHelper.validateStartAndEndDate;
-import static org.b612foundation.adam.stk.propagators.StkSegmentPropagatedOrbit.initializeOrbit;
 
 /**
  * An STK propagator that uses {@link SegmentPropagator}.
