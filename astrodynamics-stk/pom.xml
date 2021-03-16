@@ -42,7 +42,7 @@
         </dependency>
         <dependency>
             <groupId>org.b612foundation.adam</groupId>
-            <artifactId>stkparts</artifactId>
+            <artifactId>stk-parts</artifactId>
             <version>2018r3</version>
         </dependency>
         <dependency>
