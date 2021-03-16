@@ -564,7 +564,8 @@ final class StkSegmentPropagatedOrbit extends PropagatedOrbit {
               Cartesian earthPos =
                   earthEvaluator.evaluate(currentState.getCurrentDate(), 2).getValue();
               Cartesian relPosInertial = position.subtract(earthPos);
-              double distanceFromTarget = relPosInertial.getMagnitude();
+              double distanceFromTarget =
+                  relPosInertial.getMagnitude() - WorldGeodeticSystem1984.SemimajorAxis;
               ReferenceFrameEvaluator frameEvaluator =
                   GeometryTransformer.getReferenceFrameTransformation(
                       earth.getInertialFrame(), earth.getFixedFrame());

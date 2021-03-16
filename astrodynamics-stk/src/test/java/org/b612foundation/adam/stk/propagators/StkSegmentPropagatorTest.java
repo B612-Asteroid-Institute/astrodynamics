@@ -1,9 +1,16 @@
 package org.b612foundation.adam.stk.propagators;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.b612foundation.adam.common.PropagationHelper.extractFinalState;
+import static org.b612foundation.adam.stk.PropagatorTestHelper.getOpm;
+import static org.b612foundation.adam.stk.StkPropagationHelper.parseUtcAsJulian;
+
 import agi.foundation.celestial.JplDECentralBody;
-import agi.foundation.celestial.WorldGeodeticSystem1984;
 import agi.foundation.time.JulianDate;
 import com.google.common.collect.ImmutableList;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.b612foundation.adam.common.DistanceType;
 import org.b612foundation.adam.common.DistanceUnits;
 import org.b612foundation.adam.datamodel.PropagationConfigurationFactory;
@@ -19,15 +26,6 @@ import org.b612foundation.adam.propagators.OrbitEventType;
 import org.b612foundation.stk.StkLicense;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.b612foundation.adam.common.PropagationHelper.extractFinalState;
-import static org.b612foundation.adam.stk.PropagatorTestHelper.getOpm;
-import static org.b612foundation.adam.stk.StkPropagationHelper.parseUtcAsJulian;
 
 // TODO: The test assertion tolerances aren't really good, try to find how to make them closer.
 // see if can match up to 7 SD, even better 15 SD
@@ -207,11 +205,9 @@ public final class StkSegmentPropagatorTest {
         .isEqualTo(OdmCommonMetadata.ReferenceFrame.ECEF);
     assertThat(finalState.isStopped()).isTrue();
     assertThat(actualImpactDate.secondsDifference(expectedImpactDate)).isAtMost(21600);
-    // Check that distance is within 1e3 meters of stopDistance + Earth semimajor axis, which is the
-    // stopping condition distance for impact.
-    assertThat(finalState.getDistanceFromTarget())
-        .isWithin(1e3)
-        .of(500000 + WorldGeodeticSystem1984.SemimajorAxis);
+    // Check that distance is within 1e3 meters of stopDistance, which is the stopping condition
+    // distance for impact.
+    assertThat(finalState.getDistanceFromTarget()).isWithin(1e3).of(500000);
     assertThat(finalState.getDistanceType()).isEqualTo(DistanceType.ALTITUDE);
     assertThat(finalState.getDistanceUnits()).isEqualTo(DistanceUnits.METERS);
   }
