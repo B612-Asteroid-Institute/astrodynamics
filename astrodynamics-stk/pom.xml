@@ -1,63 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
+  <prerequisites>
+    <maven>3.0.5</maven>
+  </prerequisites>
 
+  <parent>
+    <groupId>org.b612foundation.adam</groupId>
+    <artifactId>adam-astrodynamics</artifactId>
+    <version>2.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>adam-astrodynamics-stk</artifactId>
+  <packaging>jar</packaging>
 
-    <parent>
-        <groupId>org.b612foundation.adam</groupId>
-        <artifactId>adam-astrodynamics</artifactId>
-        <version>2.0-SNAPSHOT</version>
-    </parent>
-    <artifactId>adam-astrodynamics-stk</artifactId>
-    <packaging>jar</packaging>
+  <name>ADAM Astrodynamics STK libraries</name>
 
-    <name>ADAM Astrodynamics STK libraries</name>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+  <repositories>
+    <repository>
+      <id>github</id>
+      <name>GitHub B612-Asteroid-Institute Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/B612-Asteroid-Institute/stk-parts</url>
+    </repository>
+  </repositories>
 
-    <repositories>
-      <repository>
-        <id>github</id>
-        <name>GitHub B612-Asteroid-Institute Apache Maven Packages</name>
-        <url>https://maven.pkg.github.com/B612-Asteroid-Institute/stk-parts</url>
-      </repository>
-    </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>org.b612foundation.adam</groupId>
+      <artifactId>adam-astrodynamics-core</artifactId>
+      <version>2.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.b612foundation.adam</groupId>
+      <artifactId>stk-parts</artifactId>
+      <version>2018r3</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>com.agi</groupId>
+      <artifactId>agi.foundation.core</artifactId>
+      <version>2018r3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.b612foundation.adam</groupId>
+      <artifactId>adam-astrodynamics-core</artifactId>
+      <version>2.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.b612foundation.adam</groupId>
+      <artifactId>stk-parts</artifactId>
+      <version>2018r3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.agi</groupId>
+      <artifactId>agi.foundation.core</artifactId>
+      <version>2018r3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.agi</groupId>
+      <artifactId>agi.foundation.core</artifactId>
+      <version>2018r3</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.agi</groupId>
+      <artifactId>agi.foundation.core</artifactId>
+      <version>2018r3</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.b612foundation.adam</groupId>
-            <artifactId>adam-astrodynamics-core</artifactId>
-            <version>2.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.b612foundation.adam</groupId>
-            <artifactId>stk-parts</artifactId>
-            <version>2018r3</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
-        </dependency>
-    </dependencies>
-
-    <distributionManagement>
-      <repository>
-        <id>github</id>
-        <name>GitHub B612-Asteroid-Institute Apache Maven Packages</name>
-        <url>https://maven.pkg.github.com/B612-Asteroid-Institute/astrodynamics</url>
-      </repository>
-    </distributionManagement>
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub B612-Asteroid-Institute Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/B612-Asteroid-Institute/astrodynamics</url>
+    </repository>
+  </distributionManagement>
 
 </project>
