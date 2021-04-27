@@ -1,5 +1,6 @@
 package org.b612foundation.adam.stk;
 
+import static com.google.common.base.Preconditions.checkArgument;
 
 import agi.foundation.Motion1;
 import agi.foundation.coordinates.Cartesian;
@@ -9,14 +10,11 @@ import agi.foundation.propagators.PropagationNewtonianPoint;
 import agi.foundation.time.JulianDate;
 import agi.foundation.time.TimeInterval;
 import agi.foundation.time.TimeStandard;
-import org.b612foundation.adam.datamodel.PropagatorConfiguration;
-import org.b612foundation.adam.opm.*;
-import org.b612foundation.adam.stk.propagators.ForceModelHelper;
-
 import java.time.ZonedDateTime;
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkArgument;
+import org.b612foundation.adam.datamodel.PropagatorConfiguration;
+import org.b612foundation.adam.opm.OdmCommonMetadata;
+import org.b612foundation.adam.opm.OrbitParameterMessage;
+import org.b612foundation.adam.stk.propagators.ForceModelHelper;
 
 /** Common methods used in propagation classes. */
 public final class StkPropagationHelper {
@@ -86,6 +84,4 @@ public final class StkPropagationHelper {
 
     return propagatorDefinition;
   }
-
 }
-
