@@ -24,5 +24,5 @@ jobs:
           mvn clean install && bash <(curl -s https://codecov.io/bash)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_USER_REF: carise
+          GITHUB_USER_REF: ${{ secrets.PRIVATE_REPO_USER }}
           GITHUB_TOKEN_REF: ${{ secrets.CICD_PRIVATE_REPO_ACCESS_TOKEN }}
